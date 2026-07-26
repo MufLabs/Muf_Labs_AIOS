@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MufLabs AIOS — Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#1B2568;
+    --bg-panel: rgba(190,205,255,0.07);
+    --bg-panel-strong: rgba(190,205,255,0.11);
+    --border-glass: rgba(200,215,255,0.14);
+    --border-glass-strong: rgba(200,215,255,0.24);
+    --text-primary:#F0F2FF;
+    --text-secondary:#AEB8EC;
+    --text-muted:#7C86C4;
+    --violet:#8B7CFF;
+    --cyan:#5CD9E8;
+    --magenta:#FF5FAE;
+    --emerald:#3FDDA0;
+    --amber:#FBBF6B;
+    --grad-neural: linear-gradient(135deg, var(--violet), var(--cyan));
+    --grad-neural-soft: linear-gradient(135deg, rgba(139,124,255,0.30), rgba(92,217,232,0.24));
+    font-family:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 1000px 650px at 12% -8%, rgba(120,140,255,0.30), transparent 60%),
+      radial-gradient(ellipse 850px 750px at 100% 8%, rgba(92,217,232,0.18), transparent 55%),
+      radial-gradient(ellipse 750px 550px at 50% 112%, rgba(140,80,255,0.20), transparent 60%),
+      linear-gradient(160deg, #2A4CC9 0%, #2436A0 42%, #2A2076 100%);
+    color:var(--text-primary);
+    min-height:100vh;
+    padding:20px;
+  }
+  .app{
+    display:grid;
+    grid-template-columns: 76px 1fr 320px;
+    grid-template-rows: 64px 1fr;
+    gap:14px;
+    max-width:1440px;
+    height:calc(100vh - 40px);
+    margin:0 auto;
+  }
+  .glass{
+    background:var(--bg-panel);
+    border:0.5px solid var(--border-glass);
+    border-radius:18px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* ===== TOP BAR ===== */
+  .topbar{
+    grid-column:1 / 4;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:30px; height:30px; border-radius:9px;
+    background:var(--grad-neural);
+    position:relative;
+    box-shadow:0 0 22px rgba(124,140,255,0.55);
+  }
+  .brand-mark::after{
+    content:'';
+    position:absolute; inset:7px;
+    border-radius:5px;
+    background:var(--bg-deep);
+  }
+  .brand-name{font-family:'Sora',sans-serif; font-weight:600; font-size:15px; letter-spacing:0.2px;}
+  .brand-sub{font-size:11px; color:var(--text-muted); margin-left:8px; font-family:'JetBrains Mono',monospace;}
+
+  .topbar-right{display:flex; align-items:center; gap:18px;}
+  .autonomy-chip{
+    display:flex; align-items:center; gap:8px;
+    padding:7px 14px;
+    border-radius:100px;
+    border:0.5px solid var(--border-glass-strong);
+    background:rgba(255,255,255,0.03);
+    font-size:12.5px;
+    color:var(--text-secondary);
+  }
+  .autonomy-dot{width:6px; height:6px; border-radius:50%; background:var(--emerald); box-shadow:0 0 8px var(--emerald);}
+  .autonomy-chip b{color:var(--text-primary); font-weight:500;}
+  .avatar{
+    width:32px; height:32px; border-radius:50%;
+    background:linear-gradient(135deg,#3a3f66,#23263f);
+    border:0.5px solid var(--border-glass-strong);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:600; color:var(--text-secondary);
+  }
+
+  /* ===== LEFT RAIL ===== */
+  .rail{
+    display:flex; flex-direction:column; align-items:center;
+    padding:20px 0; gap:6px;
+  }
+  .rail-item{
+    width:44px; height:44px; border-radius:13px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-muted); cursor:pointer;
+    transition:all .15s ease;
+  }
+  .rail-item svg{width:19px; height:19px;}
+  .rail-item.active{
+    background:var(--grad-neural-soft);
+    color:var(--text-primary);
+    border:0.5px solid rgba(139,124,255,0.4);
+  }
+  .rail-spacer{flex:1;}
+  .rail-item.ghost{color:var(--text-muted);}
+
+  /* ===== CENTER CANVAS ===== */
+  .canvas{
+    display:flex; flex-direction:column;
+    padding:26px 30px;
+    overflow:hidden;
+  }
+  .canvas-header{margin-bottom:18px;}
+  .canvas-eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--cyan);
+    letter-spacing:0.5px; margin-bottom:6px;
+  }
+  .canvas-title{font-family:'Sora',sans-serif; font-size:19px; font-weight:600;}
+  .canvas-title span{color:var(--text-secondary); font-weight:400;}
+
+  .workflow-track{
+    flex:1;
+    display:flex; flex-direction:column; gap:12px;
+    overflow-y:auto;
+    padding-right:4px;
+    margin:6px 0 18px;
+  }
+  .step{
+    display:flex; gap:14px; padding:15px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.025);
+    border:0.5px solid var(--border-glass);
+    position:relative;
+  }
+  .step::before{
+    content:''; position:absolute; left:26px; top:100%; width:1px; height:12px;
+    background:linear-gradient(var(--border-glass-strong), transparent);
+  }
+  .step:last-child::before{display:none;}
+  .step-icon{
+    width:26px; height:26px; border-radius:8px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px;
+  }
+  .step-icon.done{background:rgba(63,221,160,0.14); color:var(--emerald); border:0.5px solid rgba(63,221,160,0.35);}
+  .step-icon.active{background:var(--grad-neural-soft); color:var(--cyan); border:0.5px solid rgba(79,216,232,0.4);}
+  .step-icon.pending{background:rgba(255,255,255,0.03); color:var(--text-muted); border:0.5px solid var(--border-glass);}
+  .step-body{flex:1;}
+  .step-title{font-size:13.5px; font-weight:500; margin-bottom:2px;}
+  .step-meta{font-size:12px; color:var(--text-muted); font-family:'JetBrains Mono',monospace;}
+  .step.active .step-title{color:var(--text-primary);}
+  .step.pending .step-title{color:var(--text-secondary);}
+  .pulse{
+    width:6px; height:6px; border-radius:50%; background:var(--cyan);
+    box-shadow:0 0 10px var(--cyan);
+    animation:pulse 1.6s ease-in-out infinite;
+    margin-left:6px; display:inline-block;
+  }
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.25;}}
+
+  .approve-row{display:flex; gap:10px; margin-top:2px;}
+  .btn{
+    font-family:'Inter',sans-serif; font-size:12.5px; font-weight:500;
+    padding:7px 14px; border-radius:9px; cursor:pointer;
+    border:0.5px solid var(--border-glass-strong);
+    background:rgba(255,255,255,0.03); color:var(--text-primary);
+  }
+  .btn.primary{
+    background:var(--grad-neural); color:#141B52; border:none;
+    box-shadow:0 0 18px rgba(124,140,255,0.35);
+  }
+
+  /* ===== COMMAND ORB INPUT ===== */
+  .command-bar{
+    display:flex; align-items:center; gap:14px;
+    padding:10px 10px 10px 18px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.03);
+    border:0.5px solid var(--border-glass-strong);
+  }
+  .orb{
+    width:38px; height:38px; border-radius:50%; flex-shrink:0;
+    background:conic-gradient(from 180deg, var(--violet), var(--cyan), var(--magenta), var(--violet));
+    position:relative;
+    box-shadow:0 0 24px rgba(124,140,255,0.45);
+    animation:spin 6s linear infinite;
+  }
+  .orb::after{
+    content:''; position:absolute; inset:5px; border-radius:50%;
+    background:var(--bg-deep);
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .command-input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--text-primary); font-size:14px; font-family:'Inter',sans-serif;
+  }
+  .command-input::placeholder{color:var(--text-muted);}
+  .command-send{
+    width:34px; height:34px; border-radius:11px;
+    background:var(--grad-neural); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; color:#141B52;
+  }
+
+  /* ===== RIGHT PANEL ===== */
+  .side{
+    padding:22px 18px;
+    display:flex; flex-direction:column; gap:20px;
+    overflow-y:auto;
+  }
+  .side-block-title{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    color:var(--text-muted); letter-spacing:0.6px; text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .agent-row{
+    display:flex; align-items:center; gap:10px;
+    padding:9px 10px; border-radius:11px;
+    margin-bottom:6px;
+    border:0.5px solid transparent;
+  }
+  .agent-row.working{background:rgba(139,124,255,0.07); border-color:rgba(139,124,255,0.2);}
+  .agent-avatar{
+    width:26px; height:26px; border-radius:8px;
+    background:linear-gradient(135deg,#2c2f4d,#1a1c30);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:600; color:var(--text-secondary);
+    border:0.5px solid var(--border-glass);
+  }
+  .agent-info{flex:1;}
+  .agent-name{font-size:12.5px; font-weight:500;}
+  .agent-status{font-size:11px; color:var(--text-muted);}
+  .agent-row.working .agent-status{color:var(--cyan);}
+
+  .provider-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12px; color:var(--text-secondary); margin-bottom:8px;
+  }
+  .track{height:5px; border-radius:4px; background:rgba(255,255,255,0.06); overflow:hidden; margin-bottom:14px;}
+  .track-fill{height:100%; border-radius:4px;}
+
+  .memory-card{
+    padding:12px 13px; border-radius:12px;
+    background:rgba(255,255,255,0.025); border:0.5px solid var(--border-glass);
+    font-size:12px; color:var(--text-secondary); line-height:1.5;
+  }
+  .memory-card b{color:var(--text-primary); font-weight:500;}
+
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:var(--border-glass-strong); border-radius:6px;}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar glass">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">MufLabs AIOS</span>
+      <span class="brand-sub">workspace / proyecto-api-pagos</span>
+    </div>
+    <div class="topbar-right">
+      <div class="autonomy-chip"><span class="autonomy-dot"></span> Autonomía: <b>Nivel 1 · Guiada</b></div>
+      <div class="avatar">SR</div>
+    </div>
+  </div>
+
+  <!-- LEFT RAIL -->
+  <div class="rail glass">
+    <div class="rail-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    </div>
+    <div class="rail-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+    </div>
+    <div class="rail-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+    </div>
+    <div class="rail-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/></svg>
+    </div>
+    <div class="rail-spacer"></div>
+    <div class="rail-item ghost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 110 4h-.2a1.7 1.7 0 00-1.5 1z"/></svg>
+    </div>
+  </div>
+
+  <!-- CENTER CANVAS -->
+  <div class="canvas glass">
+    <div class="canvas-header">
+      <div class="canvas-eyebrow">ENGINEERING REQUEST · #EN-4471</div>
+      <div class="canvas-title">Revisa el módulo de pagos y prepara el release <span>· iniciado hace 2 min</span></div>
+    </div>
+
+    <div class="workflow-track">
+      <div class="step">
+        <div class="step-icon done">✓</div>
+        <div class="step-body">
+          <div class="step-title">Contexto de ingeniería cargado</div>
+          <div class="step-meta">repo: api-pagos · rama: main · 3 ADRs relacionados encontrados</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-icon done">✓</div>
+        <div class="step-body">
+          <div class="step-title">Análisis de arquitectura completado</div>
+          <div class="step-meta">confianza: 92% · 2 riesgos detectados · agent: Chief Architect</div>
+        </div>
+      </div>
+
+      <div class="step active">
+        <div class="step-icon active">↻</div>
+        <div class="step-body">
+          <div class="step-title">Ejecutando code review<span class="pulse"></span></div>
+          <div class="step-meta">agent: Code Reviewer · proveedor: claude-sonnet-5 · 14 archivos</div>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-icon pending">4</div>
+        <div class="step-body">
+          <div class="step-title">Validación de estándares de seguridad</div>
+          <div class="step-meta">en cola · requiere: Security Auditor</div>
+        </div>
+      </div>
+
+      <div class="step pending">
+        <div class="step-icon pending">5</div>
+        <div class="step-body">
+          <div class="step-title">Preparar release — requiere tu aprobación</div>
+          <div class="step-meta">gate humano obligatorio antes de producción</div>
+          <div class="approve-row">
+            <div class="btn primary">Aprobar cuando llegue</div>
+            <div class="btn">Ver detalles</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="command-bar">
+      <div class="orb"></div>
+      <input class="command-input" type="text" placeholder="Pide algo en lenguaje natural… ej. 'documenta los cambios de este release'">
+      <button class="command-send">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="side glass">
+    <div>
+      <div class="side-block-title">Agentes activos</div>
+      <div class="agent-row working">
+        <div class="agent-avatar">CR</div>
+        <div class="agent-info">
+          <div class="agent-name">Code Reviewer</div>
+          <div class="agent-status">Trabajando ahora</div>
+        </div>
+      </div>
+      <div class="agent-row">
+        <div class="agent-avatar">CA</div>
+        <div class="agent-info">
+          <div class="agent-name">Chief Architect</div>
+          <div class="agent-status">Completado</div>
+        </div>
+      </div>
+      <div class="agent-row">
+        <div class="agent-avatar">SA</div>
+        <div class="agent-info">
+          <div class="agent-name">Security Auditor</div>
+          <div class="agent-status">En cola</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="side-block-title">Proveedor en uso</div>
+      <div class="provider-bar"><span>claude-sonnet-5</span><span>68% carga</span></div>
+      <div class="track"><div class="track-fill" style="width:68%; background:var(--grad-neural);"></div></div>
+      <div class="provider-bar"><span>Costo de esta sesión</span><span>$0.34</span></div>
+      <div class="track"><div class="track-fill" style="width:22%; background:var(--emerald);"></div></div>
+    </div>
+
+    <div>
+      <div class="side-block-title">Memoria de ingeniería</div>
+      <div class="memory-card">
+        <b>3 decisiones previas</b> sobre el módulo de pagos se cargaron automáticamente, incluyendo el ADR sobre reintentos de transacciones (mar. 2026).
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

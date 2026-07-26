@@ -1,0 +1,20 @@
+{
+  "name": "@aios/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "@aios/kernel": "workspace:*",
+    "@aios/workflow": "workspace:*",
+    "@aios/agents": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "tsx": "^4.20.5"
+  }
+}

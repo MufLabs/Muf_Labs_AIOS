@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: .
+    container_name: aios-mvp-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DB_PATH=/app/data/aios-mvp.db
+
+  frontend:
+    build: ./frontend
+    container_name: aios-mvp-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

@@ -1,0 +1,783 @@
+Original Line,Original Title,New Document,New Section Title,Routing Method
+25,Purpose,01_EngineeringWorkflow.md,Purpose,keyword
+47,Scope,01_EngineeringWorkflow.md,Scope,keyword
+219,Autonomous Prompt Engineering,01_EngineeringWorkflow.md,Autonomous Prompt Engineering,keyword
+238,Multi-Stage Prompt Optimization,01_EngineeringWorkflow.md,Multi-Stage Prompt Optimization,keyword
+258,Engineering Intent Resolution,01_EngineeringWorkflow.md,Engineering Intent Resolution,keyword
+331,Engineering Workflow Engine,01_EngineeringWorkflow.md,Engineering Workflow Engine,keyword
+352,Workflow Participants,01_EngineeringWorkflow.md,Workflow Participants,keyword
+397,Workflow Authority,01_EngineeringWorkflow.md,Workflow Authority,keyword
+417,Workflow Ownership,01_EngineeringWorkflow.md,Workflow Ownership,keyword
+435,Workflow Responsibilities,01_EngineeringWorkflow.md,Workflow Responsibilities,keyword
+482,Engineering Request Lifecycle,01_EngineeringWorkflow.md,Engineering Request Lifecycle,keyword
+656,Engineering Context Loading,01_EngineeringWorkflow.md,Engineering Context Loading,keyword
+694,Engineering Context Propagation,01_EngineeringWorkflow.md,Engineering Context Propagation,keyword
+848,Progressive Configuration Model,01_EngineeringWorkflow.md,Progressive Configuration Model,keyword
+901,Automatic Engineering Orchestration,01_EngineeringWorkflow.md,Automatic Engineering Orchestration,keyword
+919,Intelligent Workflow Optimization,01_EngineeringWorkflow.md,Intelligent Workflow Optimization,keyword
+972,Workflow Inputs,01_EngineeringWorkflow.md,Workflow Inputs,keyword
+1231,Intelligent Project Understanding,01_EngineeringWorkflow.md,Intelligent Project Understanding,keyword
+1251,Automatic Workflow Selection,01_EngineeringWorkflow.md,Automatic Workflow Selection,keyword
+1400,Workflow Outputs,01_EngineeringWorkflow.md,Workflow Outputs,keyword
+1427,Engineering Artifact Generation,01_EngineeringWorkflow.md,Engineering Artifact Generation,keyword
+1447,Automatic Artifact Management,01_EngineeringWorkflow.md,Automatic Artifact Management,keyword
+1481,Dynamic Context Compression,01_EngineeringWorkflow.md,Dynamic Context Compression,keyword
+1613,Intelligent Auto-Prompting Engine,01_EngineeringWorkflow.md,Intelligent Auto-Prompting Engine,keyword
+1625,Recursive Prompt Refinement,01_EngineeringWorkflow.md,Recursive Prompt Refinement,keyword
+1641,Prompt Chain Generation,01_EngineeringWorkflow.md,Prompt Chain Generation,keyword
+1689,Prompt Quality Evaluation,01_EngineeringWorkflow.md,Prompt Quality Evaluation,keyword
+1842,Dynamic Engineering Team Assembly,01_EngineeringWorkflow.md,Dynamic Engineering Team Assembly,keyword
+2538,Adaptive Workflow Selection,01_EngineeringWorkflow.md,Adaptive Workflow Selection,keyword
+2574,Organization Profiles,01_EngineeringWorkflow.md,Organization Profiles,keyword
+2592,Project Profiles,01_EngineeringWorkflow.md,Project Profiles,keyword
+3423,Engineering Workspace Manager,01_EngineeringWorkflow.md,Engineering Workspace Manager,keyword
+3442,Multi-Project Management,01_EngineeringWorkflow.md,Multi-Project Management,keyword
+4958,Autonomous Engineering Organization,01_EngineeringWorkflow.md,Autonomous Engineering Organization,keyword
+6008,Universal Context Interface,01_EngineeringWorkflow.md,Universal Context Interface,keyword
+6027,Universal Prompt Interface,01_EngineeringWorkflow.md,Universal Prompt Interface,keyword
+70,Engineering Workflow Philosophy,02_AIOSCoreArchitecture.md,Vision & Philosophy,keyword
+90,AI-Agnostic Architecture,02_AIOSCoreArchitecture.md,AI-Agnostic Architecture,keyword
+278,Engineering Workflow Principles,02_AIOSCoreArchitecture.md,Engineering Workflow Principles,keyword
+307,Workflow Architecture,02_AIOSCoreArchitecture.md,Workflow Architecture,keyword
+2241,Architecture Discovery,02_AIOSCoreArchitecture.md,Architecture Discovery,keyword
+2679,MUF Labs AI Operating System,02_AIOSCoreArchitecture.md,MUF Labs AI Operating System,override
+2713,AI Operating System Architecture,02_AIOSCoreArchitecture.md,AI Operating System Architecture,keyword
+2998,Intelligent Orchestration Philosophy,02_AIOSCoreArchitecture.md,Intelligent Orchestration Philosophy,keyword
+3511,AI Operating System Principles,02_AIOSCoreArchitecture.md,AI Operating System Principles,keyword
+3879,Self-Discovery,02_AIOSCoreArchitecture.md,Self-Discovery,keyword
+3898,Zero Configuration Operation,02_AIOSCoreArchitecture.md,Zero Configuration Operation,keyword
+4099,Service-Oriented AI Architecture,02_AIOSCoreArchitecture.md,Service-Oriented AI Architecture,keyword
+4472,AI Operating System Manifesto,02_AIOSCoreArchitecture.md,AI Operating System Manifesto,keyword
+4895,Enterprise Architecture,02_AIOSCoreArchitecture.md,Enterprise Architecture,keyword
+4914,Engineering Operating Principles,02_AIOSCoreArchitecture.md,Engineering Operating Principles,keyword
+4968,Organizational Architecture,02_AIOSCoreArchitecture.md,Organizational Architecture,keyword
+5353,AI Operating System Constitution,02_AIOSCoreArchitecture.md,AI Operating System Constitution,keyword
+6325,Final Engineering Workflow Principles,02_AIOSCoreArchitecture.md,Final Engineering Workflow Principles,keyword
+7872,Ecosystem Principles,02_AIOSCoreArchitecture.md,Ecosystem Principles,keyword
+8358,AI Operating System Software Development Principles,02_AIOSCoreArchitecture.md,AI Operating System Software Development Principles,keyword
+8377,AI Operating System Vision Statement,02_AIOSCoreArchitecture.md,AI Operating System Vision Statement,keyword
+8411,Universal AI Session,02_AIOSCoreArchitecture.md,Universal AI Session,keyword
+8750,AI Native Ecosystem Vision,02_AIOSCoreArchitecture.md,AI Native Ecosystem Vision,keyword
+8772,Long-Term Vision,02_AIOSCoreArchitecture.md,Long-Term Vision,keyword
+8797,Native AIOS Features,02_AIOSCoreArchitecture.md,Native AIOS Features,keyword
+9760,Universal AIOS Principles,02_AIOSCoreArchitecture.md,Universal AIOS Principles,keyword
+9784,AIOS Reference Architecture,02_AIOSCoreArchitecture.md,AIOS Reference Architecture,keyword
+9796,Layered Architecture,02_AIOSCoreArchitecture.md,Layered Architecture,keyword
+10023,AI Native Service Architecture,02_AIOSCoreArchitecture.md,AI Native Service Architecture,keyword
+10059,Pluggable Architecture,02_AIOSCoreArchitecture.md,Pluggable Architecture,keyword
+10194,AI Operating System Architectural Vision,02_AIOSCoreArchitecture.md,AI Operating System Architectural Vision,keyword
+714,Multi-Agent Execution Model,03_KernelRuntime.md,Multi-Agent Execution Model,keyword
+1707,Multi-Agent Prompt Collaboration,03_KernelRuntime.md,Multi-Agent Prompt Collaboration,keyword
+1822,Automatic Engineering Agent Selection,03_KernelRuntime.md,Automatic Engineering Agent Selection,keyword
+1869,Engineering Agent Registry,03_KernelRuntime.md,Engineering Agent Registry,keyword
+2627,Engineering Session Management,03_KernelRuntime.md,Engineering Session Management,keyword
+2775,Engineering Agent Operating Model,03_KernelRuntime.md,Engineering Agent Operating Model,keyword
+3039,AI Kernel Architecture,03_KernelRuntime.md,AI Kernel Architecture,keyword
+3059,AI Kernel Responsibilities,03_KernelRuntime.md,AI Kernel Responsibilities,keyword
+3083,Kernel Services,03_KernelRuntime.md,Kernel Services,keyword
+3104,Engineering Agent Runtime,03_KernelRuntime.md,Engineering Agent Runtime,keyword
+3125,Engineering Agent Lifecycle,03_KernelRuntime.md,Engineering Agent Lifecycle,keyword
+3223,Workflow Scheduler,03_KernelRuntime.md,Workflow Scheduler,keyword
+3242,Engineering Task Manager,03_KernelRuntime.md,Engineering Task Manager,keyword
+3260,Workflow Queue Management,03_KernelRuntime.md,Workflow Queue Management,override
+3278,Resource Scheduler,03_KernelRuntime.md,Resource Scheduler,keyword
+3454,Autonomous Engineering Supervisor,03_KernelRuntime.md,Autonomous Engineering Supervisor,override
+4153,AI Session Runtime,03_KernelRuntime.md,AI Session Runtime,override
+6488,Resource Scheduling,03_KernelRuntime.md,Resource Scheduling,keyword
+6774,AI Process Manager,03_KernelRuntime.md,AI Process Manager,keyword
+6786,AI Process Model,03_KernelRuntime.md,AI Process Model,keyword
+6808,Process Lifecycle,03_KernelRuntime.md,Process Lifecycle,keyword
+6862,Process Scheduling,03_KernelRuntime.md,Process Scheduling,keyword
+6881,Intelligent Process Prioritization,03_KernelRuntime.md,Intelligent Process Prioritization,keyword
+6899,Parallel Process Execution,03_KernelRuntime.md,Parallel Process Execution,keyword
+6915,Process Synchronization,03_KernelRuntime.md,Process Synchronization,keyword
+6931,Process Isolation,03_KernelRuntime.md,Process Isolation,keyword
+6947,Background Processes,03_KernelRuntime.md,Background Processes,keyword
+6983,Persistent Processes,03_KernelRuntime.md,Persistent Processes,override
+7017,AI Thread Management,03_KernelRuntime.md,AI Thread Management,keyword
+7050,AI Filesystem (AIFS),03_KernelRuntime.md,AI Filesystem (AIFS),keyword
+7274,AI Operating System Kernel Services,03_KernelRuntime.md,AI Operating System Kernel Services,keyword
+7298,Kernel Stability Principles,03_KernelRuntime.md,Kernel Stability Principles,keyword
+8282,Intelligent Engineering Sessions,03_KernelRuntime.md,Intelligent Engineering Sessions,keyword
+8301,Engineering Workspace Runtime,03_KernelRuntime.md,Engineering Workspace Runtime,keyword
+8320,AI Native Automation,03_KernelRuntime.md,AI Native Automation,keyword
+8401,AI Native Operating Environment,03_KernelRuntime.md,AI Native Operating Environment,keyword
+9582,Autonomous Background Services,03_KernelRuntime.md,Autonomous Background Services,keyword
+9601,AI Native Scheduling,03_KernelRuntime.md,AI Native Scheduling,keyword
+9938,AI Operating System Kernel,03_KernelRuntime.md,AI Operating System Kernel,keyword
+10040,Microkernel Philosophy,03_KernelRuntime.md,Microkernel Philosophy,keyword
+10707,Intelligence Scheduling,03_KernelRuntime.md,Intelligence Scheduling,keyword
+11520,AI Operating System Interface Definition (AIOS-IDL),03_KernelRuntime.md,AI Operating System Interface Definition (AIOS-IDL),chapter
+11532,Operating System Service Contracts,03_KernelRuntime.md,Operating System Service Contracts,chapter
+11552,Universal System Call Interface,03_KernelRuntime.md,Universal System Call Interface,chapter
+11610,Kernel API,03_KernelRuntime.md,Kernel API,chapter
+11633,Capability Interface,03_KernelRuntime.md,Capability Interface,chapter
+11651,Engineering Agent Interface,03_KernelRuntime.md,Engineering Agent Interface,chapter
+11670,Workflow Interface,03_KernelRuntime.md,Workflow Interface,chapter
+11689,Memory Interface,03_KernelRuntime.md,Memory Interface,chapter
+11709,AI Filesystem Interface,03_KernelRuntime.md,AI Filesystem Interface,chapter
+11730,Repository Interface,03_KernelRuntime.md,Repository Interface,chapter
+11758,Tool Interface,03_KernelRuntime.md,Tool Interface,chapter
+11774,Event Interface,03_KernelRuntime.md,Event Interface,chapter
+11792,Telemetry Interface,03_KernelRuntime.md,Telemetry Interface,chapter
+11809,Plugin Interface,03_KernelRuntime.md,Plugin Interface,chapter
+11827,SDK Interface,03_KernelRuntime.md,SDK Interface,chapter
+11837,Interface Versioning,03_KernelRuntime.md,Interface Versioning,chapter
+11852,Interface Principles,03_KernelRuntime.md,Interface Principles,chapter
+16534,Kernel System Call Philosophy,03_KernelRuntime.md,Kernel System Call Philosophy,chapter
+16546,System Call Categories,03_KernelRuntime.md,System Call Categories,chapter
+16590,Process Management Calls,03_KernelRuntime.md,Process Management Calls,chapter
+16624,Workflow Management Calls,03_KernelRuntime.md,Workflow Management Calls,chapter
+16656,Engineering Agent Calls,03_KernelRuntime.md,Engineering Agent Calls,chapter
+16686,Capability Calls,03_KernelRuntime.md,Capability Calls,chapter
+16710,Memory Calls,03_KernelRuntime.md,Memory Calls,chapter
+16738,Knowledge Calls,03_KernelRuntime.md,Knowledge Calls,chapter
+16764,Filesystem Calls,03_KernelRuntime.md,Filesystem Calls,chapter
+16788,Repository Calls,03_KernelRuntime.md,Repository Calls,chapter
+16812,Provider Calls,03_KernelRuntime.md,Provider Calls,chapter
+16834,Resource Calls,03_KernelRuntime.md,Resource Calls,chapter
+16856,Service Calls,03_KernelRuntime.md,Service Calls,chapter
+16880,Package Calls,03_KernelRuntime.md,Package Calls,chapter
+16904,Session Calls,03_KernelRuntime.md,Session Calls,chapter
+16926,Security Calls,03_KernelRuntime.md,Security Calls,chapter
+16954,Policy Calls,03_KernelRuntime.md,Policy Calls,chapter
+16976,Communication Calls,03_KernelRuntime.md,Communication Calls,chapter
+17002,Telemetry Calls,03_KernelRuntime.md,Telemetry Calls,chapter
+17024,Universal System Call Contract,03_KernelRuntime.md,Universal System Call Contract,chapter
+17042,System Call Security,03_KernelRuntime.md,System Call Security,chapter
+17057,System Call Observability,03_KernelRuntime.md,System Call Observability,chapter
+17070,System Call Determinism,03_KernelRuntime.md,System Call Determinism,chapter
+17078,System Call Versioning,03_KernelRuntime.md,System Call Versioning,chapter
+17092,Kernel System Call Principles,03_KernelRuntime.md,Kernel System Call Principles,chapter
+677,Intelligent Context Prioritization,04_ResourceManagement.md,Intelligent Context Prioritization,keyword
+808,Workflow Resource Optimization,04_ResourceManagement.md,Workflow Resource Optimization,keyword
+1030,Engineering Resource Model,04_ResourceManagement.md,Engineering Resource Model,keyword
+1040,Supported Engineering Resources,04_ResourceManagement.md,Supported Engineering Resources,keyword
+1175,Repository Analysis,04_ResourceManagement.md,Repository Analysis,keyword
+1196,Workspace Analysis,04_ResourceManagement.md,Workspace Analysis,keyword
+1213,Automatic Resource Discovery,04_ResourceManagement.md,Automatic Resource Discovery,keyword
+1326,Large Codebase Support,04_ResourceManagement.md,Large Codebase Support,keyword
+1343,Incremental Repository Analysis,04_ResourceManagement.md,Incremental Repository Analysis,keyword
+1360,Cross-Repository Engineering,04_ResourceManagement.md,Cross-Repository Engineering,keyword
+1377,Repository Knowledge Graph,04_ResourceManagement.md,Repository Knowledge Graph,keyword
+1957,Execution Profiles,04_ResourceManagement.md,Execution Profiles,keyword
+2071,Hybrid Execution Architecture,04_ResourceManagement.md,Hybrid Execution Architecture,keyword
+2087,Offline Engineering Support,04_ResourceManagement.md,Offline Engineering Support,keyword
+2103,Failover Management,04_ResourceManagement.md,Failover Management,keyword
+2119,Retry Management,04_ResourceManagement.md,Retry Management,keyword
+2136,Engineering Recovery,04_ResourceManagement.md,Engineering Recovery,override
+2153,Workflow Resilience,04_ResourceManagement.md,Workflow Resilience,keyword
+2309,Repository Indexing,04_ResourceManagement.md,Repository Indexing,keyword
+2345,Cross-Resource Correlation,04_ResourceManagement.md,Cross-Resource Correlation,keyword
+2739,Artificial Intelligence Resource Model,04_ResourceManagement.md,Artificial Intelligence Resource Model,keyword
+2975,Universal Resource Management,04_ResourceManagement.md,Universal Resource Management,keyword
+3473,Engineering Telemetry,04_ResourceManagement.md,Engineering Telemetry,override
+3493,Observability Platform,04_ResourceManagement.md,Observability Platform,keyword
+4518,Intelligence Resource Model,04_ResourceManagement.md,Intelligence Resource Model,keyword
+5188,Autonomous Monitoring,04_ResourceManagement.md,Autonomous Monitoring,keyword
+5206,Engineering Health Management,04_ResourceManagement.md,Engineering Health Management,keyword
+5224,Engineering Analytics,04_ResourceManagement.md,Engineering Analytics,keyword
+5970,Universal Repository Interface,04_ResourceManagement.md,Universal Repository Interface,keyword
+6349,AI Resource Management,04_ResourceManagement.md,AI Resource Management,keyword
+6361,Intelligence Resource Classification,04_ResourceManagement.md,Intelligence Resource Classification,keyword
+6427,AI Resource Registry,04_ResourceManagement.md,AI Resource Registry,keyword
+6450,Dynamic Resource Discovery,04_ResourceManagement.md,Dynamic Resource Discovery,keyword
+6470,Resource Health Monitoring,04_ResourceManagement.md,Resource Health Monitoring,keyword
+6506,Resource Allocation,04_ResourceManagement.md,Resource Allocation,keyword
+6524,Resource Pooling,04_ResourceManagement.md,Resource Pooling,keyword
+6593,Resource Prioritization,04_ResourceManagement.md,Resource Prioritization,keyword
+6611,Resource Load Balancing,04_ResourceManagement.md,Resource Load Balancing,keyword
+6627,Resource Elasticity,04_ResourceManagement.md,Resource Elasticity,keyword
+6643,Resource Isolation,04_ResourceManagement.md,Resource Isolation,keyword
+6659,Resource Lifecycle,04_ResourceManagement.md,Resource Lifecycle,keyword
+6718,Resource Optimization,04_ResourceManagement.md,Resource Optimization,keyword
+6735,Autonomous Resource Management,04_ResourceManagement.md,Autonomous Resource Management,keyword
+6756,Resource Management Principles,04_ResourceManagement.md,Resource Management Principles,keyword
+7131,Intelligent Resource Resolution,04_ResourceManagement.md,Intelligent Resource Resolution,keyword
+7201,Unified Repository Abstraction,04_ResourceManagement.md,Unified Repository Abstraction,keyword
+8478,Autonomous Workspace Monitoring,04_ResourceManagement.md,Autonomous Workspace Monitoring,keyword
+8496,Repository Intelligence,04_ResourceManagement.md,Repository Intelligence,keyword
+9723,Universal Observability,04_ResourceManagement.md,Universal Observability,keyword
+9980,Resource Layer,04_ResourceManagement.md,Resource Layer,keyword
+10002,Infrastructure Layer,04_ResourceManagement.md,Infrastructure Layer,keyword
+154,Intelligent Provider Abstraction,05_ToolsAndServices.md,Intelligent Provider Abstraction,keyword
+182,Multi-Provider Engineering,05_ToolsAndServices.md,Multi-Provider Engineering,keyword
+787,Capability Allocation,05_ToolsAndServices.md,Capability Allocation,keyword
+954,Provider Independence Guarantee,05_ToolsAndServices.md,Provider Independence Guarantee,keyword
+1890,Capability Registry,05_ToolsAndServices.md,Capability Registry,keyword
+1912,Provider Registry,05_ToolsAndServices.md,Provider Registry,keyword
+1934,Model Registry,05_ToolsAndServices.md,Model Registry,keyword
+2953,Tool Operating Environment,05_ToolsAndServices.md,Tool Operating Environment,keyword
+3302,Intelligent Provider Selection,05_ToolsAndServices.md,Intelligent Provider Selection,keyword
+3341,Plugin Architecture,05_ToolsAndServices.md,Plugin Architecture,keyword
+3361,MCP Native Integration,05_ToolsAndServices.md,MCP Native Integration,keyword
+3375,Universal Tool Abstraction,05_ToolsAndServices.md,Universal Tool Abstraction,keyword
+3402,Local Development Environment Integration,05_ToolsAndServices.md,Local Development Environment Integration,keyword
+3531,Universal AI Capability Model,05_ToolsAndServices.md,Universal AI Capability Model,keyword
+3545,Capability Taxonomy,05_ToolsAndServices.md,Capability Taxonomy,keyword
+3629,Capability Composition,05_ToolsAndServices.md,Capability Composition,keyword
+3668,Dynamic Capability Discovery,05_ToolsAndServices.md,Dynamic Capability Discovery,keyword
+3684,Intelligent Capability Matching,05_ToolsAndServices.md,Intelligent Capability Matching,keyword
+3821,Universal Connector Architecture,05_ToolsAndServices.md,Universal Connector Architecture,keyword
+3840,Engineering Plugin Ecosystem,05_ToolsAndServices.md,Engineering Plugin Ecosystem,keyword
+4133,Engineering APIs,05_ToolsAndServices.md,Engineering APIs,keyword
+5904,Universal Provider Interface,05_ToolsAndServices.md,Universal Provider Interface,keyword
+5948,Universal Tool Interface,05_ToolsAndServices.md,Universal Tool Interface,keyword
+6043,Universal Capability Interface,05_ToolsAndServices.md,Universal Capability Interface,keyword
+7310,AI Native Tool Ecosystem,05_ToolsAndServices.md,AI Native Tool Ecosystem,keyword
+7322,Universal Tool Model,05_ToolsAndServices.md,Universal Tool Model,keyword
+7411,Native MCP Ecosystem,05_ToolsAndServices.md,Native MCP Ecosystem,keyword
+7429,Universal Connector Framework,05_ToolsAndServices.md,Universal Connector Framework,keyword
+7450,Connector Discovery,05_ToolsAndServices.md,Connector Discovery,keyword
+7467,Connector Lifecycle,05_ToolsAndServices.md,Connector Lifecycle,keyword
+7509,Tool Capability Registration,05_ToolsAndServices.md,Tool Capability Registration,keyword
+7549,Intelligent Tool Selection,05_ToolsAndServices.md,Intelligent Tool Selection,keyword
+7567,Tool Chaining,05_ToolsAndServices.md,Tool Chaining,keyword
+7623,Autonomous Tool Orchestration,05_ToolsAndServices.md,Autonomous Tool Orchestration,keyword
+7676,Engineering Capability Graph,05_ToolsAndServices.md,Engineering Capability Graph,keyword
+7724,Autonomous Capability Composition,05_ToolsAndServices.md,Autonomous Capability Composition,keyword
+7768,Universal AI Skill Framework,05_ToolsAndServices.md,Universal AI Skill Framework,keyword
+9959,Capability Layer,05_ToolsAndServices.md,Capability Layer,keyword
+10078,Service Discovery,05_ToolsAndServices.md,Service Discovery,keyword
+10097,Dependency Injection,05_ToolsAndServices.md,Dependency Injection,keyword
+10114,Interface Contracts,05_ToolsAndServices.md,Interface Contracts,keyword
+12756,AI Service Model,05_ToolsAndServices.md,AI Service Model,chapter
+12783,AI Service Lifecycle,05_ToolsAndServices.md,AI Service Lifecycle,chapter
+12833,Automatic Service Discovery,05_ToolsAndServices.md,Automatic Service Discovery,chapter
+12850,Service Registry,05_ToolsAndServices.md,Service Registry,chapter
+12869,Service Categories,05_ToolsAndServices.md,Service Categories,chapter
+12957,Service Scheduling,05_ToolsAndServices.md,Service Scheduling,chapter
+12974,Service Dependencies,05_ToolsAndServices.md,Service Dependencies,chapter
+12984,Service Health,05_ToolsAndServices.md,Service Health,chapter
+13002,Automatic Restart,05_ToolsAndServices.md,Automatic Restart,chapter
+13018,Background Execution,05_ToolsAndServices.md,Background Execution,chapter
+13028,Service Isolation,05_ToolsAndServices.md,Service Isolation,chapter
+13044,Service Communication,05_ToolsAndServices.md,Service Communication,chapter
+13061,Service Policies,05_ToolsAndServices.md,Service Policies,chapter
+13079,Autonomous Service Optimization,05_ToolsAndServices.md,Autonomous Service Optimization,chapter
+13096,Service Persistence,05_ToolsAndServices.md,Service Persistence,chapter
+13110,AI Native Daemons,05_ToolsAndServices.md,AI Native Daemons,chapter
+13138,Service Governance,05_ToolsAndServices.md,Service Governance,chapter
+13152,AI Service Principles,05_ToolsAndServices.md,AI Service Principles,chapter
+13170,Workflow Definition Language (WDL),05_ToolsAndServices.md,Workflow Definition Language (WDL),chapter
+4016,AI Application Runtime (AIR),06_ApplicationsSDK.md,AI Application Runtime (AIR),keyword
+4034,AI Native Applications,06_ApplicationsSDK.md,AI Native Applications,keyword
+4051,Universal Application Model,06_ApplicationsSDK.md,Universal Application Model,keyword
+4074,AI Services,06_ApplicationsSDK.md,AI Services,override
+4318,Autonomous Engineering Assistants,06_ApplicationsSDK.md,Autonomous Engineering Assistants,override
+4336,AI Copilot Framework,06_ApplicationsSDK.md,AI Copilot Framework,keyword
+7891,AI Software Development Kit (AI SDK),06_ApplicationsSDK.md,AI Software Development Kit (AI SDK),keyword
+7903,AI Native Development Framework,06_ApplicationsSDK.md,AI Native Development Framework,override
+7924,AI Native API,06_ApplicationsSDK.md,AI Native API,override
+7962,AI Application Manifest,06_ApplicationsSDK.md,AI Application Manifest,keyword
+7983,Application Lifecycle,06_ApplicationsSDK.md,Application Lifecycle,keyword
+8050,AI Native Services,06_ApplicationsSDK.md,AI Native Services,keyword
+8071,AI Application Containers,06_ApplicationsSDK.md,AI Application Containers,keyword
+8088,AI Application Profiles,06_ApplicationsSDK.md,AI Application Profiles,keyword
+8134,Application State Management,06_ApplicationsSDK.md,Application State Management,keyword
+9877,Application Layer,06_ApplicationsSDK.md,Application Layer,keyword
+827,User Configuration Philosophy,07_UserExperience.md,User Configuration Philosophy,keyword
+937,User Experience Principles,07_UserExperience.md,User Experience Principles,keyword
+2610,User Profiles,07_UserExperience.md,User Profiles,keyword
+3918,Progressive Disclosure,07_UserExperience.md,Progressive Disclosure,keyword
+3957,Engineering Transparency,07_UserExperience.md,Engineering Transparency,keyword
+4300,Engineering Workspace Awareness,07_UserExperience.md,Engineering Workspace Awareness,keyword
+4805,Human-in-the-Loop Engineering,07_UserExperience.md,Human-in-the-Loop Engineering,keyword
+4823,Human Override,07_UserExperience.md,Human Override,keyword
+8151,AI Native User Interface,07_UserExperience.md,AI Native User Interface,keyword
+8170,Engineering Command Interface,07_UserExperience.md,Engineering Command Interface,keyword
+8200,Intelligent Intent Interface,07_UserExperience.md,Intelligent Intent Interface,keyword
+8458,AI Workspace Awareness,07_UserExperience.md,AI Workspace Awareness,keyword
+8711,Engineering Experience Engine,07_UserExperience.md,Engineering Experience Engine,keyword
+8892,Native User Experience Architecture,07_UserExperience.md,Native User Experience Architecture,keyword
+8904,Human-Centered Design Principles,07_UserExperience.md,Human-Centered Design Principles,keyword
+8941,Natural Language Operating System,07_UserExperience.md,Natural Language Operating System,keyword
+8995,Intelligent Interaction Modes,07_UserExperience.md,Intelligent Interaction Modes,keyword
+9015,Adaptive User Experience,07_UserExperience.md,Adaptive User Experience,keyword
+9067,Intelligent Configuration,07_UserExperience.md,Intelligent Configuration,keyword
+9122,AI Native Dashboard,07_UserExperience.md,AI Native Dashboard,keyword
+9160,User Control,07_UserExperience.md,User Control,keyword
+9180,Progressive Autonomy,07_UserExperience.md,Progressive Autonomy,keyword
+9255,Continuous User Learning,07_UserExperience.md,Continuous User Learning,keyword
+9291,Accessibility,07_UserExperience.md,Accessibility,keyword
+9310,Universal Interaction Principles,07_UserExperience.md,Universal Interaction Principles,keyword
+9328,AI Operating System Experience Vision,07_UserExperience.md,AI Operating System Experience Vision,keyword
+9742,Engineering Explainability Framework,07_UserExperience.md,Engineering Explainability Framework,keyword
+9854,User Experience Layer,07_UserExperience.md,User Experience Layer,keyword
+732,Shared Artificial Intelligence Execution,08_IntelligenceEngine.md,Shared Artificial Intelligence Execution,keyword
+1574,Self-Optimization Engine,08_IntelligenceEngine.md,Self-Optimization Engine,keyword
+1735,Engineering Confidence Model,08_IntelligenceEngine.md,Engineering Confidence Model,keyword
+1757,Engineering Uncertainty Management,08_IntelligenceEngine.md,Engineering Uncertainty Management,keyword
+1771,Engineering Decision Engine,08_IntelligenceEngine.md,Engineering Decision Engine,keyword
+1805,Engineering Consensus Orchestration,08_IntelligenceEngine.md,Engineering Consensus Orchestration,keyword
+2168,Engineering Intelligence Layer,08_IntelligenceEngine.md,Engineering Intelligence Layer,keyword
+2180,Engineering Project Discovery,08_IntelligenceEngine.md,Engineering Project Discovery,override
+2201,Technology Discovery,08_IntelligenceEngine.md,Technology Discovery,override
+2222,Dependency Intelligence,08_IntelligenceEngine.md,Dependency Intelligence,keyword
+2263,Semantic Code Understanding,08_IntelligenceEngine.md,Semantic Code Understanding,override
+2327,Intelligent Search,08_IntelligenceEngine.md,Intelligent Search,override
+2363,Engineering Pattern Recognition,08_IntelligenceEngine.md,Engineering Pattern Recognition,keyword
+2381,Engineering Anti-Pattern Detection,08_IntelligenceEngine.md,Engineering Anti-Pattern Detection,keyword
+2401,Engineering Risk Discovery,08_IntelligenceEngine.md,Engineering Risk Discovery,keyword
+2420,Engineering Opportunity Discovery,08_IntelligenceEngine.md,Engineering Opportunity Discovery,keyword
+2438,Intelligent Engineering Recommendations,08_IntelligenceEngine.md,Intelligent Engineering Recommendations,keyword
+2759,Universal Artificial Intelligence Compatibility,08_IntelligenceEngine.md,Universal Artificial Intelligence Compatibility,keyword
+4188,Intent Recognition Engine,08_IntelligenceEngine.md,Intent Recognition Engine,keyword
+4362,Multi-Domain Intelligence,08_IntelligenceEngine.md,Multi-Domain Intelligence,keyword
+4383,Domain Specialization,08_IntelligenceEngine.md,Domain Specialization,keyword
+4435,Autonomous Continuous Improvement,08_IntelligenceEngine.md,Autonomous Continuous Improvement,keyword
+4506,Universal Intelligence Layer,08_IntelligenceEngine.md,Universal Intelligence Layer,keyword
+4545,Hybrid Intelligence,08_IntelligenceEngine.md,Hybrid Intelligence,keyword
+4581,Collective Intelligence,08_IntelligenceEngine.md,Collective Intelligence,keyword
+4600,Engineering Swarm Intelligence,08_IntelligenceEngine.md,Engineering Swarm Intelligence,keyword
+4625,Swarm Coordination,08_IntelligenceEngine.md,Swarm Coordination,keyword
+4642,Distributed Intelligence,08_IntelligenceEngine.md,Distributed Intelligence,keyword
+5243,Engineering Intelligence Dashboard,08_IntelligenceEngine.md,Engineering Intelligence Dashboard,keyword
+5262,Autonomous Recommendations,08_IntelligenceEngine.md,Autonomous Recommendations,keyword
+5281,Self-Healing Workflows,08_IntelligenceEngine.md,Self-Healing Workflows,keyword
+5299,Engineering Optimization Engine,08_IntelligenceEngine.md,Engineering Optimization Engine,keyword
+5318,Continuous Organizational Learning,08_IntelligenceEngine.md,Continuous Organizational Learning,keyword
+5335,Engineering Evolution,08_IntelligenceEngine.md,Engineering Evolution,keyword
+7035,Cooperative Intelligence,08_IntelligenceEngine.md,Cooperative Intelligence,keyword
+7164,Intelligent Engineering Search,08_IntelligenceEngine.md,Intelligent Engineering Search,override
+8437,Workspace Intelligence,08_IntelligenceEngine.md,Workspace Intelligence,keyword
+8643,Organizational Intelligence,08_IntelligenceEngine.md,Organizational Intelligence,keyword
+8661,Adaptive Intelligence,08_IntelligenceEngine.md,Adaptive Intelligence,keyword
+8730,Engineering Intelligence Network,08_IntelligenceEngine.md,Engineering Intelligence Network,keyword
+9143,Explainable Intelligence,08_IntelligenceEngine.md,Explainable Intelligence,keyword
+9236,Intelligent Recommendations,08_IntelligenceEngine.md,Intelligent Recommendations,keyword
+10580,Logical Intelligence,08_IntelligenceEngine.md,Logical Intelligence,keyword
+10614,Intelligence Instances,08_IntelligenceEngine.md,Intelligence Instances,keyword
+10633,Intelligence Lifecycle,08_IntelligenceEngine.md,Intelligence Lifecycle,keyword
+10679,Intelligence Pool,08_IntelligenceEngine.md,Intelligence Pool,keyword
+10761,Composite Intelligence,08_IntelligenceEngine.md,Composite Intelligence,keyword
+10824,Intelligence Quality Evaluation,08_IntelligenceEngine.md,Intelligence Quality Evaluation,keyword
+10842,Intelligence Evolution,08_IntelligenceEngine.md,Intelligence Evolution,keyword
+10860,Artificial Intelligence Independence,08_IntelligenceEngine.md,Artificial Intelligence Independence,keyword
+10875,Artificial Intelligence Operating Principles,08_IntelligenceEngine.md,Artificial Intelligence Operating Principles,keyword
+10893,Cognitive Operating Environment,08_IntelligenceEngine.md,Cognitive Operating Environment,keyword
+10912,Cognitive Reasoning Engine (CRE),08_IntelligenceEngine.md,Cognitive Reasoning Engine (CRE),keyword
+10924,Reasoning Independence,08_IntelligenceEngine.md,Reasoning Independence,keyword
+10939,Reasoning Strategies,08_IntelligenceEngine.md,Reasoning Strategies,keyword
+10960,Adaptive Reasoning,08_IntelligenceEngine.md,Adaptive Reasoning,keyword
+10980,Multi-Stage Reasoning,08_IntelligenceEngine.md,Multi-Stage Reasoning,keyword
+11028,Recursive Reasoning,08_IntelligenceEngine.md,Recursive Reasoning,keyword
+11043,Multi-Perspective Reasoning,08_IntelligenceEngine.md,Multi-Perspective Reasoning,keyword
+11071,Engineering Debate,08_IntelligenceEngine.md,Engineering Debate,keyword
+11086,Engineering Trade-Off Analysis,08_IntelligenceEngine.md,Engineering Trade-Off Analysis,keyword
+11103,Reasoning Confidence,08_IntelligenceEngine.md,Reasoning Confidence,keyword
+11121,Uncertainty Management,08_IntelligenceEngine.md,Uncertainty Management,keyword
+11138,Cognitive Planning,08_IntelligenceEngine.md,Cognitive Planning,keyword
+11157,Self-Reflection,08_IntelligenceEngine.md,Self-Reflection,keyword
+11173,Meta-Reasoning,08_IntelligenceEngine.md,Meta-Reasoning,keyword
+11204,Human Cognitive Collaboration,08_IntelligenceEngine.md,Human Cognitive Collaboration,keyword
+11218,Continuous Cognitive Improvement,08_IntelligenceEngine.md,Continuous Cognitive Improvement,keyword
+11235,Cognitive Reasoning Principles,08_IntelligenceEngine.md,Cognitive Reasoning Principles,keyword
+123,Capability-Based Execution,09_PlanningExecution.md,Capability-Based Execution,keyword
+452,Engineering Workflow Lifecycle,09_PlanningExecution.md,Engineering Workflow Lifecycle,keyword
+540,Engineering Decomposition,09_PlanningExecution.md,Engineering Decomposition,keyword
+558,Intelligent Task Planning,09_PlanningExecution.md,Intelligent Task Planning,keyword
+577,Parallel Engineering Execution,09_PlanningExecution.md,Parallel Engineering Execution,keyword
+595,Dynamic Workflow Adaptation,09_PlanningExecution.md,Dynamic Workflow Adaptation,keyword
+613,Workflow State Management,09_PlanningExecution.md,Workflow State Management,keyword
+639,Workflow Transitions,09_PlanningExecution.md,Workflow Transitions,keyword
+1299,Engineering Request Interpretation,09_PlanningExecution.md,Engineering Request Interpretation,keyword
+1593,Autonomous Engineering Planning,09_PlanningExecution.md,Autonomous Engineering Planning,keyword
+2474,Workflow Templates,09_PlanningExecution.md,Workflow Templates,keyword
+2496,Workflow Composition,09_PlanningExecution.md,Workflow Composition,keyword
+2557,Engineering Workflow Personalization,09_PlanningExecution.md,Engineering Workflow Personalization,keyword
+2644,Workflow Continuation,09_PlanningExecution.md,Workflow Continuation,keyword
+2663,Checkpoint Management,09_PlanningExecution.md,Checkpoint Management,keyword
+3940,Explainable Engineering Execution,09_PlanningExecution.md,Explainable Engineering Execution,keyword
+4205,Goal-Oriented Execution,09_PlanningExecution.md,Goal-Oriented Execution,keyword
+4227,Autonomous Workflow Expansion,09_PlanningExecution.md,Autonomous Workflow Expansion,keyword
+4283,Long-Running Engineering Workflows,09_PlanningExecution.md,Long-Running Engineering Workflows,keyword
+5043,Multi-User Collaboration,09_PlanningExecution.md,Multi-User Collaboration,keyword
+5061,Role-Based Engineering,09_PlanningExecution.md,Role-Based Engineering,keyword
+5082,Workspace Collaboration,09_PlanningExecution.md,Workspace Collaboration,keyword
+5099,Intelligent Task Assignment,09_PlanningExecution.md,Intelligent Task Assignment,keyword
+5120,Autonomous Delegation,09_PlanningExecution.md,Autonomous Delegation,keyword
+5135,Engineering Coordination,09_PlanningExecution.md,Engineering Coordination,keyword
+5152,Intelligent Work Distribution,09_PlanningExecution.md,Intelligent Work Distribution,keyword
+6081,Autonomous Workflow Automation,09_PlanningExecution.md,Autonomous Workflow Automation,keyword
+6163,Intelligent Workflow Supervision,09_PlanningExecution.md,Intelligent Workflow Supervision,keyword
+6180,Autonomous Workflow Correction,09_PlanningExecution.md,Autonomous Workflow Correction,keyword
+6966,Long-Running Processes,09_PlanningExecution.md,Long-Running Processes,keyword
+8222,Autonomous Objective Decomposition,09_PlanningExecution.md,Autonomous Objective Decomposition,keyword
+8922,Objective-Based Interaction,09_PlanningExecution.md,Objective-Based Interaction,keyword
+8958,Intelligent Request Interpretation,09_PlanningExecution.md,Intelligent Request Interpretation,keyword
+8976,Autonomous Workflow Generation,09_PlanningExecution.md,Autonomous Workflow Generation,keyword
+9480,Asynchronous Execution,09_PlanningExecution.md,Asynchronous Execution,keyword
+9497,Real-Time Collaboration,09_PlanningExecution.md,Real-Time Collaboration,keyword
+9513,Distributed Workflow Coordination,09_PlanningExecution.md,Distributed Workflow Coordination,keyword
+9918,Workflow Orchestration Layer,09_PlanningExecution.md,Workflow Orchestration Layer,keyword
+11252,Autonomous Planning & Execution Engine (APEE),09_PlanningExecution.md,Autonomous Planning & Execution Engine (APEE),keyword
+11264,Engineering Objective Model,09_PlanningExecution.md,Engineering Objective Model,keyword
+11285,Objective Decomposition,09_PlanningExecution.md,Objective Decomposition,keyword
+11337,Engineering Planning,09_PlanningExecution.md,Engineering Planning,keyword
+11356,Long-Term Planning,09_PlanningExecution.md,Long-Term Planning,keyword
+11372,Incremental Planning,09_PlanningExecution.md,Incremental Planning,keyword
+11388,Autonomous Replanning,09_PlanningExecution.md,Autonomous Replanning,keyword
+11405,Engineering Milestones,09_PlanningExecution.md,Engineering Milestones,keyword
+11422,Engineering Dependencies,09_PlanningExecution.md,Engineering Dependencies,override
+11439,Autonomous Execution,09_PlanningExecution.md,Autonomous Execution,keyword
+11454,Execution Supervision,09_PlanningExecution.md,Execution Supervision,keyword
+11471,Predictive Planning,09_PlanningExecution.md,Predictive Planning,keyword
+11486,Continuous Plan Optimization,09_PlanningExecution.md,Continuous Plan Optimization,keyword
+11503,Autonomous Planning Principles,09_PlanningExecution.md,Autonomous Planning Principles,keyword
+1500,Intelligent Memory Management,10_KnowledgeMemory.md,Intelligent Memory Management,keyword
+1519,PROJECT_STATE Integration,10_KnowledgeMemory.md,PROJECT_STATE Integration,keyword
+1535,Engineering Knowledge Base,10_KnowledgeMemory.md,Engineering Knowledge Base,keyword
+1554,Engineering Learning Engine,10_KnowledgeMemory.md,Engineering Learning Engine,keyword
+2282,Engineering Knowledge Graph,10_KnowledgeMemory.md,Engineering Knowledge Graph,keyword
+2790,Persistent Memory Architecture,10_KnowledgeMemory.md,Persistent Memory Architecture,keyword
+2811,T-BIT Integration,10_KnowledgeMemory.md,T-BIT Integration,override
+2838,Unified Memory Model,10_KnowledgeMemory.md,Unified Memory Model,keyword
+2857,Multi-Layer Memory Architecture,10_KnowledgeMemory.md,Multi-Layer Memory Architecture,keyword
+2937,Memory Synchronization,10_KnowledgeMemory.md,Memory Synchronization,keyword
+3750,Universal Memory Interface,10_KnowledgeMemory.md,Universal Memory Interface,keyword
+3976,Digital Twin,10_KnowledgeMemory.md,Digital Twin,keyword
+4398,Universal Knowledge Operating System,10_KnowledgeMemory.md,Universal Knowledge Operating System,keyword
+4416,Engineering Knowledge Evolution,10_KnowledgeMemory.md,Engineering Knowledge Evolution,keyword
+4696,Universal Context Fabric,10_KnowledgeMemory.md,Universal Context Fabric,keyword
+4753,Universal Engineering Memory,10_KnowledgeMemory.md,Universal Engineering Memory,keyword
+4788,Engineering Knowledge Continuity,10_KnowledgeMemory.md,Engineering Knowledge Continuity,keyword
+4986,Organizational Memory,10_KnowledgeMemory.md,Organizational Memory,keyword
+5006,Organizational Knowledge Evolution,10_KnowledgeMemory.md,Organizational Knowledge Evolution,keyword
+5023,Organizational Digital Twin,10_KnowledgeMemory.md,Organizational Digital Twin,keyword
+5927,Universal Memory Provider Interface,10_KnowledgeMemory.md,Universal Memory Provider Interface,keyword
+5988,Universal Knowledge Interface,10_KnowledgeMemory.md,Universal Knowledge Interface,keyword
+7219,Unified Memory Abstraction,10_KnowledgeMemory.md,Unified Memory Abstraction,keyword
+7255,Universal Knowledge Namespace,10_KnowledgeMemory.md,Universal Knowledge Namespace,keyword
+8514,Engineering Digital Twin,10_KnowledgeMemory.md,Engineering Digital Twin,keyword
+8535,Intelligent Project Evolution,10_KnowledgeMemory.md,Intelligent Project Evolution,keyword
+8553,Engineering Timeline,10_KnowledgeMemory.md,Engineering Timeline,keyword
+8573,Knowledge Continuity,10_KnowledgeMemory.md,Knowledge Continuity,keyword
+8590,Intelligent Context Evolution,10_KnowledgeMemory.md,Intelligent Context Evolution,keyword
+8609,Autonomous Knowledge Capture,10_KnowledgeMemory.md,Autonomous Knowledge Capture,keyword
+8628,Intelligent Knowledge Consolidation,10_KnowledgeMemory.md,Intelligent Knowledge Consolidation,keyword
+8695,Knowledge Validation,10_KnowledgeMemory.md,Knowledge Validation,keyword
+11189,Cognitive Memory Integration,10_KnowledgeMemory.md,Cognitive Memory Integration,keyword
+14801,Memory Philosophy,10_KnowledgeMemory.md,Memory Philosophy,chapter
+14813,Memory Object Identity,10_KnowledgeMemory.md,Memory Object Identity,chapter
+14832,Memory Categories,10_KnowledgeMemory.md,Memory Categories,chapter
+14884,Memory Object Structure,10_KnowledgeMemory.md,Memory Object Structure,chapter
+14928,Memory Metadata,10_KnowledgeMemory.md,Memory Metadata,chapter
+14950,Knowledge Content,10_KnowledgeMemory.md,Knowledge Content,chapter
+14970,Engineering Context,10_KnowledgeMemory.md,Engineering Context,chapter
+14990,Memory Relationships,10_KnowledgeMemory.md,Memory Relationships,chapter
+15010,Memory Evidence,10_KnowledgeMemory.md,Memory Evidence,chapter
+15029,Memory Confidence,10_KnowledgeMemory.md,Memory Confidence,chapter
+15046,Memory Lifecycle,10_KnowledgeMemory.md,Memory Lifecycle,chapter
+15092,Memory Versioning,10_KnowledgeMemory.md,Memory Versioning,chapter
+15109,Memory Indexing,10_KnowledgeMemory.md,Memory Indexing,chapter
+15126,Memory Federation,10_KnowledgeMemory.md,Memory Federation,chapter
+15160,Memory Privacy,10_KnowledgeMemory.md,Memory Privacy,chapter
+15177,Memory Governance,10_KnowledgeMemory.md,Memory Governance,chapter
+15192,Memory Quality,10_KnowledgeMemory.md,Memory Quality,chapter
+15210,Memory Retrieval,10_KnowledgeMemory.md,Memory Retrieval,chapter
+15225,Memory Evolution,10_KnowledgeMemory.md,Memory Evolution,chapter
+15243,Memory Object Principles,10_KnowledgeMemory.md,Memory Object Principles,chapter
+15261,Knowledge Graph Specification (KGS),10_KnowledgeMemory.md,Knowledge Graph Specification (KGS),chapter
+15271,Knowledge Graph Philosophy,10_KnowledgeMemory.md,Knowledge Graph Philosophy,chapter
+15281,Knowledge Graph Identity,10_KnowledgeMemory.md,Knowledge Graph Identity,chapter
+15296,Graph Nodes,10_KnowledgeMemory.md,Graph Nodes,chapter
+15346,Graph Relationships,10_KnowledgeMemory.md,Graph Relationships,chapter
+15398,Relationship Metadata,10_KnowledgeMemory.md,Relationship Metadata,chapter
+15418,Semantic Context,10_KnowledgeMemory.md,Semantic Context,chapter
+15436,Graph Evolution,10_KnowledgeMemory.md,Graph Evolution,chapter
+15455,Knowledge Graph Indexing,10_KnowledgeMemory.md,Knowledge Graph Indexing,chapter
+15472,Engineering Dependency Graph,10_KnowledgeMemory.md,Engineering Dependency Graph,chapter
+15526,Knowledge Confidence,10_KnowledgeMemory.md,Knowledge Confidence,chapter
+15543,Knowledge Navigation,10_KnowledgeMemory.md,Knowledge Navigation,chapter
+15560,Knowledge Retrieval,10_KnowledgeMemory.md,Knowledge Retrieval,chapter
+15575,Graph Synchronization,10_KnowledgeMemory.md,Graph Synchronization,chapter
+15590,Organizational Knowledge,10_KnowledgeMemory.md,Organizational Knowledge,chapter
+15606,Explainable Knowledge,10_KnowledgeMemory.md,Explainable Knowledge,chapter
+15623,Knowledge Governance,10_KnowledgeMemory.md,Knowledge Governance,chapter
+15638,Knowledge Graph Principles,10_KnowledgeMemory.md,Knowledge Graph Principles,chapter
+15656,Kernel Event Protocol (KEP),10_KnowledgeMemory.md,Kernel Event Protocol (KEP),chapter
+198,Intelligent Capability Routing,11_Communication.md,Intelligent Capability Routing,keyword
+3179,Event-Driven Architecture,11_Communication.md,Event-Driven Architecture,keyword
+3205,Engineering Event Bus,11_Communication.md,Engineering Event Bus,keyword
+3704,Artificial Intelligence Federation,11_Communication.md,Artificial Intelligence Federation,keyword
+3736,Engineering Provider Federation,11_Communication.md,Engineering Provider Federation,keyword
+3769,Memory Provider Federation,11_Communication.md,Memory Provider Federation,keyword
+3801,Engineering Resource Federation,11_Communication.md,Engineering Resource Federation,keyword
+4171,Intelligent Conversation Engine,11_Communication.md,Intelligent Conversation Engine,keyword
+4659,Engineering Mesh,11_Communication.md,Engineering Mesh,keyword
+4677,Engineering Service Mesh,11_Communication.md,Engineering Service Mesh,keyword
+4733,Intelligent Context Federation,11_Communication.md,Intelligent Context Federation,keyword
+5169,Engineering Notifications,11_Communication.md,Engineering Notifications,keyword
+6548,Resource Federation,11_Communication.md,Resource Federation,keyword
+8106,AI Native Event System,11_Communication.md,AI Native Event System,keyword
+9342,AIOS Communication Architecture,11_Communication.md,AIOS Communication Architecture,keyword
+9354,Kernel Communication Bus,11_Communication.md,Kernel Communication Bus,keyword
+9379,Message-Oriented Architecture,11_Communication.md,Message-Oriented Architecture,keyword
+9400,AI Message Model,11_Communication.md,AI Message Model,keyword
+9421,Event-Driven Intelligence,11_Communication.md,Event-Driven Intelligence,keyword
+9463,Streaming Architecture,11_Communication.md,Streaming Architecture,keyword
+9529,AI Native Notification Framework,11_Communication.md,AI Native Notification Framework,keyword
+9548,Intelligent Conversation Management,11_Communication.md,Intelligent Conversation Management,keyword
+9566,Multi-Conversation Intelligence,11_Communication.md,Multi-Conversation Intelligence,keyword
+9617,Universal Session Bus,11_Communication.md,Universal Session Bus,keyword
+9634,Cross-Organization Federation,11_Communication.md,Cross-Organization Federation,keyword
+9650,Enterprise Integration Framework,11_Communication.md,Enterprise Integration Framework,keyword
+9669,Universal API Gateway,11_Communication.md,Universal API Gateway,keyword
+9687,AI Native Command Bus,11_Communication.md,AI Native Command Bus,keyword
+9705,AI Native Query Engine,11_Communication.md,AI Native Query Engine,keyword
+10725,Intelligence Federation,11_Communication.md,Intelligence Federation,keyword
+15668,Event Philosophy,11_Communication.md,Event Philosophy,chapter
+15680,Event Identity,11_Communication.md,Event Identity,chapter
+15697,Event Categories,11_Communication.md,Event Categories,chapter
+15747,Event Structure,11_Communication.md,Event Structure,chapter
+15783,Event Metadata,11_Communication.md,Event Metadata,chapter
+15804,Event Payload,11_Communication.md,Event Payload,chapter
+15818,Event Publishing,11_Communication.md,Event Publishing,chapter
+15842,Event Subscription,11_Communication.md,Event Subscription,chapter
+15859,Event Routing,11_Communication.md,Event Routing,chapter
+15876,Event Ordering,11_Communication.md,Event Ordering,chapter
+15886,Event Correlation,11_Communication.md,Event Correlation,chapter
+15902,Event Persistence,11_Communication.md,Event Persistence,chapter
+15918,Event Replay,11_Communication.md,Event Replay,chapter
+15935,Event Streaming,11_Communication.md,Event Streaming,chapter
+15952,Event Priorities,11_Communication.md,Event Priorities,chapter
+15972,Event Reliability,11_Communication.md,Event Reliability,chapter
+15988,Event Security,11_Communication.md,Event Security,chapter
+16001,Event Lifecycle,11_Communication.md,Event Lifecycle,chapter
+16039,Event Telemetry,11_Communication.md,Event Telemetry,chapter
+16055,Event Governance,11_Communication.md,Event Governance,chapter
+16069,Kernel Event Principles,11_Communication.md,Kernel Event Principles,chapter
+16087,Kernel Communication Protocol (KCP),11_Communication.md,Kernel Communication Protocol (KCP),chapter
+16099,Communication Philosophy,11_Communication.md,Communication Philosophy,chapter
+16111,Communication Participants,11_Communication.md,Communication Participants,chapter
+16138,Communication Model,11_Communication.md,Communication Model,chapter
+16182,Communication Contracts,11_Communication.md,Communication Contracts,chapter
+16200,Message Types,11_Communication.md,Message Types,chapter
+16248,Communication Sessions,11_Communication.md,Communication Sessions,chapter
+16265,Session Lifecycle,11_Communication.md,Session Lifecycle,chapter
+16307,Service Discovery,11_Communication.md,Communication Endpoint Discovery,chapter
+16323,Capability Negotiation,11_Communication.md,Capability Negotiation,chapter
+16339,Communication Routing,11_Communication.md,Communication Routing,chapter
+16356,Reliable Delivery,11_Communication.md,Reliable Delivery,chapter
+16372,Streaming Communication,11_Communication.md,Streaming Communication,chapter
+16390,Flow Control,11_Communication.md,Flow Control,chapter
+16405,Communication Security,11_Communication.md,Communication Security,chapter
+16422,Communication Isolation,11_Communication.md,Communication Isolation,chapter
+16437,Error Handling,11_Communication.md,Communication Error Handling,chapter
+16454,Communication Observability,11_Communication.md,Communication Observability,chapter
+16472,Communication Audit,11_Communication.md,Communication Audit,chapter
+16489,Protocol Versioning,11_Communication.md,Protocol Versioning,chapter
+16503,Kernel Communication Principles,11_Communication.md,Kernel Communication Principles,chapter
+16522,Kernel System Call Specification (KSCS),11_Communication.md,Kernel System Call Specification (KSCS),chapter
+763,Engineering Agent Virtualization,12_HardwareVirtualization.md,Engineering Agent Virtualization,keyword
+4715,Context Virtualization,12_HardwareVirtualization.md,Context Virtualization,keyword
+6576,Resource Virtualization,12_HardwareVirtualization.md,Resource Virtualization,keyword
+7640,Tool Virtualization,12_HardwareVirtualization.md,Tool Virtualization,keyword
+9274,Multi-Device Experience,12_HardwareVirtualization.md,Multi-Device Experience,keyword
+10206,AI Hardware Abstraction Layer (AI-HAL),12_HardwareVirtualization.md,AI Hardware Abstraction Layer (AI-HAL),keyword
+10218,Hardware Independence,12_HardwareVirtualization.md,Hardware Independence,keyword
+10239,Compute Resource Virtualization,12_HardwareVirtualization.md,Compute Resource Virtualization,keyword
+10256,Compute Capability Registry,12_HardwareVirtualization.md,Compute Capability Registry,keyword
+10277,Intelligent Hardware Discovery,12_HardwareVirtualization.md,Intelligent Hardware Discovery,keyword
+10294,Dynamic Compute Scheduling,12_HardwareVirtualization.md,Dynamic Compute Scheduling,keyword
+10314,Compute Allocation,12_HardwareVirtualization.md,Compute Allocation,keyword
+10331,Local Compute Support,12_HardwareVirtualization.md,Local Compute Support,keyword
+10348,Enterprise Compute Support,12_HardwareVirtualization.md,Enterprise Compute Support,keyword
+10364,Cloud Compute Support,12_HardwareVirtualization.md,Cloud Compute Support,keyword
+10380,Hybrid Compute Architecture,12_HardwareVirtualization.md,Hybrid Compute Architecture,keyword
+10395,Distributed Compute Engine,12_HardwareVirtualization.md,Distributed Compute Engine,keyword
+10411,Hardware Capability Matching,12_HardwareVirtualization.md,Hardware Capability Matching,keyword
+10430,Intelligent Workload Placement,12_HardwareVirtualization.md,Intelligent Workload Placement,keyword
+10449,Adaptive Compute Scaling,12_HardwareVirtualization.md,Adaptive Compute Scaling,keyword
+10465,Hardware Health Monitoring,12_HardwareVirtualization.md,Hardware Health Monitoring,keyword
+10484,Energy-Aware Computing,12_HardwareVirtualization.md,Energy-Aware Computing,keyword
+10500,Compute Failover,12_HardwareVirtualization.md,Compute Failover,keyword
+10516,Compute Federation,12_HardwareVirtualization.md,Compute Federation,keyword
+10532,Future Hardware Compatibility,12_HardwareVirtualization.md,Future Hardware Compatibility,keyword
+10548,AI Hardware Abstraction Principles,12_HardwareVirtualization.md,AI Hardware Abstraction Principles,keyword
+10568,Artificial Intelligence Virtualization Layer (AIVL),12_HardwareVirtualization.md,Artificial Intelligence Virtualization Layer (AIVL),keyword
+13182,Workflow Definition Philosophy,13_LanguageSpecifications.md,Workflow Definition Philosophy,chapter
+13202,Workflow Identity,13_LanguageSpecifications.md,Workflow Identity,chapter
+13219,Workflow Categories,13_LanguageSpecifications.md,Workflow Categories,chapter
+13253,Workflow Composition,13_LanguageSpecifications.md,Workflow Composition (WDL Reference),chapter
+13271,Workflow Stages,13_LanguageSpecifications.md,Workflow Stages,chapter
+13288,Workflow Dependencies,13_LanguageSpecifications.md,Workflow Dependencies,chapter
+13305,Workflow Conditions,13_LanguageSpecifications.md,Workflow Conditions,chapter
+13324,Workflow Variables,13_LanguageSpecifications.md,Workflow Variables,chapter
+13343,Workflow Parameters,13_LanguageSpecifications.md,Workflow Parameters,chapter
+13361,Workflow Outputs,13_LanguageSpecifications.md,Output Declaration (WDL Reference),chapter
+13381,Approval Gates,13_LanguageSpecifications.md,Approval Gates,chapter
+13397,Validation Rules,13_LanguageSpecifications.md,Validation Rules,chapter
+13414,Error Handling,13_LanguageSpecifications.md,Workflow Error Handling,chapter
+13432,Workflow Reusability,13_LanguageSpecifications.md,Workflow Reusability,chapter
+13448,Workflow Versioning,13_LanguageSpecifications.md,Workflow Versioning,chapter
+13464,Workflow Portability,13_LanguageSpecifications.md,Workflow Portability,chapter
+13478,Workflow Registry,13_LanguageSpecifications.md,Workflow Registry,chapter
+13495,Workflow Libraries,13_LanguageSpecifications.md,Workflow Libraries,chapter
+13511,Workflow Definition Principles,13_LanguageSpecifications.md,Workflow Definition Principles,chapter
+13529,Agent Definition Language (ADL),13_LanguageSpecifications.md,Agent Definition Language (ADL),chapter
+13541,Agent Philosophy,13_LanguageSpecifications.md,Agent Philosophy,chapter
+13560,Agent Identity,13_LanguageSpecifications.md,Agent Identity,chapter
+13579,Agent Categories,13_LanguageSpecifications.md,Agent Categories,chapter
+13625,Agent Capabilities,13_LanguageSpecifications.md,Agent Capabilities,chapter
+13642,Agent Responsibilities,13_LanguageSpecifications.md,Agent Responsibilities,chapter
+13657,Agent Constraints,13_LanguageSpecifications.md,Agent Constraints,chapter
+13674,Agent Inputs,13_LanguageSpecifications.md,Agent Inputs,chapter
+13693,Agent Outputs,13_LanguageSpecifications.md,Agent Outputs,chapter
+13712,Agent Context,13_LanguageSpecifications.md,Agent Context,chapter
+13730,Agent Memory,13_LanguageSpecifications.md,Agent Memory,chapter
+13745,Agent Collaboration,13_LanguageSpecifications.md,Agent Collaboration,chapter
+13762,Agent Lifecycle,13_LanguageSpecifications.md,Agent Lifecycle,chapter
+13808,Agent Configuration,13_LanguageSpecifications.md,Agent Configuration,chapter
+13825,Agent Specialization,13_LanguageSpecifications.md,Agent Specialization,chapter
+13842,Agent Composition,13_LanguageSpecifications.md,Agent Composition,chapter
+13859,Agent Versioning,13_LanguageSpecifications.md,Agent Versioning,chapter
+13875,Agent Registry,13_LanguageSpecifications.md,Agent Registry,chapter
+13893,Agent Packaging,13_LanguageSpecifications.md,Agent Packaging,chapter
+13911,Agent Governance,13_LanguageSpecifications.md,Agent Governance,chapter
+13925,Agent Definition Principles,13_LanguageSpecifications.md,Agent Definition Principles,chapter
+13943,Capability Definition Language (CDL),13_LanguageSpecifications.md,Capability Definition Language (CDL),chapter
+13955,Capability Philosophy,13_LanguageSpecifications.md,Capability Philosophy,chapter
+13967,Capability Identity,13_LanguageSpecifications.md,Capability Identity,chapter
+13983,Capability Categories,13_LanguageSpecifications.md,Capability Categories,chapter
+14041,Capability Contract,13_LanguageSpecifications.md,Capability Contract,chapter
+14059,Capability Inputs,13_LanguageSpecifications.md,Capability Inputs,chapter
+14079,Capability Outputs,13_LanguageSpecifications.md,Capability Outputs,chapter
+14099,Capability Preconditions,13_LanguageSpecifications.md,Capability Preconditions,chapter
+14117,Capability Postconditions,13_LanguageSpecifications.md,Capability Postconditions,chapter
+14133,Capability Dependencies,13_LanguageSpecifications.md,Capability Dependencies,chapter
+14165,Capability Composition,13_LanguageSpecifications.md,Capability Composition (CDL Reference),chapter
+14175,Capability Discovery,13_LanguageSpecifications.md,Capability Discovery,chapter
+14191,Capability Registry,13_LanguageSpecifications.md,Capability Registry (CDL Reference),chapter
+14209,Capability Resolution,13_LanguageSpecifications.md,Capability Resolution,chapter
+14225,Capability Quality,13_LanguageSpecifications.md,Capability Quality,chapter
+14242,Capability Versioning,13_LanguageSpecifications.md,Capability Versioning,chapter
+14258,Capability Policies,13_LanguageSpecifications.md,Capability Policies,chapter
+14272,Capability Packaging,13_LanguageSpecifications.md,Capability Packaging,chapter
+14289,Capability Lifecycle,13_LanguageSpecifications.md,Capability Lifecycle,chapter
+14335,Capability Definition Principles,13_LanguageSpecifications.md,Capability Definition Principles,chapter
+14353,Policy Definition Language (PDL),13_LanguageSpecifications.md,Policy Definition Language (PDL),chapter
+7060,Universal Engineering Object Model,14_ObjectModels.md,Universal Engineering Object Model,override
+7084,Transparent Storage Abstraction,14_ObjectModels.md,Transparent Storage Abstraction,override
+7101,Unified Engineering URI,14_ObjectModels.md,Unified Engineering URI,override
+7146,Versioned Engineering Objects,14_ObjectModels.md,Versioned Engineering Objects,override
+7182,Engineering Object Relationships,14_ObjectModels.md,Engineering Object Relationships,override
+11870,Engineering Object Specification (EOS),14_ObjectModels.md,Engineering Object Specification (EOS),chapter
+11882,Engineering Object Philosophy,14_ObjectModels.md,Engineering Object Philosophy,chapter
+11901,Engineering Object Categories,14_ObjectModels.md,Engineering Object Categories,chapter
+11974,Universal Object Identity,14_ObjectModels.md,Universal Object Identity,chapter
+11992,Object Metadata,14_ObjectModels.md,Object Metadata,chapter
+12014,Object Relationships,14_ObjectModels.md,Object Relationships,chapter
+12036,Object Lifecycle,14_ObjectModels.md,Object Lifecycle,chapter
+12074,Object Versioning,14_ObjectModels.md,Object Versioning,chapter
+12091,Object Permissions,14_ObjectModels.md,Object Permissions,chapter
+12110,Object Context,14_ObjectModels.md,Object Context,chapter
+12127,Object Memory Binding,14_ObjectModels.md,Object Memory Binding,chapter
+12143,Object Serialization,14_ObjectModels.md,Object Serialization,chapter
+12160,Object Discovery,14_ObjectModels.md,Object Discovery,chapter
+12176,Engineering Object Registry,14_ObjectModels.md,Engineering Object Registry,chapter
+12195,Engineering Object Principles,14_ObjectModels.md,Engineering Object Principles,chapter
+12213,AI Package Specification (AIP),14_ObjectModels.md,AI Package Specification (AIP),chapter
+1463,Engineering Package Management,15_PackagesServices.md,Engineering Package Management,keyword
+3322,Engineering Capability Marketplace,15_PackagesServices.md,Engineering Capability Marketplace,keyword
+3860,Engineering Marketplace,15_PackagesServices.md,Engineering Marketplace,keyword
+7798,AI Native Packages,15_PackagesServices.md,AI Native Packages,keyword
+7818,Package Registry,15_PackagesServices.md,Package Registry,keyword
+7835,Intelligent Package Resolution,15_PackagesServices.md,Intelligent Package Resolution,keyword
+7851,AI Native Marketplace,15_PackagesServices.md,AI Native Marketplace,keyword
+12223,AI Package Philosophy,15_PackagesServices.md,AI Package Philosophy,chapter
+12246,AI Package Structure,15_PackagesServices.md,AI Package Structure,chapter
+12310,AI Package Manifest,15_PackagesServices.md,AI Package Manifest,chapter
+12335,Package Categories,15_PackagesServices.md,Package Categories,chapter
+12417,Package Metadata,15_PackagesServices.md,Package Metadata,chapter
+12438,Package Dependencies,15_PackagesServices.md,Package Dependencies,chapter
+12454,Package Installation,15_PackagesServices.md,Package Installation,chapter
+12496,Package Validation,15_PackagesServices.md,Package Validation,chapter
+12514,Digital Signing,15_PackagesServices.md,Digital Signing,chapter
+12546,Package Repository,15_PackagesServices.md,Package Repository,chapter
+12563,Package Updates,15_PackagesServices.md,Package Updates,chapter
+12579,Package Rollback,15_PackagesServices.md,Package Rollback,chapter
+12594,Package Compatibility,15_PackagesServices.md,Package Compatibility,chapter
+12611,Package Lifecycle,15_PackagesServices.md,Package Lifecycle,chapter
+12657,Package Permissions,15_PackagesServices.md,Package Permissions,chapter
+12676,Package Isolation,15_PackagesServices.md,Package Isolation,chapter
+12692,Organizational Package Policies,15_PackagesServices.md,Organizational Package Policies,chapter
+12709,Marketplace Compatibility,15_PackagesServices.md,Marketplace Compatibility,chapter
+12726,AI Package Principles,15_PackagesServices.md,AI Package Principles,chapter
+12744,AI Service Manager (AISM),15_PackagesServices.md,AI Service Manager (AISM),chapter
+1788,Workflow Decision Governance,16_GovernanceSecurity.md,Workflow Decision Governance,keyword
+1977,Engineering Policies,16_GovernanceSecurity.md,Engineering Policies,keyword
+1996,Privacy Policies,16_GovernanceSecurity.md,Privacy Policies,keyword
+2036,Cost Optimization Policies,16_GovernanceSecurity.md,Cost Optimization Policies,keyword
+2054,Latency Optimization Policies,16_GovernanceSecurity.md,Latency Optimization Policies,keyword
+4770,Engineering Identity,16_GovernanceSecurity.md,Engineering Identity,keyword
+4840,Engineering Governance Enforcement,16_GovernanceSecurity.md,Engineering Governance Enforcement,keyword
+4857,Intelligent Policy Engine,16_GovernanceSecurity.md,Intelligent Policy Engine,keyword
+4877,Regulatory Compliance,16_GovernanceSecurity.md,Regulatory Compliance,keyword
+5383,AI Operating System Security Architecture,16_GovernanceSecurity.md,AI Operating System Security Architecture,keyword
+5395,Zero Trust Architecture,16_GovernanceSecurity.md,Zero Trust Architecture,keyword
+5407,Identity Management,16_GovernanceSecurity.md,Identity Management,keyword
+5429,Authentication Framework,16_GovernanceSecurity.md,Authentication Framework,keyword
+5448,Authorization Framework,16_GovernanceSecurity.md,Authorization Framework,keyword
+5467,Fine-Grained Permissions,16_GovernanceSecurity.md,Fine-Grained Permissions,keyword
+5488,Engineering Policy Enforcement,16_GovernanceSecurity.md,Engineering Policy Enforcement,keyword
+5507,Provider Security,16_GovernanceSecurity.md,Provider Security,keyword
+5525,Memory Security,16_GovernanceSecurity.md,Memory Security,keyword
+5542,T-BIT Security Integration,16_GovernanceSecurity.md,T-BIT Security Integration,keyword
+5560,Secure Repository Access,16_GovernanceSecurity.md,Secure Repository Access,keyword
+5576,Secure Local Resource Access,16_GovernanceSecurity.md,Secure Local Resource Access,keyword
+5594,Plugin Security,16_GovernanceSecurity.md,Plugin Security,keyword
+5610,MCP Security,16_GovernanceSecurity.md,MCP Security,keyword
+5626,Tool Security,16_GovernanceSecurity.md,Tool Security,keyword
+5641,Credential Management,16_GovernanceSecurity.md,Credential Management,keyword
+5658,Secret Management,16_GovernanceSecurity.md,Secret Management,keyword
+5676,Encryption,16_GovernanceSecurity.md,Encryption,keyword
+5694,Privacy Protection,16_GovernanceSecurity.md,Privacy Protection,keyword
+5710,Data Residency,16_GovernanceSecurity.md,Data Residency,keyword
+5725,Secure Engineering Execution,16_GovernanceSecurity.md,Secure Engineering Execution,keyword
+5739,Security Audit Trail,16_GovernanceSecurity.md,Security Audit Trail,keyword
+5759,Incident Detection,16_GovernanceSecurity.md,Incident Detection,keyword
+5777,Security Response,16_GovernanceSecurity.md,Security Response,keyword
+5795,Engineering Compliance Framework,16_GovernanceSecurity.md,Engineering Compliance Framework,keyword
+5813,Security Observability,16_GovernanceSecurity.md,Security Observability,keyword
+5832,AI Operating System Trust Model,16_GovernanceSecurity.md,AI Operating System Trust Model,keyword
+5849,Security Principles,16_GovernanceSecurity.md,Security Principles,keyword
+6062,Engineering Automation Framework,16_GovernanceSecurity.md,Engineering Automation Framework,override
+6096,Engineering Automation Policies,16_GovernanceSecurity.md,Engineering Automation Policies,keyword
+6113,Human Approval Gates,16_GovernanceSecurity.md,Human Approval Gates,override
+6130,Autonomous Decision Boundaries,16_GovernanceSecurity.md,Autonomous Decision Boundaries,override
+6146,Workflow Governance Engine,16_GovernanceSecurity.md,Workflow Governance Engine,keyword
+6197,Engineering Governance Hierarchy,16_GovernanceSecurity.md,Engineering Governance Hierarchy,keyword
+6701,Resource Governance,16_GovernanceSecurity.md,Resource Governance,keyword
+8029,Application Permissions,16_GovernanceSecurity.md,Application Permissions,keyword
+8679,Autonomous Learning Policies,16_GovernanceSecurity.md,Autonomous Learning Policies,keyword
+14365,Policy Philosophy,16_GovernanceSecurity.md,Policy Philosophy,chapter
+14389,Policy Identity,16_GovernanceSecurity.md,Policy Identity,chapter
+14406,Policy Categories,16_GovernanceSecurity.md,Policy Categories,chapter
+14452,Policy Scope,16_GovernanceSecurity.md,Policy Scope,chapter
+14474,Policy Priority,16_GovernanceSecurity.md,Policy Priority,chapter
+14496,Policy Conditions,16_GovernanceSecurity.md,Policy Conditions,chapter
+14518,Policy Actions,16_GovernanceSecurity.md,Policy Actions,chapter
+14542,Policy Evaluation,16_GovernanceSecurity.md,Policy Evaluation,chapter
+14558,Policy Inheritance,16_GovernanceSecurity.md,Policy Inheritance,chapter
+14596,Policy Composition,16_GovernanceSecurity.md,Policy Composition,chapter
+14606,Policy Versioning,16_GovernanceSecurity.md,Policy Versioning,chapter
+14622,Policy Registry,16_GovernanceSecurity.md,Policy Registry,chapter
+14639,Policy Validation,16_GovernanceSecurity.md,Policy Validation,chapter
+14656,Policy Enforcement,16_GovernanceSecurity.md,Policy Enforcement,chapter
+14675,Dynamic Policy Updates,16_GovernanceSecurity.md,Dynamic Policy Updates,chapter
+14685,Policy Audit,16_GovernanceSecurity.md,Policy Audit,chapter
+14702,Policy Simulation,16_GovernanceSecurity.md,Policy Simulation,chapter
+14712,Organizational Policy Packs,16_GovernanceSecurity.md,Organizational Policy Packs,chapter
+14729,Policy Lifecycle,16_GovernanceSecurity.md,Policy Lifecycle,chapter
+14771,Policy Definition Principles,16_GovernanceSecurity.md,Policy Definition Principles,chapter
+14789,Memory Object Specification (MOS),16_GovernanceSecurity.md,Memory Object Specification (MOS),chapter
+4454,Future-Proof Architecture,17_ExtensibilityRoadmap.md,Future-Proof Architecture,keyword
+4938,Engineering Operating System Roadmap,17_ExtensibilityRoadmap.md,Engineering Operating System Roadmap,keyword
+5869,Extensibility Architecture,17_ExtensibilityRoadmap.md,Extensibility Architecture,keyword
+5881,Native Extensibility,17_ExtensibilityRoadmap.md,Native Extensibility,keyword
+8339,AI Native Extensibility,17_ExtensibilityRoadmap.md,AI Native Extensibility,keyword
+10131,Backward Compatibility,17_ExtensibilityRoadmap.md,Backward Compatibility,keyword
+10150,Reference Implementation,17_ExtensibilityRoadmap.md,Reference Implementation,keyword
+10172,AIOS Evolution Strategy,17_ExtensibilityRoadmap.md,AIOS Evolution Strategy,keyword

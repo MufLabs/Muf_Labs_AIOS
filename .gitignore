@@ -1,0 +1,82 @@
+# ── Dependencies ───────────────────────────────────────────────
+node_modules/
+**/node_modules/
+
+# ── Build outputs ─────────────────────────────────────────────
+dist/
+**/dist/
+build/
+out/
+*.tsbuildinfo
+.turbo/
+**/.turbo/
+
+# Compiled JS / maps emitted inside src (this monorepo compiles to dist/)
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts.map
+src/**/*.d.ts
+!src/**/*.d.ts
+# (keep hand-authored declarations)
+!**/types/external-modules.d.ts
+!src/**/external-modules.d.ts
+
+# ── Logs / runtime ─────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Environment / secrets ──────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ── OS / editor ────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.local
+
+# ── Test / coverage ────────────────────────────────────────────
+coverage/
+.nyc_output/
+*.lcov
+
+# ── Caches ─────────────────────────────────────────────────────
+.cache/
+.eslintcache
+.stylelintcache
+
+# ── AIOS / T-Bit runtime data ──────────────────────────────────
+*.tbit
+.tbit/
+exports/
+replicas/
+snapshots/
+**/*.wal
+lockfile.*
+
+# ── Tree dumps / scratch (regenerable) ─────────────────────────
+**/tree_*.txt
+**/*Tree.txt
+ProjectSnapshot.txt
+app_tree/
+
+# Embedded repos (managed separately; not a submodule)
+Projects/T-Bit/
+# Scratch / trace logs
+trace.txt
+**/execution.txt
+**/_test.txt

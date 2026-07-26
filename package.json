@@ -1,0 +1,17 @@
+{
+    "name": "aios",
+    "version": "0.1.0",
+    "private": true,
+    "packageManager": "pnpm@10.15.1",
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev",
+        "clean": "turbo run clean",
+        "typecheck": "turbo run typecheck"
+    },
+    "devDependencies": {
+        "@types/node": "^24.3.0",
+        "turbo": "^2.10.5",
+        "typescript": "^5.9.3"
+    }
+}

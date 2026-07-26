@@ -1,0 +1,786 @@
+# Appendix C — Index
+
+Alphabetical index of every named section in the specification and the document that owns it.
+
+- **Accessibility** — `07_UserExperience.md`
+- **Adaptive Compute Scaling** — `12_HardwareVirtualization.md`
+- **Adaptive Intelligence** — `08_IntelligenceEngine.md`
+- **Adaptive Reasoning** — `08_IntelligenceEngine.md`
+- **Adaptive User Experience** — `07_UserExperience.md`
+- **Adaptive Workflow Selection** — `01_EngineeringWorkflow.md`
+- **Agent Capabilities** — `13_LanguageSpecifications.md`
+- **Agent Categories** — `13_LanguageSpecifications.md`
+- **Agent Collaboration** — `13_LanguageSpecifications.md`
+- **Agent Composition** — `13_LanguageSpecifications.md`
+- **Agent Configuration** — `13_LanguageSpecifications.md`
+- **Agent Constraints** — `13_LanguageSpecifications.md`
+- **Agent Context** — `13_LanguageSpecifications.md`
+- **Agent Definition Language (ADL)** — `13_LanguageSpecifications.md`
+- **Agent Definition Principles** — `13_LanguageSpecifications.md`
+- **Agent Governance** — `13_LanguageSpecifications.md`
+- **Agent Identity** — `13_LanguageSpecifications.md`
+- **Agent Inputs** — `13_LanguageSpecifications.md`
+- **Agent Lifecycle** — `13_LanguageSpecifications.md`
+- **Agent Memory** — `13_LanguageSpecifications.md`
+- **Agent Outputs** — `13_LanguageSpecifications.md`
+- **Agent Packaging** — `13_LanguageSpecifications.md`
+- **Agent Philosophy** — `13_LanguageSpecifications.md`
+- **Agent Registry** — `13_LanguageSpecifications.md`
+- **Agent Responsibilities** — `13_LanguageSpecifications.md`
+- **Agent Specialization** — `13_LanguageSpecifications.md`
+- **Agent Versioning** — `13_LanguageSpecifications.md`
+- **AI Application Containers** — `06_ApplicationsSDK.md`
+- **AI Application Manifest** — `06_ApplicationsSDK.md`
+- **AI Application Profiles** — `06_ApplicationsSDK.md`
+- **AI Application Runtime (AIR)** — `06_ApplicationsSDK.md`
+- **AI Copilot Framework** — `06_ApplicationsSDK.md`
+- **AI Filesystem (AIFS)** — `03_KernelRuntime.md`
+- **AI Filesystem Interface** — `03_KernelRuntime.md`
+- **AI Hardware Abstraction Layer (AI-HAL)** — `12_HardwareVirtualization.md`
+- **AI Hardware Abstraction Principles** — `12_HardwareVirtualization.md`
+- **AI Kernel Architecture** — `03_KernelRuntime.md`
+- **AI Kernel Responsibilities** — `03_KernelRuntime.md`
+- **AI Message Model** — `11_Communication.md`
+- **AI Native API** — `06_ApplicationsSDK.md`
+- **AI Native Applications** — `06_ApplicationsSDK.md`
+- **AI Native Automation** — `03_KernelRuntime.md`
+- **AI Native Command Bus** — `11_Communication.md`
+- **AI Native Daemons** — `05_ToolsAndServices.md`
+- **AI Native Dashboard** — `07_UserExperience.md`
+- **AI Native Development Framework** — `06_ApplicationsSDK.md`
+- **AI Native Ecosystem Vision** — `02_AIOSCoreArchitecture.md`
+- **AI Native Event System** — `11_Communication.md`
+- **AI Native Extensibility** — `17_ExtensibilityRoadmap.md`
+- **AI Native Marketplace** — `15_PackagesServices.md`
+- **AI Native Notification Framework** — `11_Communication.md`
+- **AI Native Operating Environment** — `03_KernelRuntime.md`
+- **AI Native Packages** — `15_PackagesServices.md`
+- **AI Native Query Engine** — `11_Communication.md`
+- **AI Native Scheduling** — `03_KernelRuntime.md`
+- **AI Native Service Architecture** — `02_AIOSCoreArchitecture.md`
+- **AI Native Services** — `06_ApplicationsSDK.md`
+- **AI Native Tool Ecosystem** — `05_ToolsAndServices.md`
+- **AI Native User Interface** — `07_UserExperience.md`
+- **AI Operating System Architectural Vision** — `02_AIOSCoreArchitecture.md`
+- **AI Operating System Architecture** — `02_AIOSCoreArchitecture.md`
+- **AI Operating System Constitution** — `02_AIOSCoreArchitecture.md`
+- **AI Operating System Experience Vision** — `07_UserExperience.md`
+- **AI Operating System Interface Definition (AIOS-IDL)** — `03_KernelRuntime.md`
+- **AI Operating System Kernel** — `03_KernelRuntime.md`
+- **AI Operating System Kernel Services** — `03_KernelRuntime.md`
+- **AI Operating System Manifesto** — `02_AIOSCoreArchitecture.md`
+- **AI Operating System Principles** — `02_AIOSCoreArchitecture.md`
+- **AI Operating System Security Architecture** — `16_GovernanceSecurity.md`
+- **AI Operating System Software Development Principles** — `02_AIOSCoreArchitecture.md`
+- **AI Operating System Trust Model** — `16_GovernanceSecurity.md`
+- **AI Operating System Vision Statement** — `02_AIOSCoreArchitecture.md`
+- **AI Package Manifest** — `15_PackagesServices.md`
+- **AI Package Philosophy** — `15_PackagesServices.md`
+- **AI Package Principles** — `15_PackagesServices.md`
+- **AI Package Specification (AIP)** — `14_ObjectModels.md`
+- **AI Package Structure** — `15_PackagesServices.md`
+- **AI Process Manager** — `03_KernelRuntime.md`
+- **AI Process Model** — `03_KernelRuntime.md`
+- **AI Resource Management** — `04_ResourceManagement.md`
+- **AI Resource Registry** — `04_ResourceManagement.md`
+- **AI Service Lifecycle** — `05_ToolsAndServices.md`
+- **AI Service Manager (AISM)** — `15_PackagesServices.md`
+- **AI Service Model** — `05_ToolsAndServices.md`
+- **AI Service Principles** — `05_ToolsAndServices.md`
+- **AI Services** — `06_ApplicationsSDK.md`
+- **AI Session Runtime** — `03_KernelRuntime.md`
+- **AI Software Development Kit (AI SDK)** — `06_ApplicationsSDK.md`
+- **AI Thread Management** — `03_KernelRuntime.md`
+- **AI Workspace Awareness** — `07_UserExperience.md`
+- **AI-Agnostic Architecture** — `02_AIOSCoreArchitecture.md`
+- **AIOS Communication Architecture** — `11_Communication.md`
+- **AIOS Evolution Strategy** — `17_ExtensibilityRoadmap.md`
+- **AIOS Reference Architecture** — `02_AIOSCoreArchitecture.md`
+- **Application Layer** — `06_ApplicationsSDK.md`
+- **Application Lifecycle** — `06_ApplicationsSDK.md`
+- **Application Permissions** — `16_GovernanceSecurity.md`
+- **Application State Management** — `06_ApplicationsSDK.md`
+- **Approval Gates** — `13_LanguageSpecifications.md`
+- **Architecture Discovery** — `02_AIOSCoreArchitecture.md`
+- **Artificial Intelligence Federation** — `11_Communication.md`
+- **Artificial Intelligence Independence** — `08_IntelligenceEngine.md`
+- **Artificial Intelligence Operating Principles** — `08_IntelligenceEngine.md`
+- **Artificial Intelligence Resource Model** — `04_ResourceManagement.md`
+- **Artificial Intelligence Virtualization Layer (AIVL)** — `12_HardwareVirtualization.md`
+- **Asynchronous Execution** — `09_PlanningExecution.md`
+- **Authentication Framework** — `16_GovernanceSecurity.md`
+- **Authorization Framework** — `16_GovernanceSecurity.md`
+- **Automatic Artifact Management** — `01_EngineeringWorkflow.md`
+- **Automatic Engineering Agent Selection** — `03_KernelRuntime.md`
+- **Automatic Engineering Orchestration** — `01_EngineeringWorkflow.md`
+- **Automatic Resource Discovery** — `04_ResourceManagement.md`
+- **Automatic Restart** — `05_ToolsAndServices.md`
+- **Automatic Service Discovery** — `05_ToolsAndServices.md`
+- **Automatic Workflow Selection** — `01_EngineeringWorkflow.md`
+- **Autonomous Background Services** — `03_KernelRuntime.md`
+- **Autonomous Capability Composition** — `05_ToolsAndServices.md`
+- **Autonomous Continuous Improvement** — `08_IntelligenceEngine.md`
+- **Autonomous Decision Boundaries** — `16_GovernanceSecurity.md`
+- **Autonomous Delegation** — `09_PlanningExecution.md`
+- **Autonomous Engineering Assistants** — `06_ApplicationsSDK.md`
+- **Autonomous Engineering Organization** — `01_EngineeringWorkflow.md`
+- **Autonomous Engineering Planning** — `09_PlanningExecution.md`
+- **Autonomous Engineering Supervisor** — `03_KernelRuntime.md`
+- **Autonomous Execution** — `09_PlanningExecution.md`
+- **Autonomous Knowledge Capture** — `10_KnowledgeMemory.md`
+- **Autonomous Learning Policies** — `16_GovernanceSecurity.md`
+- **Autonomous Monitoring** — `04_ResourceManagement.md`
+- **Autonomous Objective Decomposition** — `09_PlanningExecution.md`
+- **Autonomous Planning & Execution Engine (APEE)** — `09_PlanningExecution.md`
+- **Autonomous Planning Principles** — `09_PlanningExecution.md`
+- **Autonomous Prompt Engineering** — `01_EngineeringWorkflow.md`
+- **Autonomous Recommendations** — `08_IntelligenceEngine.md`
+- **Autonomous Replanning** — `09_PlanningExecution.md`
+- **Autonomous Resource Management** — `04_ResourceManagement.md`
+- **Autonomous Service Optimization** — `05_ToolsAndServices.md`
+- **Autonomous Tool Orchestration** — `05_ToolsAndServices.md`
+- **Autonomous Workflow Automation** — `09_PlanningExecution.md`
+- **Autonomous Workflow Correction** — `09_PlanningExecution.md`
+- **Autonomous Workflow Expansion** — `09_PlanningExecution.md`
+- **Autonomous Workflow Generation** — `09_PlanningExecution.md`
+- **Autonomous Workspace Monitoring** — `04_ResourceManagement.md`
+- **Background Execution** — `05_ToolsAndServices.md`
+- **Background Processes** — `03_KernelRuntime.md`
+- **Backward Compatibility** — `17_ExtensibilityRoadmap.md`
+- **Capability Allocation** — `05_ToolsAndServices.md`
+- **Capability Calls** — `03_KernelRuntime.md`
+- **Capability Categories** — `13_LanguageSpecifications.md`
+- **Capability Composition** — `05_ToolsAndServices.md`
+- **Capability Composition (CDL Reference)** — `13_LanguageSpecifications.md`
+- **Capability Contract** — `13_LanguageSpecifications.md`
+- **Capability Definition Language (CDL)** — `13_LanguageSpecifications.md`
+- **Capability Definition Principles** — `13_LanguageSpecifications.md`
+- **Capability Dependencies** — `13_LanguageSpecifications.md`
+- **Capability Discovery** — `13_LanguageSpecifications.md`
+- **Capability Identity** — `13_LanguageSpecifications.md`
+- **Capability Inputs** — `13_LanguageSpecifications.md`
+- **Capability Interface** — `03_KernelRuntime.md`
+- **Capability Layer** — `05_ToolsAndServices.md`
+- **Capability Lifecycle** — `13_LanguageSpecifications.md`
+- **Capability Negotiation** — `11_Communication.md`
+- **Capability Outputs** — `13_LanguageSpecifications.md`
+- **Capability Packaging** — `13_LanguageSpecifications.md`
+- **Capability Philosophy** — `13_LanguageSpecifications.md`
+- **Capability Policies** — `13_LanguageSpecifications.md`
+- **Capability Postconditions** — `13_LanguageSpecifications.md`
+- **Capability Preconditions** — `13_LanguageSpecifications.md`
+- **Capability Quality** — `13_LanguageSpecifications.md`
+- **Capability Registry** — `05_ToolsAndServices.md`
+- **Capability Registry (CDL Reference)** — `13_LanguageSpecifications.md`
+- **Capability Resolution** — `13_LanguageSpecifications.md`
+- **Capability Taxonomy** — `05_ToolsAndServices.md`
+- **Capability Versioning** — `13_LanguageSpecifications.md`
+- **Capability-Based Execution** — `09_PlanningExecution.md`
+- **Checkpoint Management** — `09_PlanningExecution.md`
+- **Cloud Compute Support** — `12_HardwareVirtualization.md`
+- **Cognitive Memory Integration** — `10_KnowledgeMemory.md`
+- **Cognitive Operating Environment** — `08_IntelligenceEngine.md`
+- **Cognitive Planning** — `08_IntelligenceEngine.md`
+- **Cognitive Reasoning Engine (CRE)** — `08_IntelligenceEngine.md`
+- **Cognitive Reasoning Principles** — `08_IntelligenceEngine.md`
+- **Collective Intelligence** — `08_IntelligenceEngine.md`
+- **Communication Audit** — `11_Communication.md`
+- **Communication Calls** — `03_KernelRuntime.md`
+- **Communication Contracts** — `11_Communication.md`
+- **Communication Endpoint Discovery** — `11_Communication.md`
+- **Communication Error Handling** — `11_Communication.md`
+- **Communication Isolation** — `11_Communication.md`
+- **Communication Model** — `11_Communication.md`
+- **Communication Observability** — `11_Communication.md`
+- **Communication Participants** — `11_Communication.md`
+- **Communication Philosophy** — `11_Communication.md`
+- **Communication Routing** — `11_Communication.md`
+- **Communication Security** — `11_Communication.md`
+- **Communication Sessions** — `11_Communication.md`
+- **Composite Intelligence** — `08_IntelligenceEngine.md`
+- **Compute Allocation** — `12_HardwareVirtualization.md`
+- **Compute Capability Registry** — `12_HardwareVirtualization.md`
+- **Compute Failover** — `12_HardwareVirtualization.md`
+- **Compute Federation** — `12_HardwareVirtualization.md`
+- **Compute Resource Virtualization** — `12_HardwareVirtualization.md`
+- **Connector Discovery** — `05_ToolsAndServices.md`
+- **Connector Lifecycle** — `05_ToolsAndServices.md`
+- **Context Virtualization** — `12_HardwareVirtualization.md`
+- **Continuous Cognitive Improvement** — `08_IntelligenceEngine.md`
+- **Continuous Organizational Learning** — `08_IntelligenceEngine.md`
+- **Continuous Plan Optimization** — `09_PlanningExecution.md`
+- **Continuous User Learning** — `07_UserExperience.md`
+- **Cooperative Intelligence** — `08_IntelligenceEngine.md`
+- **Cost Optimization Policies** — `16_GovernanceSecurity.md`
+- **Credential Management** — `16_GovernanceSecurity.md`
+- **Cross-Organization Federation** — `11_Communication.md`
+- **Cross-Repository Engineering** — `04_ResourceManagement.md`
+- **Cross-Resource Correlation** — `04_ResourceManagement.md`
+- **Data Residency** — `16_GovernanceSecurity.md`
+- **Dependency Injection** — `05_ToolsAndServices.md`
+- **Dependency Intelligence** — `08_IntelligenceEngine.md`
+- **Digital Signing** — `15_PackagesServices.md`
+- **Digital Twin** — `10_KnowledgeMemory.md`
+- **Distributed Compute Engine** — `12_HardwareVirtualization.md`
+- **Distributed Intelligence** — `08_IntelligenceEngine.md`
+- **Distributed Workflow Coordination** — `09_PlanningExecution.md`
+- **Domain Specialization** — `08_IntelligenceEngine.md`
+- **Dynamic Capability Discovery** — `05_ToolsAndServices.md`
+- **Dynamic Compute Scheduling** — `12_HardwareVirtualization.md`
+- **Dynamic Context Compression** — `01_EngineeringWorkflow.md`
+- **Dynamic Engineering Team Assembly** — `01_EngineeringWorkflow.md`
+- **Dynamic Policy Updates** — `16_GovernanceSecurity.md`
+- **Dynamic Resource Discovery** — `04_ResourceManagement.md`
+- **Dynamic Workflow Adaptation** — `09_PlanningExecution.md`
+- **Ecosystem Principles** — `02_AIOSCoreArchitecture.md`
+- **Encryption** — `16_GovernanceSecurity.md`
+- **Energy-Aware Computing** — `12_HardwareVirtualization.md`
+- **Engineering Agent Calls** — `03_KernelRuntime.md`
+- **Engineering Agent Interface** — `03_KernelRuntime.md`
+- **Engineering Agent Lifecycle** — `03_KernelRuntime.md`
+- **Engineering Agent Operating Model** — `03_KernelRuntime.md`
+- **Engineering Agent Registry** — `03_KernelRuntime.md`
+- **Engineering Agent Runtime** — `03_KernelRuntime.md`
+- **Engineering Agent Virtualization** — `12_HardwareVirtualization.md`
+- **Engineering Analytics** — `04_ResourceManagement.md`
+- **Engineering Anti-Pattern Detection** — `08_IntelligenceEngine.md`
+- **Engineering APIs** — `05_ToolsAndServices.md`
+- **Engineering Artifact Generation** — `01_EngineeringWorkflow.md`
+- **Engineering Automation Framework** — `16_GovernanceSecurity.md`
+- **Engineering Automation Policies** — `16_GovernanceSecurity.md`
+- **Engineering Capability Graph** — `05_ToolsAndServices.md`
+- **Engineering Capability Marketplace** — `15_PackagesServices.md`
+- **Engineering Command Interface** — `07_UserExperience.md`
+- **Engineering Compliance Framework** — `16_GovernanceSecurity.md`
+- **Engineering Confidence Model** — `08_IntelligenceEngine.md`
+- **Engineering Consensus Orchestration** — `08_IntelligenceEngine.md`
+- **Engineering Context** — `10_KnowledgeMemory.md`
+- **Engineering Context Loading** — `01_EngineeringWorkflow.md`
+- **Engineering Context Propagation** — `01_EngineeringWorkflow.md`
+- **Engineering Coordination** — `09_PlanningExecution.md`
+- **Engineering Debate** — `08_IntelligenceEngine.md`
+- **Engineering Decision Engine** — `08_IntelligenceEngine.md`
+- **Engineering Decomposition** — `09_PlanningExecution.md`
+- **Engineering Dependencies** — `09_PlanningExecution.md`
+- **Engineering Dependency Graph** — `10_KnowledgeMemory.md`
+- **Engineering Digital Twin** — `10_KnowledgeMemory.md`
+- **Engineering Event Bus** — `11_Communication.md`
+- **Engineering Evolution** — `08_IntelligenceEngine.md`
+- **Engineering Experience Engine** — `07_UserExperience.md`
+- **Engineering Explainability Framework** — `07_UserExperience.md`
+- **Engineering Governance Enforcement** — `16_GovernanceSecurity.md`
+- **Engineering Governance Hierarchy** — `16_GovernanceSecurity.md`
+- **Engineering Health Management** — `04_ResourceManagement.md`
+- **Engineering Identity** — `16_GovernanceSecurity.md`
+- **Engineering Intelligence Dashboard** — `08_IntelligenceEngine.md`
+- **Engineering Intelligence Layer** — `08_IntelligenceEngine.md`
+- **Engineering Intelligence Network** — `08_IntelligenceEngine.md`
+- **Engineering Intent Resolution** — `01_EngineeringWorkflow.md`
+- **Engineering Knowledge Base** — `10_KnowledgeMemory.md`
+- **Engineering Knowledge Continuity** — `10_KnowledgeMemory.md`
+- **Engineering Knowledge Evolution** — `10_KnowledgeMemory.md`
+- **Engineering Knowledge Graph** — `10_KnowledgeMemory.md`
+- **Engineering Learning Engine** — `10_KnowledgeMemory.md`
+- **Engineering Marketplace** — `15_PackagesServices.md`
+- **Engineering Mesh** — `11_Communication.md`
+- **Engineering Milestones** — `09_PlanningExecution.md`
+- **Engineering Notifications** — `11_Communication.md`
+- **Engineering Object Categories** — `14_ObjectModels.md`
+- **Engineering Object Philosophy** — `14_ObjectModels.md`
+- **Engineering Object Principles** — `14_ObjectModels.md`
+- **Engineering Object Registry** — `14_ObjectModels.md`
+- **Engineering Object Relationships** — `14_ObjectModels.md`
+- **Engineering Object Specification (EOS)** — `14_ObjectModels.md`
+- **Engineering Objective Model** — `09_PlanningExecution.md`
+- **Engineering Operating Principles** — `02_AIOSCoreArchitecture.md`
+- **Engineering Operating System Roadmap** — `17_ExtensibilityRoadmap.md`
+- **Engineering Opportunity Discovery** — `08_IntelligenceEngine.md`
+- **Engineering Optimization Engine** — `08_IntelligenceEngine.md`
+- **Engineering Package Management** — `15_PackagesServices.md`
+- **Engineering Pattern Recognition** — `08_IntelligenceEngine.md`
+- **Engineering Planning** — `09_PlanningExecution.md`
+- **Engineering Plugin Ecosystem** — `05_ToolsAndServices.md`
+- **Engineering Policies** — `16_GovernanceSecurity.md`
+- **Engineering Policy Enforcement** — `16_GovernanceSecurity.md`
+- **Engineering Project Discovery** — `08_IntelligenceEngine.md`
+- **Engineering Provider Federation** — `11_Communication.md`
+- **Engineering Recovery** — `04_ResourceManagement.md`
+- **Engineering Request Interpretation** — `09_PlanningExecution.md`
+- **Engineering Request Lifecycle** — `01_EngineeringWorkflow.md`
+- **Engineering Resource Federation** — `11_Communication.md`
+- **Engineering Resource Model** — `04_ResourceManagement.md`
+- **Engineering Risk Discovery** — `08_IntelligenceEngine.md`
+- **Engineering Service Mesh** — `11_Communication.md`
+- **Engineering Session Management** — `03_KernelRuntime.md`
+- **Engineering Swarm Intelligence** — `08_IntelligenceEngine.md`
+- **Engineering Task Manager** — `03_KernelRuntime.md`
+- **Engineering Telemetry** — `04_ResourceManagement.md`
+- **Engineering Timeline** — `10_KnowledgeMemory.md`
+- **Engineering Trade-Off Analysis** — `08_IntelligenceEngine.md`
+- **Engineering Transparency** — `07_UserExperience.md`
+- **Engineering Uncertainty Management** — `08_IntelligenceEngine.md`
+- **Engineering Workflow Engine** — `01_EngineeringWorkflow.md`
+- **Engineering Workflow Lifecycle** — `09_PlanningExecution.md`
+- **Engineering Workflow Personalization** — `09_PlanningExecution.md`
+- **Engineering Workflow Principles** — `02_AIOSCoreArchitecture.md`
+- **Engineering Workspace Awareness** — `07_UserExperience.md`
+- **Engineering Workspace Manager** — `01_EngineeringWorkflow.md`
+- **Engineering Workspace Runtime** — `03_KernelRuntime.md`
+- **Enterprise Architecture** — `02_AIOSCoreArchitecture.md`
+- **Enterprise Compute Support** — `12_HardwareVirtualization.md`
+- **Enterprise Integration Framework** — `11_Communication.md`
+- **Event Categories** — `11_Communication.md`
+- **Event Correlation** — `11_Communication.md`
+- **Event Governance** — `11_Communication.md`
+- **Event Identity** — `11_Communication.md`
+- **Event Interface** — `03_KernelRuntime.md`
+- **Event Lifecycle** — `11_Communication.md`
+- **Event Metadata** — `11_Communication.md`
+- **Event Ordering** — `11_Communication.md`
+- **Event Payload** — `11_Communication.md`
+- **Event Persistence** — `11_Communication.md`
+- **Event Philosophy** — `11_Communication.md`
+- **Event Priorities** — `11_Communication.md`
+- **Event Publishing** — `11_Communication.md`
+- **Event Reliability** — `11_Communication.md`
+- **Event Replay** — `11_Communication.md`
+- **Event Routing** — `11_Communication.md`
+- **Event Security** — `11_Communication.md`
+- **Event Streaming** — `11_Communication.md`
+- **Event Structure** — `11_Communication.md`
+- **Event Subscription** — `11_Communication.md`
+- **Event Telemetry** — `11_Communication.md`
+- **Event-Driven Architecture** — `11_Communication.md`
+- **Event-Driven Intelligence** — `11_Communication.md`
+- **Execution Profiles** — `04_ResourceManagement.md`
+- **Execution Supervision** — `09_PlanningExecution.md`
+- **Explainable Engineering Execution** — `09_PlanningExecution.md`
+- **Explainable Intelligence** — `08_IntelligenceEngine.md`
+- **Explainable Knowledge** — `10_KnowledgeMemory.md`
+- **Extensibility Architecture** — `17_ExtensibilityRoadmap.md`
+- **Failover Management** — `04_ResourceManagement.md`
+- **Filesystem Calls** — `03_KernelRuntime.md`
+- **Final Engineering Workflow Principles** — `02_AIOSCoreArchitecture.md`
+- **Fine-Grained Permissions** — `16_GovernanceSecurity.md`
+- **Flow Control** — `11_Communication.md`
+- **Future Hardware Compatibility** — `12_HardwareVirtualization.md`
+- **Future-Proof Architecture** — `17_ExtensibilityRoadmap.md`
+- **Goal-Oriented Execution** — `09_PlanningExecution.md`
+- **Graph Evolution** — `10_KnowledgeMemory.md`
+- **Graph Nodes** — `10_KnowledgeMemory.md`
+- **Graph Relationships** — `10_KnowledgeMemory.md`
+- **Graph Synchronization** — `10_KnowledgeMemory.md`
+- **Hardware Capability Matching** — `12_HardwareVirtualization.md`
+- **Hardware Health Monitoring** — `12_HardwareVirtualization.md`
+- **Hardware Independence** — `12_HardwareVirtualization.md`
+- **Human Approval Gates** — `16_GovernanceSecurity.md`
+- **Human Cognitive Collaboration** — `08_IntelligenceEngine.md`
+- **Human Override** — `07_UserExperience.md`
+- **Human-Centered Design Principles** — `07_UserExperience.md`
+- **Human-in-the-Loop Engineering** — `07_UserExperience.md`
+- **Hybrid Compute Architecture** — `12_HardwareVirtualization.md`
+- **Hybrid Execution Architecture** — `04_ResourceManagement.md`
+- **Hybrid Intelligence** — `08_IntelligenceEngine.md`
+- **Identity Management** — `16_GovernanceSecurity.md`
+- **Incident Detection** — `16_GovernanceSecurity.md`
+- **Incremental Planning** — `09_PlanningExecution.md`
+- **Incremental Repository Analysis** — `04_ResourceManagement.md`
+- **Infrastructure Layer** — `04_ResourceManagement.md`
+- **Intelligence Evolution** — `08_IntelligenceEngine.md`
+- **Intelligence Federation** — `11_Communication.md`
+- **Intelligence Instances** — `08_IntelligenceEngine.md`
+- **Intelligence Lifecycle** — `08_IntelligenceEngine.md`
+- **Intelligence Pool** — `08_IntelligenceEngine.md`
+- **Intelligence Quality Evaluation** — `08_IntelligenceEngine.md`
+- **Intelligence Resource Classification** — `04_ResourceManagement.md`
+- **Intelligence Resource Model** — `04_ResourceManagement.md`
+- **Intelligence Scheduling** — `03_KernelRuntime.md`
+- **Intelligent Auto-Prompting Engine** — `01_EngineeringWorkflow.md`
+- **Intelligent Capability Matching** — `05_ToolsAndServices.md`
+- **Intelligent Capability Routing** — `11_Communication.md`
+- **Intelligent Configuration** — `07_UserExperience.md`
+- **Intelligent Context Evolution** — `10_KnowledgeMemory.md`
+- **Intelligent Context Federation** — `11_Communication.md`
+- **Intelligent Context Prioritization** — `04_ResourceManagement.md`
+- **Intelligent Conversation Engine** — `11_Communication.md`
+- **Intelligent Conversation Management** — `11_Communication.md`
+- **Intelligent Engineering Recommendations** — `08_IntelligenceEngine.md`
+- **Intelligent Engineering Search** — `08_IntelligenceEngine.md`
+- **Intelligent Engineering Sessions** — `03_KernelRuntime.md`
+- **Intelligent Hardware Discovery** — `12_HardwareVirtualization.md`
+- **Intelligent Intent Interface** — `07_UserExperience.md`
+- **Intelligent Interaction Modes** — `07_UserExperience.md`
+- **Intelligent Knowledge Consolidation** — `10_KnowledgeMemory.md`
+- **Intelligent Memory Management** — `10_KnowledgeMemory.md`
+- **Intelligent Orchestration Philosophy** — `02_AIOSCoreArchitecture.md`
+- **Intelligent Package Resolution** — `15_PackagesServices.md`
+- **Intelligent Policy Engine** — `16_GovernanceSecurity.md`
+- **Intelligent Process Prioritization** — `03_KernelRuntime.md`
+- **Intelligent Project Evolution** — `10_KnowledgeMemory.md`
+- **Intelligent Project Understanding** — `01_EngineeringWorkflow.md`
+- **Intelligent Provider Abstraction** — `05_ToolsAndServices.md`
+- **Intelligent Provider Selection** — `05_ToolsAndServices.md`
+- **Intelligent Recommendations** — `08_IntelligenceEngine.md`
+- **Intelligent Request Interpretation** — `09_PlanningExecution.md`
+- **Intelligent Resource Resolution** — `04_ResourceManagement.md`
+- **Intelligent Search** — `08_IntelligenceEngine.md`
+- **Intelligent Task Assignment** — `09_PlanningExecution.md`
+- **Intelligent Task Planning** — `09_PlanningExecution.md`
+- **Intelligent Tool Selection** — `05_ToolsAndServices.md`
+- **Intelligent Work Distribution** — `09_PlanningExecution.md`
+- **Intelligent Workflow Optimization** — `01_EngineeringWorkflow.md`
+- **Intelligent Workflow Supervision** — `09_PlanningExecution.md`
+- **Intelligent Workload Placement** — `12_HardwareVirtualization.md`
+- **Intent Recognition Engine** — `08_IntelligenceEngine.md`
+- **Interface Contracts** — `05_ToolsAndServices.md`
+- **Interface Principles** — `03_KernelRuntime.md`
+- **Interface Versioning** — `03_KernelRuntime.md`
+- **Kernel API** — `03_KernelRuntime.md`
+- **Kernel Communication Bus** — `11_Communication.md`
+- **Kernel Communication Principles** — `11_Communication.md`
+- **Kernel Communication Protocol (KCP)** — `11_Communication.md`
+- **Kernel Event Principles** — `11_Communication.md`
+- **Kernel Event Protocol (KEP)** — `10_KnowledgeMemory.md`
+- **Kernel Services** — `03_KernelRuntime.md`
+- **Kernel Stability Principles** — `03_KernelRuntime.md`
+- **Kernel System Call Philosophy** — `03_KernelRuntime.md`
+- **Kernel System Call Principles** — `03_KernelRuntime.md`
+- **Kernel System Call Specification (KSCS)** — `11_Communication.md`
+- **Knowledge Calls** — `03_KernelRuntime.md`
+- **Knowledge Confidence** — `10_KnowledgeMemory.md`
+- **Knowledge Content** — `10_KnowledgeMemory.md`
+- **Knowledge Continuity** — `10_KnowledgeMemory.md`
+- **Knowledge Governance** — `10_KnowledgeMemory.md`
+- **Knowledge Graph Identity** — `10_KnowledgeMemory.md`
+- **Knowledge Graph Indexing** — `10_KnowledgeMemory.md`
+- **Knowledge Graph Philosophy** — `10_KnowledgeMemory.md`
+- **Knowledge Graph Principles** — `10_KnowledgeMemory.md`
+- **Knowledge Graph Specification (KGS)** — `10_KnowledgeMemory.md`
+- **Knowledge Navigation** — `10_KnowledgeMemory.md`
+- **Knowledge Retrieval** — `10_KnowledgeMemory.md`
+- **Knowledge Validation** — `10_KnowledgeMemory.md`
+- **Large Codebase Support** — `04_ResourceManagement.md`
+- **Latency Optimization Policies** — `16_GovernanceSecurity.md`
+- **Layered Architecture** — `02_AIOSCoreArchitecture.md`
+- **Local Compute Support** — `12_HardwareVirtualization.md`
+- **Local Development Environment Integration** — `05_ToolsAndServices.md`
+- **Logical Intelligence** — `08_IntelligenceEngine.md`
+- **Long-Running Engineering Workflows** — `09_PlanningExecution.md`
+- **Long-Running Processes** — `09_PlanningExecution.md`
+- **Long-Term Planning** — `09_PlanningExecution.md`
+- **Long-Term Vision** — `02_AIOSCoreArchitecture.md`
+- **Marketplace Compatibility** — `15_PackagesServices.md`
+- **MCP Native Integration** — `05_ToolsAndServices.md`
+- **MCP Security** — `16_GovernanceSecurity.md`
+- **Memory Calls** — `03_KernelRuntime.md`
+- **Memory Categories** — `10_KnowledgeMemory.md`
+- **Memory Confidence** — `10_KnowledgeMemory.md`
+- **Memory Evidence** — `10_KnowledgeMemory.md`
+- **Memory Evolution** — `10_KnowledgeMemory.md`
+- **Memory Federation** — `10_KnowledgeMemory.md`
+- **Memory Governance** — `10_KnowledgeMemory.md`
+- **Memory Indexing** — `10_KnowledgeMemory.md`
+- **Memory Interface** — `03_KernelRuntime.md`
+- **Memory Lifecycle** — `10_KnowledgeMemory.md`
+- **Memory Metadata** — `10_KnowledgeMemory.md`
+- **Memory Object Identity** — `10_KnowledgeMemory.md`
+- **Memory Object Principles** — `10_KnowledgeMemory.md`
+- **Memory Object Specification (MOS)** — `16_GovernanceSecurity.md`
+- **Memory Object Structure** — `10_KnowledgeMemory.md`
+- **Memory Philosophy** — `10_KnowledgeMemory.md`
+- **Memory Privacy** — `10_KnowledgeMemory.md`
+- **Memory Provider Federation** — `11_Communication.md`
+- **Memory Quality** — `10_KnowledgeMemory.md`
+- **Memory Relationships** — `10_KnowledgeMemory.md`
+- **Memory Retrieval** — `10_KnowledgeMemory.md`
+- **Memory Security** — `16_GovernanceSecurity.md`
+- **Memory Synchronization** — `10_KnowledgeMemory.md`
+- **Memory Versioning** — `10_KnowledgeMemory.md`
+- **Message Types** — `11_Communication.md`
+- **Message-Oriented Architecture** — `11_Communication.md`
+- **Meta-Reasoning** — `08_IntelligenceEngine.md`
+- **Microkernel Philosophy** — `03_KernelRuntime.md`
+- **Model Registry** — `05_ToolsAndServices.md`
+- **MUF Labs AI Operating System** — `02_AIOSCoreArchitecture.md`
+- **Multi-Agent Execution Model** — `03_KernelRuntime.md`
+- **Multi-Agent Prompt Collaboration** — `03_KernelRuntime.md`
+- **Multi-Conversation Intelligence** — `11_Communication.md`
+- **Multi-Device Experience** — `12_HardwareVirtualization.md`
+- **Multi-Domain Intelligence** — `08_IntelligenceEngine.md`
+- **Multi-Layer Memory Architecture** — `10_KnowledgeMemory.md`
+- **Multi-Perspective Reasoning** — `08_IntelligenceEngine.md`
+- **Multi-Project Management** — `01_EngineeringWorkflow.md`
+- **Multi-Provider Engineering** — `05_ToolsAndServices.md`
+- **Multi-Stage Prompt Optimization** — `01_EngineeringWorkflow.md`
+- **Multi-Stage Reasoning** — `08_IntelligenceEngine.md`
+- **Multi-User Collaboration** — `09_PlanningExecution.md`
+- **Native AIOS Features** — `02_AIOSCoreArchitecture.md`
+- **Native Extensibility** — `17_ExtensibilityRoadmap.md`
+- **Native MCP Ecosystem** — `05_ToolsAndServices.md`
+- **Native User Experience Architecture** — `07_UserExperience.md`
+- **Natural Language Operating System** — `07_UserExperience.md`
+- **Object Context** — `14_ObjectModels.md`
+- **Object Discovery** — `14_ObjectModels.md`
+- **Object Lifecycle** — `14_ObjectModels.md`
+- **Object Memory Binding** — `14_ObjectModels.md`
+- **Object Metadata** — `14_ObjectModels.md`
+- **Object Permissions** — `14_ObjectModels.md`
+- **Object Relationships** — `14_ObjectModels.md`
+- **Object Serialization** — `14_ObjectModels.md`
+- **Object Versioning** — `14_ObjectModels.md`
+- **Objective Decomposition** — `09_PlanningExecution.md`
+- **Objective-Based Interaction** — `09_PlanningExecution.md`
+- **Observability Platform** — `04_ResourceManagement.md`
+- **Offline Engineering Support** — `04_ResourceManagement.md`
+- **Operating System Service Contracts** — `03_KernelRuntime.md`
+- **Organization Profiles** — `01_EngineeringWorkflow.md`
+- **Organizational Architecture** — `02_AIOSCoreArchitecture.md`
+- **Organizational Digital Twin** — `10_KnowledgeMemory.md`
+- **Organizational Intelligence** — `08_IntelligenceEngine.md`
+- **Organizational Knowledge** — `10_KnowledgeMemory.md`
+- **Organizational Knowledge Evolution** — `10_KnowledgeMemory.md`
+- **Organizational Memory** — `10_KnowledgeMemory.md`
+- **Organizational Package Policies** — `15_PackagesServices.md`
+- **Organizational Policy Packs** — `16_GovernanceSecurity.md`
+- **Output Declaration (WDL Reference)** — `13_LanguageSpecifications.md`
+- **Package Calls** — `03_KernelRuntime.md`
+- **Package Categories** — `15_PackagesServices.md`
+- **Package Compatibility** — `15_PackagesServices.md`
+- **Package Dependencies** — `15_PackagesServices.md`
+- **Package Installation** — `15_PackagesServices.md`
+- **Package Isolation** — `15_PackagesServices.md`
+- **Package Lifecycle** — `15_PackagesServices.md`
+- **Package Metadata** — `15_PackagesServices.md`
+- **Package Permissions** — `15_PackagesServices.md`
+- **Package Registry** — `15_PackagesServices.md`
+- **Package Repository** — `15_PackagesServices.md`
+- **Package Rollback** — `15_PackagesServices.md`
+- **Package Updates** — `15_PackagesServices.md`
+- **Package Validation** — `15_PackagesServices.md`
+- **Parallel Engineering Execution** — `09_PlanningExecution.md`
+- **Parallel Process Execution** — `03_KernelRuntime.md`
+- **Persistent Memory Architecture** — `10_KnowledgeMemory.md`
+- **Persistent Processes** — `03_KernelRuntime.md`
+- **Pluggable Architecture** — `02_AIOSCoreArchitecture.md`
+- **Plugin Architecture** — `05_ToolsAndServices.md`
+- **Plugin Interface** — `03_KernelRuntime.md`
+- **Plugin Security** — `16_GovernanceSecurity.md`
+- **Policy Actions** — `16_GovernanceSecurity.md`
+- **Policy Audit** — `16_GovernanceSecurity.md`
+- **Policy Calls** — `03_KernelRuntime.md`
+- **Policy Categories** — `16_GovernanceSecurity.md`
+- **Policy Composition** — `16_GovernanceSecurity.md`
+- **Policy Conditions** — `16_GovernanceSecurity.md`
+- **Policy Definition Language (PDL)** — `13_LanguageSpecifications.md`
+- **Policy Definition Principles** — `16_GovernanceSecurity.md`
+- **Policy Enforcement** — `16_GovernanceSecurity.md`
+- **Policy Evaluation** — `16_GovernanceSecurity.md`
+- **Policy Identity** — `16_GovernanceSecurity.md`
+- **Policy Inheritance** — `16_GovernanceSecurity.md`
+- **Policy Lifecycle** — `16_GovernanceSecurity.md`
+- **Policy Philosophy** — `16_GovernanceSecurity.md`
+- **Policy Priority** — `16_GovernanceSecurity.md`
+- **Policy Registry** — `16_GovernanceSecurity.md`
+- **Policy Scope** — `16_GovernanceSecurity.md`
+- **Policy Simulation** — `16_GovernanceSecurity.md`
+- **Policy Validation** — `16_GovernanceSecurity.md`
+- **Policy Versioning** — `16_GovernanceSecurity.md`
+- **Predictive Planning** — `09_PlanningExecution.md`
+- **Privacy Policies** — `16_GovernanceSecurity.md`
+- **Privacy Protection** — `16_GovernanceSecurity.md`
+- **Process Isolation** — `03_KernelRuntime.md`
+- **Process Lifecycle** — `03_KernelRuntime.md`
+- **Process Management Calls** — `03_KernelRuntime.md`
+- **Process Scheduling** — `03_KernelRuntime.md`
+- **Process Synchronization** — `03_KernelRuntime.md`
+- **Progressive Autonomy** — `07_UserExperience.md`
+- **Progressive Configuration Model** — `01_EngineeringWorkflow.md`
+- **Progressive Disclosure** — `07_UserExperience.md`
+- **Project Profiles** — `01_EngineeringWorkflow.md`
+- **PROJECT_STATE Integration** — `10_KnowledgeMemory.md`
+- **Prompt Chain Generation** — `01_EngineeringWorkflow.md`
+- **Prompt Quality Evaluation** — `01_EngineeringWorkflow.md`
+- **Protocol Versioning** — `11_Communication.md`
+- **Provider Calls** — `03_KernelRuntime.md`
+- **Provider Independence Guarantee** — `05_ToolsAndServices.md`
+- **Provider Registry** — `05_ToolsAndServices.md`
+- **Provider Security** — `16_GovernanceSecurity.md`
+- **Purpose** — `01_EngineeringWorkflow.md`
+- **Real-Time Collaboration** — `09_PlanningExecution.md`
+- **Reasoning Confidence** — `08_IntelligenceEngine.md`
+- **Reasoning Independence** — `08_IntelligenceEngine.md`
+- **Reasoning Strategies** — `08_IntelligenceEngine.md`
+- **Recursive Prompt Refinement** — `01_EngineeringWorkflow.md`
+- **Recursive Reasoning** — `08_IntelligenceEngine.md`
+- **Reference Implementation** — `17_ExtensibilityRoadmap.md`
+- **Regulatory Compliance** — `16_GovernanceSecurity.md`
+- **Relationship Metadata** — `10_KnowledgeMemory.md`
+- **Reliable Delivery** — `11_Communication.md`
+- **Repository Analysis** — `04_ResourceManagement.md`
+- **Repository Calls** — `03_KernelRuntime.md`
+- **Repository Indexing** — `04_ResourceManagement.md`
+- **Repository Intelligence** — `04_ResourceManagement.md`
+- **Repository Interface** — `03_KernelRuntime.md`
+- **Repository Knowledge Graph** — `04_ResourceManagement.md`
+- **Resource Allocation** — `04_ResourceManagement.md`
+- **Resource Calls** — `03_KernelRuntime.md`
+- **Resource Elasticity** — `04_ResourceManagement.md`
+- **Resource Federation** — `11_Communication.md`
+- **Resource Governance** — `16_GovernanceSecurity.md`
+- **Resource Health Monitoring** — `04_ResourceManagement.md`
+- **Resource Isolation** — `04_ResourceManagement.md`
+- **Resource Layer** — `04_ResourceManagement.md`
+- **Resource Lifecycle** — `04_ResourceManagement.md`
+- **Resource Load Balancing** — `04_ResourceManagement.md`
+- **Resource Management Principles** — `04_ResourceManagement.md`
+- **Resource Optimization** — `04_ResourceManagement.md`
+- **Resource Pooling** — `04_ResourceManagement.md`
+- **Resource Prioritization** — `04_ResourceManagement.md`
+- **Resource Scheduler** — `03_KernelRuntime.md`
+- **Resource Scheduling** — `03_KernelRuntime.md`
+- **Resource Virtualization** — `12_HardwareVirtualization.md`
+- **Retry Management** — `04_ResourceManagement.md`
+- **Role-Based Engineering** — `09_PlanningExecution.md`
+- **Scope** — `01_EngineeringWorkflow.md`
+- **SDK Interface** — `03_KernelRuntime.md`
+- **Secret Management** — `16_GovernanceSecurity.md`
+- **Secure Engineering Execution** — `16_GovernanceSecurity.md`
+- **Secure Local Resource Access** — `16_GovernanceSecurity.md`
+- **Secure Repository Access** — `16_GovernanceSecurity.md`
+- **Security Audit Trail** — `16_GovernanceSecurity.md`
+- **Security Calls** — `03_KernelRuntime.md`
+- **Security Observability** — `16_GovernanceSecurity.md`
+- **Security Principles** — `16_GovernanceSecurity.md`
+- **Security Response** — `16_GovernanceSecurity.md`
+- **Self-Discovery** — `02_AIOSCoreArchitecture.md`
+- **Self-Healing Workflows** — `08_IntelligenceEngine.md`
+- **Self-Optimization Engine** — `08_IntelligenceEngine.md`
+- **Self-Reflection** — `08_IntelligenceEngine.md`
+- **Semantic Code Understanding** — `08_IntelligenceEngine.md`
+- **Semantic Context** — `10_KnowledgeMemory.md`
+- **Service Calls** — `03_KernelRuntime.md`
+- **Service Categories** — `05_ToolsAndServices.md`
+- **Service Communication** — `05_ToolsAndServices.md`
+- **Service Dependencies** — `05_ToolsAndServices.md`
+- **Service Discovery** — `05_ToolsAndServices.md`
+- **Service Governance** — `05_ToolsAndServices.md`
+- **Service Health** — `05_ToolsAndServices.md`
+- **Service Isolation** — `05_ToolsAndServices.md`
+- **Service Persistence** — `05_ToolsAndServices.md`
+- **Service Policies** — `05_ToolsAndServices.md`
+- **Service Registry** — `05_ToolsAndServices.md`
+- **Service Scheduling** — `05_ToolsAndServices.md`
+- **Service-Oriented AI Architecture** — `02_AIOSCoreArchitecture.md`
+- **Session Calls** — `03_KernelRuntime.md`
+- **Session Lifecycle** — `11_Communication.md`
+- **Shared Artificial Intelligence Execution** — `08_IntelligenceEngine.md`
+- **Streaming Architecture** — `11_Communication.md`
+- **Streaming Communication** — `11_Communication.md`
+- **Supported Engineering Resources** — `04_ResourceManagement.md`
+- **Swarm Coordination** — `08_IntelligenceEngine.md`
+- **System Call Categories** — `03_KernelRuntime.md`
+- **System Call Determinism** — `03_KernelRuntime.md`
+- **System Call Observability** — `03_KernelRuntime.md`
+- **System Call Security** — `03_KernelRuntime.md`
+- **System Call Versioning** — `03_KernelRuntime.md`
+- **T-BIT Integration** — `10_KnowledgeMemory.md`
+- **T-BIT Security Integration** — `16_GovernanceSecurity.md`
+- **Technology Discovery** — `08_IntelligenceEngine.md`
+- **Telemetry Calls** — `03_KernelRuntime.md`
+- **Telemetry Interface** — `03_KernelRuntime.md`
+- **Tool Capability Registration** — `05_ToolsAndServices.md`
+- **Tool Chaining** — `05_ToolsAndServices.md`
+- **Tool Interface** — `03_KernelRuntime.md`
+- **Tool Operating Environment** — `05_ToolsAndServices.md`
+- **Tool Security** — `16_GovernanceSecurity.md`
+- **Tool Virtualization** — `12_HardwareVirtualization.md`
+- **Transparent Storage Abstraction** — `14_ObjectModels.md`
+- **Uncertainty Management** — `08_IntelligenceEngine.md`
+- **Unified Engineering URI** — `14_ObjectModels.md`
+- **Unified Memory Abstraction** — `10_KnowledgeMemory.md`
+- **Unified Memory Model** — `10_KnowledgeMemory.md`
+- **Unified Repository Abstraction** — `04_ResourceManagement.md`
+- **Universal AI Capability Model** — `05_ToolsAndServices.md`
+- **Universal AI Session** — `02_AIOSCoreArchitecture.md`
+- **Universal AI Skill Framework** — `05_ToolsAndServices.md`
+- **Universal AIOS Principles** — `02_AIOSCoreArchitecture.md`
+- **Universal API Gateway** — `11_Communication.md`
+- **Universal Application Model** — `06_ApplicationsSDK.md`
+- **Universal Artificial Intelligence Compatibility** — `08_IntelligenceEngine.md`
+- **Universal Capability Interface** — `05_ToolsAndServices.md`
+- **Universal Connector Architecture** — `05_ToolsAndServices.md`
+- **Universal Connector Framework** — `05_ToolsAndServices.md`
+- **Universal Context Fabric** — `10_KnowledgeMemory.md`
+- **Universal Context Interface** — `01_EngineeringWorkflow.md`
+- **Universal Engineering Memory** — `10_KnowledgeMemory.md`
+- **Universal Engineering Object Model** — `14_ObjectModels.md`
+- **Universal Intelligence Layer** — `08_IntelligenceEngine.md`
+- **Universal Interaction Principles** — `07_UserExperience.md`
+- **Universal Knowledge Interface** — `10_KnowledgeMemory.md`
+- **Universal Knowledge Namespace** — `10_KnowledgeMemory.md`
+- **Universal Knowledge Operating System** — `10_KnowledgeMemory.md`
+- **Universal Memory Interface** — `10_KnowledgeMemory.md`
+- **Universal Memory Provider Interface** — `10_KnowledgeMemory.md`
+- **Universal Object Identity** — `14_ObjectModels.md`
+- **Universal Observability** — `04_ResourceManagement.md`
+- **Universal Prompt Interface** — `01_EngineeringWorkflow.md`
+- **Universal Provider Interface** — `05_ToolsAndServices.md`
+- **Universal Repository Interface** — `04_ResourceManagement.md`
+- **Universal Resource Management** — `04_ResourceManagement.md`
+- **Universal Session Bus** — `11_Communication.md`
+- **Universal System Call Contract** — `03_KernelRuntime.md`
+- **Universal System Call Interface** — `03_KernelRuntime.md`
+- **Universal Tool Abstraction** — `05_ToolsAndServices.md`
+- **Universal Tool Interface** — `05_ToolsAndServices.md`
+- **Universal Tool Model** — `05_ToolsAndServices.md`
+- **User Configuration Philosophy** — `07_UserExperience.md`
+- **User Control** — `07_UserExperience.md`
+- **User Experience Layer** — `07_UserExperience.md`
+- **User Experience Principles** — `07_UserExperience.md`
+- **User Profiles** — `07_UserExperience.md`
+- **Validation Rules** — `13_LanguageSpecifications.md`
+- **Versioned Engineering Objects** — `14_ObjectModels.md`
+- **Vision & Philosophy** — `02_AIOSCoreArchitecture.md`
+- **Workflow Architecture** — `02_AIOSCoreArchitecture.md`
+- **Workflow Authority** — `01_EngineeringWorkflow.md`
+- **Workflow Categories** — `13_LanguageSpecifications.md`
+- **Workflow Composition** — `09_PlanningExecution.md`
+- **Workflow Composition (WDL Reference)** — `13_LanguageSpecifications.md`
+- **Workflow Conditions** — `13_LanguageSpecifications.md`
+- **Workflow Continuation** — `09_PlanningExecution.md`
+- **Workflow Decision Governance** — `16_GovernanceSecurity.md`
+- **Workflow Definition Language (WDL)** — `05_ToolsAndServices.md`
+- **Workflow Definition Philosophy** — `13_LanguageSpecifications.md`
+- **Workflow Definition Principles** — `13_LanguageSpecifications.md`
+- **Workflow Dependencies** — `13_LanguageSpecifications.md`
+- **Workflow Error Handling** — `13_LanguageSpecifications.md`
+- **Workflow Governance Engine** — `16_GovernanceSecurity.md`
+- **Workflow Identity** — `13_LanguageSpecifications.md`
+- **Workflow Inputs** — `01_EngineeringWorkflow.md`
+- **Workflow Interface** — `03_KernelRuntime.md`
+- **Workflow Libraries** — `13_LanguageSpecifications.md`
+- **Workflow Management Calls** — `03_KernelRuntime.md`
+- **Workflow Orchestration Layer** — `09_PlanningExecution.md`
+- **Workflow Outputs** — `01_EngineeringWorkflow.md`
+- **Workflow Ownership** — `01_EngineeringWorkflow.md`
+- **Workflow Parameters** — `13_LanguageSpecifications.md`
+- **Workflow Participants** — `01_EngineeringWorkflow.md`
+- **Workflow Portability** — `13_LanguageSpecifications.md`
+- **Workflow Queue Management** — `03_KernelRuntime.md`
+- **Workflow Registry** — `13_LanguageSpecifications.md`
+- **Workflow Resilience** — `04_ResourceManagement.md`
+- **Workflow Resource Optimization** — `04_ResourceManagement.md`
+- **Workflow Responsibilities** — `01_EngineeringWorkflow.md`
+- **Workflow Reusability** — `13_LanguageSpecifications.md`
+- **Workflow Scheduler** — `03_KernelRuntime.md`
+- **Workflow Stages** — `13_LanguageSpecifications.md`
+- **Workflow State Management** — `09_PlanningExecution.md`
+- **Workflow Templates** — `09_PlanningExecution.md`
+- **Workflow Transitions** — `09_PlanningExecution.md`
+- **Workflow Variables** — `13_LanguageSpecifications.md`
+- **Workflow Versioning** — `13_LanguageSpecifications.md`
+- **Workspace Analysis** — `04_ResourceManagement.md`
+- **Workspace Collaboration** — `09_PlanningExecution.md`
+- **Workspace Intelligence** — `08_IntelligenceEngine.md`
+- **Zero Configuration Operation** — `02_AIOSCoreArchitecture.md`
+- **Zero Trust Architecture** — `16_GovernanceSecurity.md`
