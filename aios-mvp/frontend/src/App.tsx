@@ -6,6 +6,7 @@ import { SidePanel } from './components/SidePanel';
 import { AgentsView } from './components/AgentsView';
 import { HistoryView } from './components/HistoryView';
 import { SettingsView } from './components/SettingsView';
+import { QVaultView } from './components/qvault/QVaultView';
 import { useSession } from './hooks/useSession';
 import type { EngineeringCommand } from './types/api';
 
@@ -36,7 +37,7 @@ export default function App() {
     clearError,
   } = useSession();
 
-  const [activeView, setActiveView] = useState<'workspace' | 'agents' | 'history' | 'settings'>('workspace');
+  const [activeView, setActiveView] = useState<'workspace' | 'agents' | 'history' | 'settings' | 'qvault'>('workspace');
 
   // Auto-create session on mount
   useEffect(() => {
@@ -81,6 +82,7 @@ export default function App() {
       {activeView === 'agents' && <AgentsView />}
       {activeView === 'history' && <HistoryView sessionId={session?.id || null} />}
       {activeView === 'settings' && <SettingsView session={session} />}
+      {activeView === 'qvault' && <QVaultView />}
 
       <SidePanel agents={agents} activeWorkflow={activeWorkflow} />
 

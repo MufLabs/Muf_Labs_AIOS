@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-type RailView = 'workspace' | 'agents' | 'history' | 'settings';
+type RailView = 'workspace' | 'agents' | 'history' | 'settings' | 'qvault';
 
 interface RailNavProps {
   activeView: RailView;
@@ -52,6 +52,17 @@ export function RailNav({ activeView, onViewChange }: RailNavProps) {
       svg: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'qvault',
+      label: 'Q-Vault',
+      svg: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+          <circle cx="12" cy="12" r="3.5" />
+          <circle cx="12" cy="12" r="8" opacity="0.5" strokeDasharray="3 3" />
+          <path d="M12 4v2M12 18v2M4 12h2M18 12h2" />
         </svg>
       ),
     },

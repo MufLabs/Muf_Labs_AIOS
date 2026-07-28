@@ -22,9 +22,20 @@ async function getJson<T>(path: string): Promise<T> {
   return payload;
 }
 
+/** Resolve or create the user's T-Bit container ID on first call */
+function resolveContainerId(): string {
+  let cid = localStorage.getItem("tbit:activeContainerId");
+  if (!cid) {
+    cid = `tbit-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+    localStorage.setItem("tbit:activeContainerId", cid);
+  }
+  return cid;
+}
+
 export const memoryCoreClient = {
+  /** Store a memory record into the T-Bit container */
   remember(body: {
-    userId: string;
+    userId?: string;
     text?: string;
     payload?: unknown;
     key?: string;
@@ -34,22 +45,43 @@ export const memoryCoreClient = {
     source?: string;
     links?: string[];
   }) {
-    return postJson("/api/memory/remember", body);
+    const containerId = resolveContainerId();
+    return postJson(`/api/v1/tbit/containers/${containerId}/memos`, {
+      content: body.text ?? JSON.stringify(body.payload ?? ""),
+      tags: body.tags,
+      sourceUrl: body.source,
+    });
   },
+
+  /** Recall memories matching a query */
   recall(key: string) {
-    return postJson("/api/memory/recall", { key });
+    const containerId = resolveContainerId();
+    return getJson(`/api/v1/tbit/containers/${containerId}/memos?q=${encodeURIComponent(key)}`);
   },
+
+  /** Semantic context for a user query */
   context(userId: string, query: string, limit = 8) {
-    return postJson("/api/memory/context", { userId, query, limit });
+    const containerId = resolveContainerId();
+    return getJson(
+      `/api/v1/tbit/containers/${containerId}/memos?q=${encodeURIComponent(query)}&topK=${limit}`,
+    );
   },
+
+  /** Get links / graph for a specific memory record */
   links(key: string) {
-    return postJson("/api/memory/links", { key });
+    const containerId = resolveContainerId();
+    return getJson(`/api/v1/tbit/containers/${containerId}/memos/${encodeURIComponent(key)}/context`);
   },
+
+  /** Get the full memory graph for this container */
   graph(userId?: string) {
-    const query = userId ? `?userId=${encodeURIComponent(userId)}` : "";
-    return getJson(`/api/memory/graph${query}`);
+    const containerId = resolveContainerId();
+    return getJson(`/api/v1/tbit/containers/${containerId}/memos?topK=100`);
   },
+
+  /** Delete a memory record */
   delete(key: string) {
-    return postJson("/api/memory/delete", { key });
+    const containerId = resolveContainerId();
+    return postJson(`/api/v1/tbit/containers/${containerId}/memos/delete`, { key });
   },
 };

@@ -97,7 +97,16 @@ export * from "./bridges/DocumentExtractors";
 export * from "./bridges/CodeGraphExtractor";
 
 // Semantic index
-export * from "./indexing/SemanticIndex";
+export {
+  type SemanticIndexEntry,
+  type TBitSemanticIndex,
+  type SemanticSearchRequest,
+  type SemanticSearchResult,
+  rebuildSemanticIndex,
+  getSemanticIndex,
+  searchSemanticIndex,
+  getSemanticIndexStats,
+} from "./indexing/SemanticIndex";
 
 export type {
   TBitAssetStatus,
@@ -106,6 +115,11 @@ export type {
   RegisterAssetRequest,
   DeleteAssetResult,
 } from "./assets/AssetManager";
-export * from "./SemanticCompression";
-export * from "./EncryptionKeyManager";
-export * from "./AllocationMap";
+
+// Semantic compression (canonical)
+export {
+  type CompressionState,
+  type SemanticCompressionRequest,
+  type SemanticCompressionReport,
+  compressSemanticGravity,
+} from "./SemanticCompression";

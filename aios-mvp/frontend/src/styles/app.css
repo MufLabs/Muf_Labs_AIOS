@@ -355,3 +355,331 @@ body {
 
 .empty-state-icon { font-size: 32px; opacity: 0.5; }
 .empty-state-text { font-size: 14px; }
+
+/* ===== Q·VAULT — MEMORY TOPOLOGY ===== */
+.qvault-view {
+  grid-column: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Toolbar */
+.qvault-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.qvault-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qvault-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.qvault-title {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+  color: var(--text-primary);
+}
+
+.qvault-badge {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 0.5px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.qvault-search {
+  width: 200px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 0.5px solid var(--border-glass);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.qvault-search:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 2px rgba(139, 124, 255, 0.15);
+}
+
+.qvault-search::placeholder { color: var(--text-muted); }
+
+.qvault-toggle-group {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 10px;
+  border: 0.5px solid var(--border-glass);
+  background: rgba(0, 0, 0, 0.20);
+}
+
+.qvault-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.qvault-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.qvault-btn.active {
+  background: var(--grad-neural);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(139, 124, 255, 0.35);
+}
+
+.qvault-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.qvault-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border-glass);
+  margin: 0 2px;
+}
+
+/* Canvas Area */
+.qvault-canvas-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 0.5px solid var(--border-glass);
+  background: radial-gradient(ellipse at 30% 30%, #141e3c 0%, #0b1120 100%);
+}
+
+/* Empty state */
+.qvault-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px;
+}
+
+.qvault-empty-icon {
+  font-size: 42px;
+  opacity: 0.4;
+  color: var(--violet);
+}
+
+.qvault-empty-hint {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  max-width: 340px;
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+/* Footer */
+.qvault-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.qvault-selected-label {
+  color: var(--violet);
+  text-shadow: 0 0 8px rgba(139, 124, 255, 0.4);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Detail Panel */
+.qvault-detail-panel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 340px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  padding: 18px;
+  border-radius: 14px;
+  z-index: 20;
+  animation: qvaultSlideIn 0.25s ease;
+}
+
+@keyframes qvaultSlideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.qvault-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.qvault-detail-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-all;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.qvault-detail-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.qvault-detail-close:hover { color: var(--magenta); }
+
+.qvault-detail-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.qvault-detail-meta strong {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.qvault-detail-meta code {
+  font-size: 10px;
+  color: var(--cyan);
+  background: rgba(92, 217, 232, 0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.qvault-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.qvault-tag-chip {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: rgba(139, 124, 255, 0.12);
+  border: 0.5px solid rgba(139, 124, 255, 0.30);
+  color: var(--violet);
+}
+
+.qvault-detail-links {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.qvault-detail-links strong {
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.qvault-detail-links ul { list-style: none; padding: 0; }
+
+.qvault-link-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  cursor: pointer;
+  padding: 3px 0;
+  transition: color 0.15s ease;
+  word-break: break-all;
+}
+
+.qvault-link-item:hover { color: var(--text-primary); text-decoration: underline; }
+
+.qvault-detail-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.qvault-recall-output {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.30);
+  border: 0.5px solid var(--border-glass);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-secondary);
+  max-height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .qvault-toolbar-right { gap: 6px; }
+  .qvault-search { width: 140px; }
+  .qvault-detail-panel { width: 280px; }
+}
+
+@media (max-width: 640px) {
+  .qvault-detail-panel {
+    width: calc(100% - 32px);
+  }
+  .qvault-search { width: 110px; }
+}

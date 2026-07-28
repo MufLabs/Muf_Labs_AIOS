@@ -1,7 +1,7 @@
 {
   "name": "@aios/api",
   "private": true,
-  "version": "0.1.0",
+  "version":  "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts",
@@ -11,7 +11,8 @@
     "express": "^5.1.0",
     "@aios/kernel": "workspace:*",
     "@aios/workflow": "workspace:*",
-    "@aios/agents": "workspace:*"
+    "@aios/agents": "workspace:*",
+    "@muf/tbit-core": "workspace:*"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
