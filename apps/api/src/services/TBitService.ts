@@ -1,16 +1,11 @@
+import { readFile } from "fs/promises";
 import {
   TBitStorageService,
-  TBitContainer,
   TBitStorageConfig,
-  TBitMetadata,
-  TBitWalRecord,
   EncryptionKeyMaterial,
   getActiveEncryptionKey,
-  getEncryptionKeyById,
   getEncryptionKeyRing,
   getEncryptionKeyStatus,
-  normalizeTBitKey,
-  normalizeUnicodeText,
   rememberMemory,
   recallMemory,
   getMemoryContext,
@@ -19,26 +14,24 @@ import {
   rebuildQueryIndex,
   getContainerHealthReport,
   reconcileContainerHealth,
-  TBitSpacePaths,
-  getTBitSpacePaths,
-  TBitContainerHealth,
+  TBitHealthReport,
   MemoryCoreRecord,
+  MemoryCoreContextResult,
   MemoryGraph,
-  QueryIndexEntry,
+  QuerySearchRequest,
+  QuerySearchResult,
   TBitAssetRecord,
-  TBitAssetStatus,
-  TBitAssetIndex,
   listAssets,
   getAssetStats,
-  registerAsset,
-  deleteAsset,
   MarkdownImportResult,
+  MarkdownImportRequest,
   importMarkdownDocument,
-  importBinaryAsset,
+  UniversalDocumentImportRequest,
+  UniversalDocumentImportResult,
   importUniversalDocument,
+  importBinaryAsset,
+  BinaryAssetImportResult,
 } from "@muf/tbit-core";
-
-import { randomUUID } from "node:crypto";
 
 export type ContainerCreateRequest = {
   spaceId: string;
@@ -50,23 +43,30 @@ export type ContainerCreateResponse = {
   containerId: string;
   spaceId: string;
   label: string;
-  offsets: { header: number; index: number; data: number };
+  ready: boolean;
 };
 
 export type MemoStoreRequest = {
-  containerId: string;
-  content: string;
+  containerId?: string;
+  userId?: string;
+  text?: string;
+  payload?: unknown;
+  key?: string;
+  domain?: string;
+  collection?: string;
   tags?: string[];
-  sourceUrl?: string;
+  links?: string[];
+  source?: string;
 };
 
 export type MemoStoreResponse = {
-  recordId: string;
-  timestamp: number;
+  key: string;
+  checksum: string;
 };
 
 export type MemoRecallRequest = {
-  containerId: string;
+  containerId?: string;
+  userId?: string;
   query: string;
   topK?: number;
 };
@@ -76,164 +76,184 @@ export type MemoRecallResponse = {
   graph?: MemoryGraph;
 };
 
-export type HealthResponse = {
-  containerId: string;
-  health: TBitContainerHealth;
-};
-
-export type EncryptionKeyResponse = {
-  keyId: string;
-  status: string;
+export type EncryptionKeyInfo = {
+  enabled: boolean;
+  algorithm: string;
+  activeKeyId: string;
+  previousKeyIds: string[];
+  keyCount: number;
 };
 
 export class TBitService {
-  private readonly storage: TBitStorageService;
-  private readonly containers: Map<string, TBitContainer> = new Map();
+  private storage: TBitStorageService | null = null;
 
-  constructor(config?: Partial<TBitStorageConfig>) {
+  /**
+   * Lazy-init the storage service using runtime paths.
+   * The T-Bit config is derived from environment or defaults.
+   */
+  private async getStorage(): Promise<TBitStorageService> {
+    if (this.storage) return this.storage;
+
+    const hmacSecrets = new Map<string, string>();
+    const secret = process.env.TBIT_HMAC_SECRET ?? "tbit-default-hmac";
+    hmacSecrets.set("default", secret);
+
+    const config: TBitStorageConfig = {
+      name: process.env.TBIT_CONTAINER_NAME ?? "aios-default",
+      containerPath: process.env.TBIT_CONTAINER_PATH ?? "./data/tbit/aios.tbit",
+      metadataPath: process.env.TBIT_METADATA_PATH ?? "./data/tbit/aios.meta.json",
+      walPath: process.env.TBIT_WAL_PATH ?? "./data/tbit/aios.wal.json",
+      snapshotsDir: process.env.TBIT_SNAPSHOTS_DIR ?? "./data/tbit/snapshots",
+      replicasDir: process.env.TBIT_REPLICAS_DIR ?? "./data/tbit/replicas",
+      exportsDir: process.env.TBIT_EXPORTS_DIR ?? "./data/tbit/exports",
+      lockPath: process.env.TBIT_LOCK_PATH ?? "./data/tbit/aios.lock",
+      hmacSecrets,
+      hmacKeyId: "default",
+    };
+
     this.storage = new TBitStorageService(config);
+    return this.storage;
   }
 
   // ─── Container lifecycle ────────────────────────────────
 
   async createContainer(req: ContainerCreateRequest): Promise<ContainerCreateResponse> {
-    const containerId = `tbit-${randomUUID().slice(0, 8)}`;
-    const keyMaterial = await getActiveEncryptionKey();
+    const storage = await this.getStorage();
+    await storage.recover();
 
-    const container = await this.storage.createContainer({
-      containerId,
-      spaceId: req.spaceId,
-      label: req.label ?? `T-Bit ${containerId}`,
-      encryptionKey: keyMaterial,
-      vaultRoot: req.vaultRoot,
-    });
-
-    this.containers.set(containerId, container);
+    // Ensure encryption key is active
+    getActiveEncryptionKey();
 
     return {
-      containerId,
+      containerId: req.spaceId,
       spaceId: req.spaceId,
-      label: container.label,
-      offsets: {
-        header: container.offsets.header,
-        index: container.offsets.index,
-        data: container.offsets.data,
-      },
+      label: req.label ?? `T-Bit ${req.spaceId}`,
+      ready: true,
     };
-  }
-
-  async openContainer(containerId: string): Promise<TBitContainer> {
-    const cached = this.containers.get(containerId);
-    if (cached) return cached;
-
-    const keyMaterial = await getActiveEncryptionKey();
-    const container = await this.storage.openContainer({ containerId, encryptionKey: keyMaterial });
-    this.containers.set(containerId, container);
-    return container;
-  }
-
-  async closeContainer(containerId: string): Promise<void> {
-    this.containers.delete(containerId);
   }
 
   // ─── Memo (memory) operations ───────────────────────────
 
   async storeMemo(req: MemoStoreRequest): Promise<MemoStoreResponse> {
-    const container = await this.openContainer(req.containerId);
+    const storage = await this.getStorage();
 
-    const normalized = normalizeUnicodeText(req.content);
-    const key = normalizeTBitKey(req.containerId);
-
-    const record = await rememberMemory(container, {
-      key,
-      content: normalized,
-      tags: req.tags ?? [],
-      sourceUrl: req.sourceUrl,
-      timestamp: Date.now(),
+    const record = await rememberMemory(storage, {
+      userId: req.userId,
+      text: req.text,
+      payload: req.payload,
+      key: req.key,
+      domain: req.domain,
+      collection: req.collection,
+      tags: req.tags,
+      links: req.links,
+      source: req.source,
     });
 
     return {
-      recordId: record.id ?? key,
-      timestamp: Date.now(),
+      key: record.key,
+      checksum: record.checksum,
     };
   }
 
   async recallMemos(req: MemoRecallRequest): Promise<MemoRecallResponse> {
-    const container = await this.openContainer(req.containerId);
+    // For query-based recall, use getMemoryContext (userId + query + limit)
+    const context = await getMemoryContext(
+      req.userId ?? "anonimo",
+      req.query,
+      req.topK ?? 10,
+    );
 
-    const records = await recallMemory(container, req.query, req.topK ?? 10);
-    const graph = await getMemoryGraph(container);
+    const graph = await getMemoryGraph(req.userId);
 
-    return { records, graph };
+    return {
+      records: context.records,
+      graph,
+    };
   }
 
-  async getMemoryContext(containerId: string, recordId: string, depth?: number) {
-    const container = await this.openContainer(containerId);
-    return getMemoryContext(container, recordId, depth);
+  async getMemoryContextForRecord(userId: string, query: string, limit?: number): Promise<MemoryCoreContextResult> {
+    return getMemoryContext(userId, query, limit ?? 8);
   }
 
   // ─── Query index ────────────────────────────────────────
 
-  async searchIndex(containerId: string, query: string, topK?: number): Promise<QueryIndexEntry[]> {
-    const container = await this.openContainer(containerId);
-    return searchQueryIndex(container, query, topK ?? 20);
+  async searchIndex(query: string, topK?: number): Promise<{ results: QuerySearchResult[] }> {
+    const request: QuerySearchRequest = {
+      query,
+      topK: topK ?? 20,
+    };
+    return searchQueryIndex(request);
   }
 
-  async rebuildIndex(containerId: string): Promise<void> {
-    const container = await this.openContainer(containerId);
-    await rebuildQueryIndex(container);
+  async rebuildIndex(): Promise<void> {
+    await rebuildQueryIndex();
   }
 
   // ─── Container health ───────────────────────────────────
 
-  async getHealth(containerId: string): Promise<HealthResponse> {
-    const container = await this.openContainer(containerId);
-    const health = await getContainerHealthReport(container);
-    return { containerId, health };
+  async getHealth(): Promise<TBitHealthReport> {
+    return getContainerHealthReport();
   }
 
-  async reconcileHealth(containerId: string): Promise<HealthResponse> {
-    const container = await this.openContainer(containerId);
-    const health = await reconcileContainerHealth(container);
-    return { containerId, health };
+  async reconcileHealth() {
+    return reconcileContainerHealth();
   }
 
   // ─── Encryption keys ────────────────────────────────────
 
-  async getEncryptionKeyInfo(): Promise<EncryptionKeyResponse> {
-    const keyId = (await getActiveEncryptionKey()).id;
-    const status = await getEncryptionKeyStatus(keyId);
-    return { keyId, status };
+  getEncryptionKeyInfo(): EncryptionKeyInfo {
+    const status = getEncryptionKeyStatus();
+    return {
+      enabled: status.enabled,
+      algorithm: status.algorithm,
+      activeKeyId: status.activeKeyId,
+      previousKeyIds: status.previousKeyIds,
+      keyCount: status.keyCount,
+    };
   }
 
-  async getEncryptionKeyRing(): Promise<EncryptionKeyMaterial[]> {
+  getEncryptionKeyRing(): EncryptionKeyMaterial[] {
     return getEncryptionKeyRing();
   }
 
   // ─── Asset management ───────────────────────────────────
 
-  async listContainerAssets(containerId: string): Promise<TBitAssetRecord[]> {
-    const container = await this.openContainer(containerId);
-    return listAssets(container);
+  async listAllAssets(userId?: string): Promise<TBitAssetRecord[]> {
+    return listAssets(userId);
   }
 
-  async getAssetStats(containerId: string) {
-    const container = await this.openContainer(containerId);
-    return getAssetStats(container);
+  async getAssetStatistics(userId?: string) {
+    return getAssetStats(userId);
   }
 
-  async importBinary(containerId: string, filePath: string, assetType?: string) {
-    const container = await this.openContainer(containerId);
-    return importBinaryAsset(container, filePath, assetType);
+  async importBinaryAsset(filePath: string, assetType?: string): Promise<BinaryAssetImportResult> {
+    const storage = await this.getStorage();
+    const content = await readFile(filePath);
+    const contentBase64 = content.toString("base64");
+    const filename = filePath.split(/[/\\]/).pop() ?? "asset.bin";
+    return importBinaryAsset(storage, {
+      contentBase64,
+      filename,
+      userId: "aios",
+      mimeType: assetType || undefined,
+    });
   }
 
-  async importMarkdown(containerId: string, filePath: string): Promise<MarkdownImportResult> {
-    const container = await this.openContainer(containerId);
-    return importMarkdownDocument(container, filePath);
+  async importMarkdownFile(filePath: string): Promise<MarkdownImportResult> {
+    const storage = await this.getStorage();
+    const request: MarkdownImportRequest = {
+      filePath,
+      userId: "aios",
+    };
+    return importMarkdownDocument(storage, request);
   }
 
-  async importUniversal(containerId: string, filePath: string) {
-    const container = await this.openContainer(containerId);
-    return importUniversalDocument(container, filePath);
+  async importUniversalFile(filePath: string): Promise<UniversalDocumentImportResult> {
+    const storage = await this.getStorage();
+    const request: UniversalDocumentImportRequest = {
+      filePath,
+      userId: "aios",
+    };
+    return importUniversalDocument(storage, request);
   }
 }

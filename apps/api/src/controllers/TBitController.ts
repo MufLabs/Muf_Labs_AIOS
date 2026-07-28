@@ -1,6 +1,19 @@
 import { Request, Response } from "express";
 import { TBitService } from "../services/TBitService";
 
+/** Cast a query param to string (Express 5 may return string | string[] | ParsedQs) */
+function qs(val: unknown): string {
+  if (Array.isArray(val)) return val[0] ?? "";
+  if (typeof val === "string") return val;
+  return String(val ?? "");
+}
+
+/** Cast a query param to optional number */
+function qn(val: unknown): number | undefined {
+  const s = qs(val);
+  return s ? Number(s) : undefined;
+}
+
 export class TBitController {
   private readonly service = new TBitService();
 
@@ -20,18 +33,18 @@ export class TBitController {
 
   recallMemos = async (req: Request, res: Response) => {
     const result = await this.service.recallMemos({
-      containerId: req.params.containerId,
-      query: req.query.q as string,
-      topK: req.query.topK ? Number(req.query.topK) : undefined,
+      userId: qs(req.query.userId) || undefined,
+      query: qs(req.query.q),
+      topK: qn(req.query.topK),
     });
     res.json(result);
   };
 
   getMemoryContext = async (req: Request, res: Response) => {
-    const result = await this.service.getMemoryContext(
-      req.params.containerId,
-      req.params.recordId,
-      req.query.depth ? Number(req.query.depth) : undefined,
+    const result = await this.service.getMemoryContextForRecord(
+      qs(req.query.userId) || "anonimo",
+      qs(req.query.q),
+      qn(req.query.limit),
     );
     res.json(result);
   };
@@ -40,57 +53,57 @@ export class TBitController {
 
   searchIndex = async (req: Request, res: Response) => {
     const result = await this.service.searchIndex(
-      req.params.containerId,
-      req.query.q as string,
-      req.query.topK ? Number(req.query.topK) : undefined,
+      qs(req.query.q),
+      qn(req.query.topK),
     );
     res.json(result);
   };
 
-  rebuildIndex = async (req: Request, res: Response) => {
-    await this.service.rebuildIndex(req.params.containerId);
+  rebuildIndex = async (_req: Request, res: Response) => {
+    await this.service.rebuildIndex();
     res.json({ status: "ok" });
   };
 
   // ─── Container health ───────────────────────────────────
 
-  getHealth = async (req: Request, res: Response) => {
-    const result = await this.service.getHealth(req.params.containerId);
-    res.json(result);
+  getHealth = async (_req: Request, res: Response) => {
+    const result = await this.service.getHealth();
+    res.json({ health: result });
   };
 
-  reconcileHealth = async (req: Request, res: Response) => {
-    const result = await this.service.reconcileHealth(req.params.containerId);
+  reconcileHealth = async (_req: Request, res: Response) => {
+    const result = await this.service.reconcileHealth();
     res.json(result);
   };
 
   // ─── Encryption keys ────────────────────────────────────
 
   getEncryptionKeyInfo = async (_req: Request, res: Response) => {
-    const result = await this.service.getEncryptionKeyInfo();
+    const result = this.service.getEncryptionKeyInfo();
     res.json(result);
   };
 
   getEncryptionKeyRing = async (_req: Request, res: Response) => {
-    const result = await this.service.getEncryptionKeyRing();
+    const result = this.service.getEncryptionKeyRing();
     res.json(result);
   };
 
   // ─── Asset management ───────────────────────────────────
 
   listAssets = async (req: Request, res: Response) => {
-    const result = await this.service.listContainerAssets(req.params.containerId);
+    const userId = qs(req.query.userId) || undefined;
+    const result = await this.service.listAllAssets(userId);
     res.json(result);
   };
 
   getAssetStats = async (req: Request, res: Response) => {
-    const result = await this.service.getAssetStats(req.params.containerId);
+    const userId = qs(req.query.userId) || undefined;
+    const result = await this.service.getAssetStatistics(userId);
     res.json(result);
   };
 
   importBinary = async (req: Request, res: Response) => {
-    const result = await this.service.importBinary(
-      req.params.containerId,
+    const result = await this.service.importBinaryAsset(
       req.body.filePath,
       req.body.assetType,
     );
@@ -98,18 +111,12 @@ export class TBitController {
   };
 
   importMarkdown = async (req: Request, res: Response) => {
-    const result = await this.service.importMarkdown(
-      req.params.containerId,
-      req.body.filePath,
-    );
+    const result = await this.service.importMarkdownFile(req.body.filePath);
     res.status(201).json(result);
   };
 
   importUniversal = async (req: Request, res: Response) => {
-    const result = await this.service.importUniversal(
-      req.params.containerId,
-      req.body.filePath,
-    );
+    const result = await this.service.importUniversalFile(req.body.filePath);
     res.status(201).json(result);
   };
 }

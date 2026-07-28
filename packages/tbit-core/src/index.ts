@@ -55,6 +55,8 @@ export {
 // ─── Query & Semantic Index ──────────────────────────────────────
 export {
   QueryIndexEntry,
+  QuerySearchRequest,
+  QuerySearchResult,
   getQueryIndex,
   getQueryIndexStats,
   rebuildQueryIndex,
@@ -117,6 +119,7 @@ export {
 // ─── Markdown Bridge ─────────────────────────────────────────────
 export {
   MarkdownImportResult,
+  MarkdownImportRequest,
   importMarkdownDocument,
   parseMarkdownDocument,
   reconstructMarkdownDocument,
@@ -135,6 +138,8 @@ export {
 // ─── Universal Document Bridge ───────────────────────────────────
 export {
   importUniversalDocument,
+  UniversalDocumentImportRequest,
+  UniversalDocumentImportResult,
 } from "./universalDocumentBridge";
 
 // ─── Semantic Compression ────────────────────────────────────────
