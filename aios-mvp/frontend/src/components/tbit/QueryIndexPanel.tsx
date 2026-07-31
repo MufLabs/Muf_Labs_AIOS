@@ -1,190 +1,295 @@
-import { useState } from "react";
-import { queryIndexClient, QueryIndexSearchResult } from "../queryIndexClient";
-import { useTBitStore } from "../store/useTBitStore";
+import { useState, useEffect } from "react";
+import { Search, RefreshCw, Filter, ChevronDown, ChevronUp, Database, Zap, Loader2, AlertTriangle, History, Play, Trash2, Copy, Code, FileText, Settings, Filter as FilterIcon } from "lucide-react";
 
-type QueryLog = {
-  level: "OK" | "ERROR" | "INFO";
-  text: string;
-};
+interface SearchResult {
+  id: string;
+  query: string;
+  results: Array<{
+    nodeId: string;
+    score: number;
+    content: string;
+    metadata: Record<string, unknown>;
+  }>;
+  timestamp: string;
+  executionTime: number;
+  totalHits: number;
+}
+
+interface QueryState {
+  query: string;
+  results: SearchResult | null;
+  history: SearchResult[];
+  loading: boolean;
+  error: string | null;
+  searchType: "semantic" | "keyword" | "hybrid" | "graph";
+  limit: number;
+  threshold: number;
+  includeMetadata: boolean;
+}
+
+const SEARCH_TYPES = [
+  { value: "semantic", label: "Semantic Search", icon: Brain, description: "Vector similarity search" },
+  { value: "keyword", label: "Keyword Search", icon: Search, description: "Full-text keyword matching" },
+  { value: "hybrid", label: "Hybrid Search", icon: Zap, description: "Combined semantic + keyword" },
+  { value: "graph", label: "Graph Traversal", icon: GitBranch, description: "Follow memory links" },
+] as const;
 
 export function QueryIndexPanel() {
-  const setSelectedMemoryNodeKey = useTBitStore((state) => state.setSelectedMemoryNodeKey);
-  const [userId, setUserId] = useState("Mauricio");
-  const [query, setQuery] = useState("");
-  const [source, setSource] = useState("");
-  const [tag, setTag] = useState("");
-  const [attribute, setAttribute] = useState("");
-  const [value, setValue] = useState("");
-  const [results, setResults] = useState<QueryIndexSearchResult[]>([]);
-  const [stats, setStats] = useState<string>("Indice no consultado");
-  const [logs, setLogs] = useState<QueryLog[]>([]);
-  const [busy, setBusy] = useState(false);
+  const [state, setState] = useState<QueryState>({
+    query: "",
+    results: null,
+    history: [],
+    loading: false,
+    error: null,
+    searchType: "hybrid",
+    limit: 10,
+    threshold: 0.7,
+    includeMetadata: true,
+  });
 
-  const pushLog = (level: QueryLog["level"], text: string) => {
-    setLogs((current) => [...current.slice(-3), { level, text }]);
-  };
-
-  const rebuild = async () => {
+  const executeSearch = async () => {
+    if (!state.query.trim()) return;
+    
+    setState((s) => ({ ...s, loading: true, error: null }));
+    const startTime = Date.now();
+    
     try {
-      setBusy(true);
-      const response = (await queryIndexClient.rebuild()) as {
-        index?: { totalRecords: number; tokens: number; documents: number; attributes: number };
+      const response = await fetch("/api/tbit/memory/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: state.query,
+          type: state.searchType,
+          limit: state.limit,
+          threshold: state.threshold,
+          includeMetadata: state.includeMetadata,
+        }),
+      });
+      
+      if (!response.ok) throw new Error("Search failed");
+      const results = await response.json();
+      
+      const searchResult: SearchResult = {
+        id: crypto.randomUUID(),
+        query: state.query,
+        results: results.nodes || results,
+        timestamp: new Date().toISOString(),
+        executionTime: Date.now() - startTime,
+        totalHits: results.total || (results.nodes?.length || results.length || 0),
       };
-      const index = response.index;
-      setStats(`Registros: ${index?.totalRecords ?? 0} | Tokens: ${index?.tokens ?? 0} | Docs: ${index?.documents ?? 0}`);
-      pushLog("OK", "Query Index reconstruido.");
-    } catch (error) {
-      pushLog("ERROR", error instanceof Error ? error.message : "Fallo reconstruyendo indice.");
-    } finally {
-      setBusy(false);
+      
+      setState((s) => ({
+        ...s,
+        results: searchResult,
+        loading: false,
+        history: [searchResult, ...s.history.slice(0, 49)],
+      }));
+    } catch (err) {
+      setState((s) => ({ ...s, loading: false, error: err instanceof Error ? err.message : "Search failed" }));
     }
   };
 
-  const search = async () => {
-    try {
-      setBusy(true);
-      const tags = tag
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
-      const response = (await queryIndexClient.search({
-        userId: userId.trim() || undefined,
-        query: query.trim() || undefined,
-        source: source.trim() || undefined,
-        tags: tags.length ? tags : undefined,
-        attribute: attribute.trim() || undefined,
-        value: value.trim() || undefined,
-        limit: 12,
-      })) as { index?: { totalRecords: number; builtAt: string }; results?: QueryIndexSearchResult[] };
+  const rerunHistory = (item: SearchResult) => {
+    setState((s) => ({ ...s, query: item.query, searchType: "hybrid" }), () => executeSearch());
+  };
 
-      setResults(response.results ?? []);
-      setStats(`Resultados: ${response.results?.length ?? 0} | Registros indexados: ${response.index?.totalRecords ?? 0}`);
-      pushLog("OK", "Busqueda completada.");
-    } catch (error) {
-      pushLog("ERROR", error instanceof Error ? error.message : "Fallo buscando en indice.");
-    } finally {
-      setBusy(false);
+  const clearHistory = () => {
+    if (confirm("Clear search history?")) {
+      setState((s) => ({ ...s, history: [] }));
+    }
+  };
+
+  const copyQuery = async (query: string) => {
+    await navigator.clipboard.writeText(query);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      executeSearch();
     }
   };
 
   return (
-    <section className="border border-emerald-900/50 bg-gray-950/70 p-4 font-mono text-xs text-white backdrop-blur">
-      <div className="mb-3 border-b border-emerald-950 pb-2">
-        <div className="text-[10px] font-bold tracking-widest text-emerald-300">T-BIT QUERY INDEX</div>
-        <div className="mt-1 text-gray-500">Busqueda rapida por texto, tags, tipo, usuario y atributos.</div>
+    <div className="tbit-panel query-index-panel">
+      <div className="panel-header">
+        <div className="panel-title-row">
+          <Database className="panel-icon" size={20} />
+          <h2 className="panel-title">Query Indexes</h2>
+        </div>
+        <div className="panel-actions">
+          <div className="view-toggle">
+            {SEARCH_TYPES.map((type) => (
+              <button
+                key={type.value}
+                className={`view-btn ${state.searchType === type.value ? "active" : ""}`}
+                onClick={() => setState((s) => ({ ...s, searchType: type.value }))}
+                title={type.description}
+              >
+                <type.icon size={14} />
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <label className="block">
-          <span className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-gray-500">Usuario</span>
-          <input
-            value={userId}
-            onChange={(event) => setUserId(event.target.value)}
-            className="w-full border border-gray-800 bg-gray-950 px-2 py-2 text-emerald-100 outline-none focus:border-emerald-500"
+      {state.error && (
+        <div className="panel-error">
+          <AlertTriangle size={14} /> {state.error}
+          <button onClick={() => setState((s) => ({ ...s, error: null }))}>✕</button>
+        </div>
+      )}
+
+      <div className="query-panel">
+        <div className="query-form">
+          <textarea
+            className="query-textarea"
+            value={state.query}
+            onChange={(e) => setState((s) => ({ ...s, query: e.target.value }))}
+            onKeyDown={handleKeyDown}
+            placeholder="Enter your query... (Ctrl+Enter to search)"
+            rows={4}
           />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-gray-500">Tipo</span>
-          <select
-            value={source}
-            onChange={(event) => setSource(event.target.value)}
-            className="w-full border border-gray-800 bg-gray-950 px-2 py-2 text-emerald-100 outline-none focus:border-emerald-500"
-          >
-            <option value="">Todos</option>
-            <option value="markdown">Markdown</option>
-            <option value="markdown-chunk">Chunk</option>
-            <option value="ai">IA</option>
-            <option value="demo">Demo</option>
-          </select>
-        </label>
-      </div>
-
-      <label className="mt-2 block">
-        <span className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-gray-500">Buscar</span>
-        <input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") void search();
-          }}
-          className="w-full border border-gray-800 bg-gray-950 px-2 py-2 text-cyan-100 outline-none focus:border-cyan-500"
-          placeholder="Petius, cumpleaños, tema visual..."
-        />
-      </label>
-
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <input
-          value={tag}
-          onChange={(event) => setTag(event.target.value)}
-          className="border border-gray-800 bg-gray-950 px-2 py-2 text-purple-100 outline-none focus:border-purple-500"
-          placeholder="tag"
-        />
-        <input
-          value={attribute}
-          onChange={(event) => setAttribute(event.target.value)}
-          className="border border-gray-800 bg-gray-950 px-2 py-2 text-purple-100 outline-none focus:border-purple-500"
-          placeholder="atributo JSON"
-        />
-      </div>
-
-      <input
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        className="mt-2 w-full border border-gray-800 bg-gray-950 px-2 py-2 text-purple-100 outline-none focus:border-purple-500"
-        placeholder="valor opcional del atributo/texto"
-      />
-
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <button
-          onClick={search}
-          disabled={busy}
-          className="border border-emerald-700/60 bg-emerald-950/30 py-2 font-bold text-emerald-300 hover:bg-emerald-500 hover:text-black disabled:opacity-50"
-        >
-          BUSCAR
-        </button>
-        <button
-          onClick={rebuild}
-          disabled={busy}
-          className="border border-cyan-700/60 bg-cyan-950/30 py-2 font-bold text-cyan-300 hover:bg-cyan-500 hover:text-black disabled:opacity-50"
-        >
-          REINDEXAR
-        </button>
-      </div>
-
-      <div className="mt-3 border border-gray-900 bg-black/30 p-2 text-gray-400">{stats}</div>
-
-      <div className="mt-2 max-h-52 space-y-2 overflow-y-auto">
-        {results.map((result) => (
-          <button
-            key={result.key}
-            onClick={() => setSelectedMemoryNodeKey(result.key)}
-            className="w-full border border-gray-900 bg-black/30 p-2 text-left hover:border-emerald-500"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span className="truncate font-bold text-emerald-200">{result.filename || result.title}</span>
-              <span className="text-[10px] uppercase text-gray-500">{result.source}</span>
+          <div className="query-options">
+            <div className="query-option">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={state.includeMetadata}
+                  onChange={(e) => setState((s) => ({ ...s, includeMetadata: e.target.checked }))}
+                />
+                Include Metadata
+              </label>
             </div>
-            <div className="mt-1 truncate text-[10px] text-gray-500">{result.key}</div>
-            <div className="mt-1 line-clamp-2 text-gray-400">{result.textPreview || "Sin preview"}</div>
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-3 max-h-20 overflow-y-auto border border-gray-900 bg-black/30 p-2">
-        {logs.length === 0 ? (
-          <div className="text-gray-600">Query Index listo.</div>
-        ) : (
-          logs.map((log, index) => (
-            <div key={`${log.level}-${index}`} className="text-gray-400">
-              <span className={log.level === "ERROR" ? "text-red-400" : log.level === "OK" ? "text-emerald-300" : "text-cyan-300"}>
-                [{log.level}]
-              </span>{" "}
-              {log.text}
+            <div className="query-option">
+              <label>
+                Limit:
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={state.limit}
+                  onChange={(e) => setState((s) => ({ ...s, limit: parseInt(e.target.value) || 10 }))}
+                  style={{ width: 60, marginLeft: 8 }}
+                />
+              </label>
             </div>
-          ))
+            <div className="query-option">
+              <label>
+                Threshold:
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={state.threshold}
+                  onChange={(e) => setState((s) => ({ ...s, threshold: parseFloat(e.target.value) }))}
+                  style={{ width: 120, marginLeft: 8 }}
+                />
+                <span style={{ marginLeft: 8, fontSize: 12 }}>{(state.threshold * 100).toFixed(0)}%</span>
+              </label>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+            <button className="btn btn-primary" onClick={executeSearch} disabled={state.loading || !state.query.trim()}>
+              {state.loading ? <Loader2 className="spin" size={14} /> : <Play size={14} />} Search
+            </button>
+            <button className="btn btn-secondary" onClick={() => setState((s) => ({ ...s, query: "", results: null }))}>
+              <Trash2 size={14} /> Clear
+            </button>
+          </div>
+        </div>
+
+        {state.results && (
+          <div className="query-results">
+            <div className="query-results-header">
+              <span>
+                <strong>{state.results.totalHits}</strong> results in <strong>{state.results.executionTime}ms</strong>
+              </span>
+              <span>{new Date(state.results.timestamp).toLocaleTimeString()}</span>
+            </div>
+            <div className="results-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Score</th>
+                    <th>Node ID</th>
+                    <th>Content Preview</th>
+                    <th>Metadata</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state.results.results.map((result, i) => (
+                    <tr key={`${result.nodeId}-${i}`}>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ flex: 1, height: 6, background: "var(--bg-tertiary)", borderRadius: 3, overflow: "hidden" }}>
+                            <div style={{ width: `${result.score * 100}%`, height: "100%", background: result.score > 0.8 ? "var(--accent-success)" : result.score > 0.5 ? "var(--accent-warning)" : "var(--accent-danger)" }} />
+                          </div>
+                          <span style={{ fontSize: 11, fontWeight: 600, minWidth: 40 }}>{(result.score * 100).toFixed(1)}%</span>
+                        </div>
+                      </td>
+                      <td>
+                        <code className="checksum" onClick={() => copyQuery(result.nodeId)} style={{ cursor: "pointer" }}>{result.nodeId}</code>
+                      </td>
+                      <td>
+                        <pre style={{ margin: 0, fontFamily: "inherit", fontSize: 11, whiteSpace: "pre-wrap", wordWrap: "break-word", maxWidth: 400 }}>
+                          {result.content.slice(0, 300)}{result.content.length > 300 ? "..." : ""}
+                        </pre>
+                      </td>
+                      <td>
+                        {state.includeMetadata && result.metadata && Object.keys(result.metadata).length > 0 ? (
+                          <pre style={{ margin: 0, fontFamily: "inherit", fontSize: 10, whiteSpace: "pre-wrap", maxWidth: 200 }}>
+                            {JSON.stringify(result.metadata, null, 2)}
+                          </pre>
+                        ) : (
+                          <span style={{ color: "var(--text-muted)", fontSize: 11 }}>{state.includeMetadata ? "No metadata" : "Disabled"}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
+
+        <div className="query-history">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <h4 style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--text-muted)" }}>
+              Search History ({state.history.length})
+            </h4>
+            {state.history.length > 0 && (
+              <button className="btn btn-sm btn-secondary" onClick={clearHistory}>
+                <Trash2 size={12} /> Clear
+              </button>
+            )}
+          </div>
+          {state.history.length === 0 ? (
+            <p style={{ color: "var(--text-muted)", textAlign: "center", padding: 20 }}>No search history yet</p>
+          ) : (
+            <div className="history-list">
+              {state.history.map((item) => (
+                <div key={item.id} className="history-item">
+                  <div className="history-query" onClick={() => rerunHistory(item)} style={{ cursor: "pointer" }}>
+                    {item.query}
+                  </div>
+                  <div className="history-meta">
+                    <span>{item.totalHits} results</span>
+                    <span>{item.executionTime}ms</span>
+                    <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
+                    <span className="type-badge" style={{ color: "var(--accent-primary)" }}>{item.query.split(" ").length > 10 ? "hybrid" : "semantic"}</span>
+                  </div>
+                  <div className="history-actions">
+                    <button className="icon-btn" onClick={() => rerunHistory(item)} title="Rerun"><Play size={12} /></button>
+                    <button className="icon-btn" onClick={() => copyQuery(item.query)} title="Copy"><Copy size={12} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 

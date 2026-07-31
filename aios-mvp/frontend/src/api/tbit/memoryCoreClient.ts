@@ -32,6 +32,11 @@ function resolveContainerId(): string {
   return cid;
 }
 
+/** Get the container ID, creating if needed */
+export function getContainerId(): string {
+  return resolveContainerId();
+}
+
 export const memoryCoreClient = {
   /** Store a memory record into the T-Bit container */
   remember(body: {
@@ -76,7 +81,7 @@ export const memoryCoreClient = {
   /** Get the full memory graph for this container */
   graph(userId?: string) {
     const containerId = resolveContainerId();
-    return getJson(`/api/v1/tbit/containers/${containerId}/memos?topK=100`);
+    return getJson(`/api/v1/tbit/containers/${containerId}/memos/graph`);
   },
 
   /** Delete a memory record */

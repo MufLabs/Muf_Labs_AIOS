@@ -1,0 +1,272 @@
+/* Onboarding / first-run setup wizard */
+.onboarding-shell {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #131c33 0%, var(--bg-primary) 70%);
+  padding: 24px;
+  z-index: 1000;
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 40px 36px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.onboarding-logo {
+  color: var(--accent-primary);
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.onboarding-card h1 {
+  font-size: 24px;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.onboarding-lead {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 24px;
+}
+
+.onboarding-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  text-align: left;
+  display: inline-block;
+}
+
+.onboarding-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 6px 0;
+}
+
+.onboarding-checklist .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.onboarding-checklist .dot.ok {
+  background: var(--accent-success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+.onboarding-field {
+  display: block;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.onboarding-field span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.onboarding-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.onboarding-field input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+
+.onboarding-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.onboarding-btn {
+  appearance: none;
+  border: 1px solid var(--border-secondary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.05s;
+}
+
+.onboarding-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent-primary);
+}
+
+.onboarding-btn:active {
+  transform: translateY(1px);
+}
+
+.onboarding-btn.primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+}
+
+.onboarding-btn.primary:hover {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+}
+
+.onboarding-error {
+  color: var(--accent-danger);
+  font-size: 13px;
+  margin: 0 0 16px;
+  word-break: break-word;
+}
+
+.onboarding-result {
+  text-align: left;
+  margin: 0 0 24px;
+  font-size: 13px;
+}
+
+.onboarding-result dt {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+.onboarding-result dd {
+  margin: 4px 0 0;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.onboarding-result code {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.onboarding-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-secondary);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  animation: onboarding-spin 0.8s linear infinite;
+}
+
+.onboarding-spinner.large {
+  width: 44px;
+  height: 44px;
+  border-width: 4px;
+  margin-top: 8px;
+}
+
+.onboarding-spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+  margin: 0 8px 0 0;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.onboarding-vault-picker {
+  text-align: center;
+  margin: 24px 0;
+}
+
+.onboarding-vault-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.onboarding-vault-selected .vault-icon {
+  font-size: 18px;
+}
+
+.onboarding-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.onboarding-vault-manual {
+  text-align: center;
+  margin: 24px 0;
+}
+
+.onboarding-notice {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 16px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+}
+
+.onboarding-btn.secondary {
+  background: var(--bg-tertiary);
+  border-color: var(--border-secondary);
+}
+
+.onboarding-btn.secondary:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent-primary);
+}
+
+.onboarding-btn.small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+@keyframes onboarding-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

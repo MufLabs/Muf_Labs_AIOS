@@ -11,7 +11,7 @@
             "path": "./packages/agents"
         },
         {
-            "path": "./packages/core"
+            "path": "./packages/tbit-core"
         },
         {
             "path": "./apps/api"

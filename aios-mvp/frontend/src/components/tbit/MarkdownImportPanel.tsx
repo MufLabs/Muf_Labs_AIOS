@@ -1,286 +1,591 @@
-import { useState } from "react";
-import { markdownBridgeClient } from "../markdownBridgeClient";
-import { useTBitStore } from "../store/useTBitStore";
+import { useState, useEffect } from "react";
+import { Search, RefreshCw, Filter, Upload, Download, Trash2, Eye, Copy, ChevronDown, ChevronUp, FileText, Plus, AlertTriangle, CheckCircle, XCircle, Clock, RotateCcw, Settings, FileCheck, FileX } from "lucide-react";
 
-type ImportLog = {
-  level: "OK" | "ERROR" | "INFO";
-  text: string;
-};
-
-type MarkdownDocumentItem = {
+interface MarkdownDocument {
   key: string;
-  userId: string;
   title: string;
-  filename?: string;
-  chunked: boolean;
-  chunkCount: number;
-  originalBytes?: number;
+  content: string;
+  contentPreview: string;
+  wordCount: number;
+  charCount: number;
+  tags: string[];
+  source: string;
+  checksum: string;
+  status: "indexed" | "pending" | "failed" | "processing";
+  chunks: number;
+  createdAt: string;
   updatedAt: string;
-};
-
-function readActiveUserId(): string {
-  try {
-    const profile = JSON.parse(localStorage.getItem("tbit_user_profile") ?? "null") as { userId?: string; displayName?: string } | null;
-    return profile?.userId?.trim() || profile?.displayName?.trim() || "usuario_local";
-  } catch {
-    return "usuario_local";
-  }
+  metadata: Record<string, unknown>;
 }
 
+interface ImportState {
+  documents: MarkdownDocument[];
+  loading: boolean;
+  error: string | null;
+  searchQuery: string;
+  filterStatus: string;
+  filterSource: string;
+  selectedDoc: MarkdownDocument | null;
+  showImportModal: boolean;
+  viewMode: "grid" | "list";
+}
+
+const STATUS_COLORS: Record<MarkdownDocument["status"], string> = {
+  indexed: "var(--accent-success)",
+  pending: "var(--accent-warning)",
+  failed: "var(--accent-danger)",
+  processing: "var(--accent-info)",
+};
+
+const STATUS_ICONS: Record<MarkdownDocument["status"], React.ReactNode> = {
+  indexed: <CheckCircle size={14} />,
+  pending: <Clock size={14} />,
+  failed: <XCircle size={14} />,
+  processing: <RotateCcw className="spin" size={14} />,
+};
+
+const STATUS_LABELS: Record<MarkdownDocument["status"], string> = {
+  indexed: "Indexed",
+  pending: "Pending",
+  failed: "Failed",
+  processing: "Processing",
+};
+
 export function MarkdownImportPanel() {
-  const { memoryGraph, setMemoryGraph } = useTBitStore();
-  const [userId, setUserId] = useState(readActiveUserId);
-  const [fileName, setFileName] = useState("");
-  const [content, setContent] = useState("");
-  const [documentKey, setDocumentKey] = useState("");
-  const [documents, setDocuments] = useState<MarkdownDocumentItem[]>([]);
-  const [selectedDocumentKey, setSelectedDocumentKey] = useState("");
-  const [logs, setLogs] = useState<ImportLog[]>([]);
-  const [busy, setBusy] = useState(false);
+  const [state, setState] = useState<ImportState>({
+    documents: [],
+    loading: true,
+    error: null,
+    searchQuery: "",
+    filterStatus: "",
+    filterSource: "",
+    selectedDoc: null,
+    showImportModal: false,
+    viewMode: "grid",
+  });
 
-  const pushLog = (level: ImportLog["level"], text: string) => {
-    setLogs((prev) => [...prev.slice(-4), { level, text }]);
-  };
-
-  const loadFile = async (file: File) => {
-    setFileName(file.name);
-    setContent(await file.text());
-    pushLog("INFO", `Archivo cargado: ${file.name}`);
-  };
-
-  const importMarkdown = async () => {
-    if (!fileName || !content.trim()) {
-      pushLog("ERROR", "Selecciona un archivo Markdown primero.");
-      return;
-    }
+  const fetchDocuments = async () => {
+    setState((s) => ({ ...s, loading: true, error: null }));
     try {
-      setBusy(true);
-      const response = (await markdownBridgeClient.import({
-        userId,
-        filename: fileName,
-        content,
-      })) as { result?: { key?: string; links?: string[]; tags?: string[]; chunked?: boolean; chunkCount?: number; originalBytes?: number } };
-      if (response.result?.key) {
-        setDocumentKey(response.result.key);
-        setSelectedDocumentKey(response.result.key);
-      }
-      pushLog("OK", `Importado: ${response.result?.key ?? fileName}`);
-      pushLog("INFO", `Links: ${response.result?.links?.length ?? 0} | Tags: ${response.result?.tags?.length ?? 0}`);
-      if (response.result?.chunked) {
-        pushLog("INFO", `Documento grande: ${response.result.chunkCount} chunks | ${response.result.originalBytes} bytes`);
-      }
-    } catch (error) {
-      pushLog("ERROR", error instanceof Error ? error.message : "Fallo importando Markdown.");
-    } finally {
-      setBusy(false);
+      const response = await fetch("/api/tbit/markdown");
+      if (!response.ok) throw new Error("Failed to fetch markdown documents");
+      const documents = await response.json();
+      setState((s) => ({ ...s, documents, loading: false }));
+    } catch (err) {
+      setState((s) => ({ ...s, loading: false, error: err instanceof Error ? err.message : "Unknown error" }));
     }
   };
 
-  const loadDocuments = async () => {
-    try {
-      setBusy(true);
-      const response = (await markdownBridgeClient.list(userId)) as { documents?: MarkdownDocumentItem[] };
-      const nextDocuments = response.documents ?? [];
-      setDocuments(nextDocuments);
-      if (!selectedDocumentKey && nextDocuments[0]) {
-        setSelectedDocumentKey(nextDocuments[0].key);
-        setDocumentKey(nextDocuments[0].key);
-      }
-      pushLog("OK", `Documentos encontrados: ${nextDocuments.length}`);
-    } catch (error) {
-      pushLog("ERROR", error instanceof Error ? error.message : "Fallo listando documentos.");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const removeKeysFromGraph = (keys: string[]) => {
-    if (!memoryGraph || keys.length === 0) return;
-    const deleted = new Set(keys);
-    setMemoryGraph({
-      ...memoryGraph,
-      nodes: memoryGraph.nodes.filter((node) => !deleted.has(node.key)),
-      links: memoryGraph.links.filter((link) => !deleted.has(link.sourceKey) && !deleted.has(link.targetKey)),
-      tags: Object.fromEntries(
-        Object.entries(memoryGraph.tags)
-          .map(([tag, tagKeys]) => [tag, tagKeys.filter((key) => !deleted.has(key))])
-          .filter(([, tagKeys]) => tagKeys.length > 0),
-      ),
-    });
-  };
-
-  const deleteMarkdown = async () => {
-    const key = (selectedDocumentKey || documentKey).trim();
-    if (!key) {
-      pushLog("ERROR", "Selecciona un documento a eliminar.");
-      return;
-    }
-
-    const selected = documents.find((document) => document.key === key);
-    const label = selected?.filename || selected?.title || key;
-
-    const firstConfirmation = window.confirm(
-      `Vas a eliminar definitivamente este documento del vacio:\n\n${label}\n\nEsta accion colapsa el manifiesto, sus chunks y sus enlaces logicos.`,
-    );
-    if (!firstConfirmation) return;
-
-    const secondConfirmation = window.confirm(
-      `Confirmacion final:\n\nEliminar "${label}" de forma permanente?`,
-    );
-    if (!secondConfirmation) return;
+  const importDocuments = async (files: File[], options: { source: string; tags: string[]; splitChunks: boolean; maxChunkSize: number }) => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append("files", file));
+    formData.append("source", options.source);
+    formData.append("tags", JSON.stringify(options.tags));
+    formData.append("splitChunks", String(options.splitChunks));
+    formData.append("maxChunkSize", String(options.maxChunkSize));
 
     try {
-      setBusy(true);
-      const response = (await markdownBridgeClient.delete(key)) as {
-        result?: { deletedKeys?: string[]; collapsedCount?: number; indexRemovedCount?: number; warnings?: string[] };
-      };
-      pushLog("OK", `Documento eliminado: ${response.result?.deletedKeys?.length ?? 0} claves`);
-      pushLog("INFO", `Colapsadas: ${response.result?.collapsedCount ?? 0} | Indice: ${response.result?.indexRemovedCount ?? 0}`);
-      if (response.result?.warnings?.length) {
-        pushLog("INFO", `Avisos: ${response.result.warnings.length}`);
-      }
-      removeKeysFromGraph(response.result?.deletedKeys ?? []);
-      setDocuments((current) => current.filter((document) => document.key !== key));
-      setSelectedDocumentKey("");
-      setDocumentKey("");
-    } catch (error) {
-      pushLog("ERROR", error instanceof Error ? error.message : "Fallo eliminando Markdown.");
-    } finally {
-      setBusy(false);
+      const response = await fetch("/api/tbit/markdown/import", {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Import failed");
+      await fetchDocuments();
+      setState((s) => ({ ...s, showImportModal: false }));
+    } catch (err) {
+      setState((s) => ({ ...s, error: err instanceof Error ? err.message : "Import failed" }));
     }
   };
 
-  const purgeOrphans = async () => {
-    const confirmed = window.confirm(
-      "Limpiar chunks huerfanos del usuario actual?\n\nEsto elimina fragmentos Markdown que ya no tienen documento padre.",
-    );
-    if (!confirmed) return;
-
+  const reindexDocument = async (key: string) => {
     try {
-      setBusy(true);
-      const response = (await markdownBridgeClient.purgeOrphans(userId)) as {
-        result?: { purgedKeys?: string[]; collapsedCount?: number; indexRemovedCount?: number; warnings?: string[] };
-      };
-      const purgedKeys = response.result?.purgedKeys ?? [];
-      removeKeysFromGraph(purgedKeys);
-      pushLog("OK", `Chunks huerfanos limpiados: ${purgedKeys.length}`);
-      pushLog("INFO", `Colapsados: ${response.result?.collapsedCount ?? 0} | Indice: ${response.result?.indexRemovedCount ?? 0}`);
-    } catch (error) {
-      pushLog("ERROR", error instanceof Error ? error.message : "Fallo limpiando chunks huerfanos.");
-    } finally {
-      setBusy(false);
+      const response = await fetch(`/api/tbit/markdown/${encodeURIComponent(key)}/reindex`, { method: "POST" });
+      if (!response.ok) throw new Error("Reindex failed");
+      await fetchDocuments();
+    } catch (err) {
+      setState((s) => ({ ...s, error: err instanceof Error ? err.message : "Reindex failed" }));
     }
+  };
+
+  const deleteDocument = async (key: string) => {
+    if (!confirm(`Delete document "${key}"?`)) return;
+    try {
+      const response = await fetch(`/api/tbit/markdown/${encodeURIComponent(key)}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Delete failed");
+      await fetchDocuments();
+    } catch (err) {
+      setState((s) => ({ ...s, error: err instanceof Error ? err.message : "Delete failed" }));
+    }
+  };
+
+  const updateDocumentStatus = async (key: string, status: "indexed" | "pending") => {
+    try {
+      const response = await fetch(`/api/tbit/markdown/${encodeURIComponent(key)}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!response.ok) throw new Error("Status update failed");
+      await fetchDocuments();
+    } catch (err) {
+      setState((s) => ({ ...s, error: err instanceof Error ? err.message : "Status update failed" }));
+    }
+  };
+
+  const copyContent = async (content: string) => {
+    await navigator.clipboard.writeText(content);
+  };
+
+  const downloadDocument = async (key: string, title: string) => {
+    try {
+      const response = await fetch(`/api/tbit/markdown/${encodeURIComponent(key)}/download`);
+      if (!response.ok) throw new Error("Download failed");
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${title}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setState((s) => ({ ...s, error: err instanceof Error ? err.message : "Download failed" }));
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const filteredDocs = state.documents.filter((doc) => {
+    const matchesSearch =
+      doc.title.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+      doc.content.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+      doc.key.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+      doc.tags.some((tag) => tag.toLowerCase().includes(state.searchQuery.toLowerCase()));
+    const matchesStatus = !state.filterStatus || doc.status === state.filterStatus;
+    const matchesSource = !state.filterSource || doc.source === state.filterSource;
+    return matchesSearch && matchesStatus && matchesSource;
+  });
+
+  const sources = [...new Set(state.documents.map((d) => d.source))].sort();
+  const statuses = ["indexed", "pending", "failed", "processing"] as const;
+
+  const formatNumber = (n: number) => {
+    if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+    if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
+    return String(n);
   };
 
   return (
-    <section className="border border-cyan-900/50 bg-gray-950/70 p-4 font-mono text-xs text-white backdrop-blur">
-      <div className="mb-3 border-b border-cyan-950 pb-2">
-        <div className="text-[10px] font-bold tracking-widest text-cyan-300">T-BIT MARKDOWN BRIDGE</div>
-        <div className="mt-1 text-gray-500">Importa notas .md como memorias enlazadas.</div>
+    <div className="tbit-panel markdown-import-panel">
+      <div className="panel-header">
+        <div className="panel-title-row">
+          <FileText className="panel-icon" size={20} />
+          <h2 className="panel-title">Markdown Import</h2>
+        </div>
+        <div className="panel-actions">
+          <input
+            type="text"
+            placeholder="Search documents..."
+            value={state.searchQuery}
+            onChange={(e) => setState((s) => ({ ...s, searchQuery: e.target.value }))}
+            className="panel-search"
+          />
+          <select
+            value={state.filterStatus}
+            onChange={(e) => setState((s) => ({ ...s, filterStatus: e.target.value }))}
+            className="panel-filter"
+          >
+            <option value="">All Status</option>
+            {statuses.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
+          </select>
+          <select
+            value={state.filterSource}
+            onChange={(e) => setState((s) => ({ ...s, filterSource: e.target.value }))}
+            className="panel-filter"
+          >
+            <option value="">All Sources</option>
+            {sources.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <div className="view-toggle">
+            <button
+              className={`view-btn ${state.viewMode === "grid" ? "active" : ""}`}
+              onClick={() => setState((s) => ({ ...s, viewMode: "grid" }))}
+              title="Grid View"
+            >
+              <div className="grid-icon" />
+            </button>
+            <button
+              className={`view-btn ${state.viewMode === "list" ? "active" : ""}`}
+              onClick={() => setState((s) => ({ ...s, viewMode: "list" }))}
+              title="List View"
+            >
+              <div className="list-icon" />
+            </button>
+          </div>
+          <button className="btn btn-secondary" onClick={fetchDocuments} title="Refresh">
+            <RefreshCw size={14} />
+          </button>
+          <button className="btn btn-primary" onClick={() => setState((s) => ({ ...s, showImportModal: true }))}>
+            <Upload size={14} /> Import Markdown
+          </button>
+        </div>
       </div>
 
-      <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-gray-500">Usuario</label>
-      <input
-        value={userId}
-        onChange={(event) => setUserId(event.target.value)}
-        className="mb-3 w-full border border-gray-800 bg-gray-950 px-2 py-2 text-cyan-200 outline-none focus:border-cyan-500"
-      />
+      {state.error && (
+        <div className="panel-error">
+          <AlertTriangle size={14} /> {state.error}
+          <button onClick={() => setState((s) => ({ ...s, error: null }))}>✕</button>
+        </div>
+      )}
 
-      <label className="mb-2 block cursor-pointer border border-dashed border-cyan-800/70 bg-black/30 p-4 text-center text-cyan-300 hover:border-cyan-400">
-        Seleccionar archivo Markdown
-        <input
-          type="file"
-          accept=".md,.markdown,text/markdown,text/plain"
-          className="hidden"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) void loadFile(file);
-          }}
-        />
-      </label>
-
-      <div className="mb-3 border border-gray-900 bg-black/30 p-2 text-gray-400">
-        {fileName || "Ningun archivo seleccionado"}
-      </div>
-
-      <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-gray-500">
-        Clave del documento
-      </label>
-      <input
-        value={documentKey}
-        onChange={(event) => setDocumentKey(event.target.value)}
-        className="mb-3 w-full border border-gray-800 bg-gray-950 px-2 py-2 text-cyan-100 outline-none focus:border-cyan-500"
-        placeholder="Se completa al importar, o pega una clave Markdown::..."
-      />
-
-      <button
-        onClick={importMarkdown}
-        disabled={busy}
-        className="w-full border border-cyan-700/50 bg-cyan-950/40 py-2 font-bold text-cyan-300 hover:bg-cyan-500 hover:text-black disabled:opacity-50"
-      >
-        {busy ? "IMPORTANDO..." : "IMPORTAR AL VACIO"}
-      </button>
-
-      <div className="my-3 border-t border-cyan-950" />
-
-      <button
-        onClick={loadDocuments}
-        disabled={busy}
-        className="w-full border border-purple-800/60 bg-purple-950/30 py-2 font-bold text-purple-300 hover:bg-purple-500 hover:text-black disabled:opacity-50"
-      >
-        CARGAR DOCUMENTOS EXISTENTES
-      </button>
-
-      <label className="mb-1 mt-3 block text-[10px] font-bold uppercase tracking-wider text-gray-500">
-        Documento a eliminar
-      </label>
-      <select
-        value={selectedDocumentKey}
-        onChange={(event) => {
-          setSelectedDocumentKey(event.target.value);
-          setDocumentKey(event.target.value);
-        }}
-        className="mb-2 w-full border border-gray-800 bg-gray-950 px-2 py-2 text-cyan-100 outline-none focus:border-purple-500"
-      >
-        <option value="">Selecciona un documento...</option>
-        {documents.map((document) => (
-          <option key={document.key} value={document.key}>
-            {document.filename || document.title} {document.chunked ? `(${document.chunkCount} chunks)` : ""}
-          </option>
-        ))}
-      </select>
-
-      <button
-        onClick={deleteMarkdown}
-        disabled={busy || !(selectedDocumentKey || documentKey).trim()}
-        className="mt-2 w-full border border-red-700/70 bg-red-950/30 py-2 font-bold text-red-300 hover:bg-red-600 hover:text-white disabled:opacity-50"
-      >
-        ELIMINAR DOCUMENTO DEL VACIO
-      </button>
-
-      <button
-        onClick={purgeOrphans}
-        disabled={busy}
-        className="mt-2 w-full border border-amber-700/70 bg-amber-950/20 py-2 font-bold text-amber-300 hover:bg-amber-500 hover:text-black disabled:opacity-50"
-      >
-        LIMPIAR CHUNKS HUERFANOS
-      </button>
-
-      <div className="mt-3 max-h-28 overflow-y-auto border border-gray-900 bg-black/30 p-2">
-        {logs.length === 0 ? (
-          <div className="text-gray-600">Esperando archivo Markdown.</div>
+      <div className="panel-content">
+        {state.loading ? (
+          <div className="panel-loading">Loading documents...</div>
+        ) : filteredDocs.length === 0 ? (
+          <div className="panel-empty">
+            <FileText size={48} className="empty-icon" />
+            <p>{state.documents.length === 0 ? "No markdown documents imported" : "No documents match your filters"}</p>
+            {state.documents.length === 0 && (
+              <button className="btn btn-secondary" onClick={() => setState((s) => ({ ...s, showImportModal: true }))}>
+                <Upload size={14} /> Import First Document
+              </button>
+            )}
+          </div>
+        ) : state.viewMode === "grid" ? (
+          <div className="documents-grid">
+            {filteredDocs.map((doc) => (
+              <div
+                key={doc.key}
+                className={`doc-card ${state.selectedDoc?.key === doc.key ? "selected" : ""}`}
+                onClick={() => setState((s) => ({ ...s, selectedDoc: doc }))}
+              >
+                <div className="doc-header">
+                  <div className="doc-type">
+                    <FileText size={16} style={{ color: "var(--accent-primary)" }} />
+                    <span className="doc-type-label">{doc.status === "indexed" ? "Indexed" : doc.status}</span>
+                  </div>
+                  <div className="doc-source">{doc.source}</div>
+                </div>
+                <div className="doc-title" title={doc.title}>{doc.title}</div>
+                <div className="doc-preview">{doc.contentPreview}</div>
+                <div className="doc-meta">
+                  <div className="doc-stat">
+                    <span className="stat-value">{formatNumber(doc.wordCount)}</span>
+                    <span className="stat-label">Words</span>
+                  </div>
+                  <div className="doc-stat">
+                    <span className="stat-value">{doc.chunks}</span>
+                    <span className="stat-label">Chunks</span>
+                  </div>
+                  <div className="doc-stat">
+                    <span className="stat-value" style={{ color: STATUS_COLORS[doc.status] }}>
+                      {STATUS_ICONS[doc.status]}
+                    </span>
+                    <span className="stat-label">{STATUS_LABELS[doc.status]}</span>
+                  </div>
+                </div>
+                <div className="doc-tags">
+                  {doc.tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className="tag">{tag}</span>
+                  ))}
+                  {doc.tags.length > 4 && <span className="tag">+{doc.tags.length - 4}</span>}
+                </div>
+                <div className="doc-footer">
+                  <span>{new Date(doc.updatedAt).toLocaleDateString()}</span>
+                  <span style={{ color: "var(--text-muted)", fontSize: 10 }}>{doc.checksum.slice(0, 8)}...</span>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
-          logs.map((log, index) => (
-            <div key={`${log.level}-${index}`} className="text-gray-400">
-              <span className={log.level === "ERROR" ? "text-red-400" : log.level === "OK" ? "text-emerald-300" : "text-cyan-300"}>
-                [{log.level}]
-              </span>{" "}
-              {log.text}
-            </div>
-          ))
+          <div className="documents-table-wrapper">
+            <table className="documents-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Source</th>
+                  <th>Status</th>
+                  <th>Words</th>
+                  <th>Chunks</th>
+                  <th>Tags</th>
+                  <th>Created</th>
+                  <th>Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredDocs.map((doc) => (
+                  <tr key={doc.key} className={state.selectedDoc?.key === doc.key ? "selected" : ""}
+                    onClick={() => setState((s) => ({ ...s, selectedDoc: doc }))}>
+                    <td>
+                      <div className="doc-title-cell">
+                        <FileText size={14} style={{ color: "var(--accent-primary)", marginRight: 6 }} />
+                        {doc.title}
+                      </div>
+                    </td>
+                    <td><span className="source-badge">{doc.source}</span></td>
+                    <td>
+                      <span className="status-badge" style={{ background: `${STATUS_COLORS[doc.status]}20`, color: STATUS_COLORS[doc.status], borderColor: `${STATUS_COLORS[doc.status]}40` }}>
+                        {STATUS_ICONS[doc.status]} {STATUS_LABELS[doc.status]}
+                      </span>
+                    </td>
+                    <td>{formatNumber(doc.wordCount)}</td>
+                    <td>{doc.chunks}</td>
+                    <td>
+                      <div className="doc-tags">
+                        {doc.tags.slice(0, 3).map((tag) => (
+                          <span key={tag} className="tag">{tag}</span>
+                        ))}
+                        {doc.tags.length > 3 && <span className="tag">+{doc.tags.length - 3}</span>}
+                      </div>
+                    </td>
+                    <td>{new Date(doc.createdAt).toLocaleDateString()}</td>
+                    <td>{new Date(doc.updatedAt).toLocaleDateString()}</td>
+                    <td>
+                      <div className="action-buttons">
+                        <button className="icon-btn" onClick={(e) => { e.stopPropagation(); downloadDocument(doc.key, doc.title); }} title="Download">
+                          <Download size={14} />
+                        </button>
+                        <button className="icon-btn" onClick={(e) => { e.stopPropagation(); copyContent(doc.content); }} title="Copy Content">
+                          <Copy size={14} />
+                        </button>
+                        {doc.status === "failed" && (
+                          <button className="icon-btn" onClick={(e) => { e.stopPropagation(); reindexDocument(doc.key); }} title="Reindex">
+                            <RotateCcw size={14} />
+                          </button>
+                        )}
+                        <button className="icon-btn danger" onClick={(e) => { e.stopPropagation(); deleteDocument(doc.key); }} title="Delete">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-    </section>
+
+      {state.selectedDoc && (
+        <div className="detail-panel">
+          <div className="detail-header">
+            <h3>{state.selectedDoc.title}</h3>
+            <button className="detail-close" onClick={() => setState((s) => ({ ...s, selectedDoc: null }))}>✕</button>
+          </div>
+          <div className="detail-content">
+            <div className="detail-grid">
+              <div className="detail-item"><strong>Key:</strong> <code>{state.selectedDoc.key}</code></div>
+              <div className="detail-item"><strong>Source:</strong> <span className="source-badge">{state.selectedDoc.source}</span></div>
+              <div className="detail-item">
+                <strong>Status:</strong>
+                <span className="status-badge" style={{ background: `${STATUS_COLORS[state.selectedDoc.status]}20`, color: STATUS_COLORS[state.selectedDoc.status], borderColor: `${STATUS_COLORS[state.selectedDoc.status]}40` }}>
+                  {STATUS_ICONS[state.selectedDoc.status]} {STATUS_LABELS[state.selectedDoc.status]}
+                </span>
+              </div>
+              <div className="detail-item"><strong>Words:</strong> {formatNumber(state.selectedDoc.wordCount)}</div>
+              <div className="detail-item"><strong>Characters:</strong> {formatNumber(state.selectedDoc.charCount)}</div>
+              <div className="detail-item"><strong>Chunks:</strong> {state.selectedDoc.chunks}</div>
+              <div className="detail-item"><strong>Checksum:</strong> <code>{state.selectedDoc.checksum}</code></div>
+              <div className="detail-item"><strong>Created:</strong> {new Date(state.selectedDoc.createdAt).toLocaleString()}</div>
+              <div className="detail-item"><strong>Updated:</strong> {new Date(state.selectedDoc.updatedAt).toLocaleString()}</div>
+              <div className="detail-item full-width"><strong>Tags:</strong>
+                <div className="detail-tags">
+                  {state.selectedDoc.tags.map((tag) => (
+                    <span key={tag} className="tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="detail-section">
+              <h4>Content Preview</h4>
+              <pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word", maxHeight: 200, overflow: "auto" }}>{state.selectedDoc.content.slice(0, 2000)}{state.selectedDoc.content.length > 2000 ? "..." : ""}</pre>
+            </div>
+            <div className="detail-section"><h4>Metadata</h4><pre>{JSON.stringify(state.selectedDoc.metadata, null, 2)}</pre></div>
+            <div className="detail-actions">
+              <button className="btn btn-secondary" onClick={() => downloadDocument(state.selectedDoc.key, state.selectedDoc.title)}>
+                <Download size={14} /> Download
+              </button>
+              <button className="btn btn-secondary" onClick={() => copyContent(state.selectedDoc.content)}>
+                <Copy size={14} /> Copy Content
+              </button>
+              {state.selectedDoc.status === "failed" && (
+                <button className="btn btn-secondary" onClick={() => reindexDocument(state.selectedDoc.key)}>
+                  <RotateCcw size={14} /> Reindex
+                </button>
+              )}
+              {state.selectedDoc.status === "indexed" && (
+                <button className="btn btn-secondary" onClick={() => updateDocumentStatus(state.selectedDoc.key, "pending")}>
+                  <Clock size={14} /> Mark Pending
+                </button>
+              )}
+              {state.selectedDoc.status === "pending" && (
+                <button className="btn btn-secondary" onClick={() => updateDocumentStatus(state.selectedDoc.key, "indexed")}>
+                  <CheckCircle size={14} /> Mark Indexed
+                </button>
+              )}
+              <button className="btn btn-danger" onClick={() => deleteDocument(state.selectedDoc.key)}>
+                <Trash2 size={14} /> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {state.showImportModal && (
+        <div className="modal-overlay" onClick={() => setState((s) => ({ ...s, showImportModal: false }))}>
+          <div className="modal modal-large" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Import Markdown Documents</h3>
+              <button className="modal-close" onClick={() => setState((s) => ({ ...s, showImportModal: false }))}>✕</button>
+            </div>
+            <MarkdownImportForm onSubmit={importDocuments} onCancel={() => setState((s) => ({ ...s, showImportModal: false }))} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MarkdownImportForm({ onSubmit, onCancel }: { onSubmit: (files: File[], options: { source: string; tags: string[]; splitChunks: boolean; maxChunkSize: number }) => void; onCancel: () => void }) {
+  const [files, setFiles] = useState<File[]>([]);
+  const [source, setSource] = useState("manual-import");
+  const [tags, setTags] = useState("");
+  const [tagList, setTagList] = useState<string[]>([]);
+  const [splitChunks, setSplitChunks] = useState(true);
+  const [maxChunkSize, setMaxChunkSize] = useState(1000);
+  const [dragActive, setDragActive] = useState(false);
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragActive(false);
+    if (e.dataTransfer.files.length > 0) {
+      setFiles(Array.from(e.dataTransfer.files).filter(f => f.type === "text/markdown" || f.name.endsWith(".md")));
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles(Array.from(e.target.files).filter(f => f.type === "text/markdown" || f.name.endsWith(".md")));
+    }
+  };
+
+  const addTag = () => {
+    const trimmed = tags.trim();
+    if (trimmed && !tagList.includes(trimmed)) {
+      setTagList([...tagList, trimmed]);
+      setTags("");
+    }
+  };
+
+  const removeTag = (tag: string) => {
+    setTagList(tagList.filter((t) => t !== tag));
+  };
+
+  const removeFile = (index: number) => {
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (files.length === 0) return;
+    onSubmit(files, { source, tags: tagList, splitChunks, maxChunkSize });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="import-form">
+      <div className={`drop-zone ${dragActive ? "active" : ""}`}
+        onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+        onDragLeave={() => setDragActive(false)}
+        onDrop={handleDrop}
+        onClick={() => document.getElementById("markdown-file-input")?.click()}>
+        <input id="markdown-file-input" type="file" accept=".md,.markdown" multiple hidden onChange={handleFileSelect} />
+        {files.length > 0 ? (
+          <div className="selected-files">
+            <FileText size={32} />
+            <p>{files.length} file(s) selected</p>
+            <ul>
+              {files.map((file, i) => (
+                <li key={i}>
+                  <span>{file.name} ({Math.round(file.size / 1024)} KB)</span>
+                  <button type="button" onClick={() => removeFile(i)}>✕</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <>
+            <FileText size={32} />
+            <p>Drag & drop .md files or click to browse</p>
+            <span className="hint">Multiple files supported • Max 50MB each</span>
+          </>
+        )}
+      </div>
+
+      <div className="form-group">
+        <label>Source</label>
+        <input
+          type="text"
+          value={source}
+          onChange={(e) => setSource(e.target.value)}
+          placeholder="e.g., manual-import, documentation, notes"
+        />
+        <span className="form-hint">Used to categorize imported documents</span>
+      </div>
+
+      <div className="form-group">
+        <label>Tags</label>
+        <div className="tag-input">
+          <input
+            type="text"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
+            placeholder="Add tag..."
+          />
+          <button type="button" onClick={addTag} className="btn btn-sm btn-secondary">Add</button>
+        </div>
+        <div className="tag-list">
+          {tagList.map((tag) => (
+            <span key={tag} className="tag">
+              {tag}
+              <button type="button" onClick={() => removeTag(tag)}>✕</button>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={splitChunks}
+              onChange={(e) => setSplitChunks(e.target.checked)}
+            />
+            Split into chunks
+          </label>
+        </div>
+        <div className="form-group">
+          <label>Max Chunk Size (words)</label>
+          <input
+            type="number"
+            min="100"
+            max="5000"
+            value={maxChunkSize}
+            onChange={(e) => setMaxChunkSize(parseInt(e.target.value) || 1000)}
+          />
+        </div>
+      </div>
+
+      <div className="form-actions">
+        <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
+        <button type="submit" className="btn btn-primary" disabled={files.length === 0}>
+          <Upload size={14} /> Import {files.length} Document{files.length !== 1 ? "s" : ""}
+        </button>
+      </div>
+    </form>
   );
 }
 

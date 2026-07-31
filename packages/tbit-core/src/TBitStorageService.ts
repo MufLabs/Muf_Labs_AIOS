@@ -560,6 +560,36 @@ export class TBitStorageService {
     return this.withOperation(() => this.globalChecksum());
   }
 
+  private async countSnapshots(): Promise<number> {
+    try {
+      const entries = await fs.readdir(this.config.snapshotsDir);
+      return entries.filter((e) => e.endsWith(".tbit")).length;
+    } catch {
+      return 0;
+    }
+  }
+
+  async getStats() {
+    return this.withOperation(async () => {
+      await this.ensureContainer();
+      const metadata = await this.readMetadata();
+      const containerSize = this.containerSizeBytes();
+      const walSize = existsSync(this.config.walPath)
+        ? (await fs.stat(this.config.walPath)).size
+        : 0;
+      const snapshotCount = await this.countSnapshots();
+      const checksum = await this.globalChecksum();
+
+      return {
+        totalRecords: Object.keys(metadata).length,
+        containerSizeBytes: containerSize,
+        walSizeBytes: walSize,
+        snapshotCount,
+        checksum: checksum.combinedHash,
+      };
+    });
+  }
+
   async exportBundle(label = "manual") {
     return this.withOperation(async () => {
       await this.ensureContainer();

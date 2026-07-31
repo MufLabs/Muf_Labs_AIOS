@@ -4,10 +4,12 @@ import {
   TBitStorageConfig,
   EncryptionKeyMaterial,
   getActiveEncryptionKey,
+  getActiveEncryptionKeyAsync,
   getEncryptionKeyRing,
   getEncryptionKeyStatus,
+  generateEncryptionKey,
+  isEncryptionConfigured,
   rememberMemory,
-  recallMemory,
   getMemoryContext,
   getMemoryGraph,
   searchQueryIndex,
@@ -31,6 +33,10 @@ import {
   importUniversalDocument,
   importBinaryAsset,
   BinaryAssetImportResult,
+  createSpaceManifest,
+  listSpaceManifests,
+  TBitSpaceManifest,
+  normalizeTBitSpaceId,
 } from "@muf/tbit-core";
 
 export type ContainerCreateRequest = {
@@ -44,6 +50,7 @@ export type ContainerCreateResponse = {
   spaceId: string;
   label: string;
   ready: boolean;
+  manifest?: TBitSpaceManifest;
 };
 
 export type MemoStoreRequest = {
@@ -84,13 +91,30 @@ export type EncryptionKeyInfo = {
   keyCount: number;
 };
 
+export type SetupStatusResponse = {
+  initialized: boolean;
+  encryptionConfigured: boolean;
+  spacesCount: number;
+};
+
+export type SetupBootstrapRequest = {
+  userId: string;
+  label?: string;
+  generateKey?: boolean;
+};
+
+export type SetupBootstrapResponse = {
+  containerId: string;
+  spaceId: string;
+  label: string;
+  manifest: TBitSpaceManifest;
+  encryptionKeyId: string;
+  ready: boolean;
+};
+
 export class TBitService {
   private storage: TBitStorageService | null = null;
 
-  /**
-   * Lazy-init the storage service using runtime paths.
-   * The T-Bit config is derived from environment or defaults.
-   */
   private async getStorage(): Promise<TBitStorageService> {
     if (this.storage) return this.storage;
 
@@ -115,33 +139,101 @@ export class TBitService {
     return this.storage;
   }
 
-  // ─── Container lifecycle ────────────────────────────────
-
+  /**
+   * Create a T-Bit container AND persist an on-disk space manifest.
+   * Uses the async key resolver so first-run setups with a generated key work.
+   */
   async createContainer(req: ContainerCreateRequest): Promise<ContainerCreateResponse> {
     const storage = await this.getStorage();
     await storage.recover();
+    await getActiveEncryptionKeyAsync();
 
-    // Ensure encryption key is active
-    getActiveEncryptionKey();
-
-    return {
-      containerId: req.spaceId,
+    const manifest = await createSpaceManifest({
       spaceId: req.spaceId,
       label: req.label ?? `T-Bit ${req.spaceId}`,
+      userId: req.spaceId,
+    });
+
+    return {
+      containerId: manifest.spaceId,
+      spaceId: manifest.spaceId,
+      label: manifest.label,
       ready: true,
+      manifest,
     };
   }
 
-  // ─── Memo (memory) operations ───────────────────────────
+  // ─── First-run setup (Phase 3) ────────────────────────────────────
+
+  /**
+   * Report whether the system has been bootstrapped.
+   * Frontend uses this to decide whether to show the setup wizard.
+   */
+  async getSetupStatus(): Promise<SetupStatusResponse> {
+    const encryptionConfigured = await isEncryptionConfigured();
+    const spaces = await listSpaceManifests();
+    return {
+      initialized: encryptionConfigured && spaces.length > 0,
+      encryptionConfigured,
+      spacesCount: spaces.length,
+    };
+  }
+
+  /**
+   * Run the full first-run bootstrap:
+   * 1. (optionally) generate an AES-256-GCM key and persist it to the keyring file.
+   * 2. Create the space directory tree + space.json manifest.
+   * 3. Recover the storage container using the now-available key.
+   *
+   * This makes first-run self-service — no env vars required when `generateKey` is true.
+   */
+  async bootstrapSetup(req: SetupBootstrapRequest): Promise<SetupBootstrapResponse> {
+    if (!req.userId?.trim()) {
+      throw new Error("bootstrapSetup requiere userId.");
+    }
+
+    const spaceId = `user:${normalizeTBitSpaceId(req.userId)}`;
+    const label = req.label ?? `AIOS Space ${req.userId}`;
+
+    // 1) Encryption key — generate if requested and none is configured yet.
+    let encryptionKeyId: string;
+    const configured = await isEncryptionConfigured();
+    if (req.generateKey && !configured) {
+      const key = await generateEncryptionKey(`key-${normalizeTBitSpaceId(req.userId)}`);
+      encryptionKeyId = key.id;
+    } else {
+      // Use existing key (env or persisted) or generate as a fallback.
+      const key = configured
+        ? await getActiveEncryptionKeyAsync()
+        : await generateEncryptionKey(`key-${normalizeTBitSpaceId(req.userId)}`);
+      encryptionKeyId = key.id;
+    }
+
+    // 2) Persist the space manifest + directory scaffold.
+    const manifest = await createSpaceManifest({ spaceId, label, userId: req.userId });
+
+    // 3) Recover storage to validate the container is usable with the active key.
+    const storage = await this.getStorage();
+    await storage.recover();
+
+    return {
+      containerId: manifest.spaceId,
+      spaceId: manifest.spaceId,
+      label: manifest.label,
+      manifest,
+      encryptionKeyId,
+      ready: true,
+    };
+  }
 
   async storeMemo(req: MemoStoreRequest): Promise<MemoStoreResponse> {
     const storage = await this.getStorage();
 
     const record = await rememberMemory(storage, {
-      userId: req.userId,
+      userId: req.userId ?? "anonymous",
       text: req.text,
       payload: req.payload,
-      key: req.key,
+      ...(req.key ? { key: req.key } : {}),
       domain: req.domain,
       collection: req.collection,
       tags: req.tags,
@@ -156,40 +248,40 @@ export class TBitService {
   }
 
   async recallMemos(req: MemoRecallRequest): Promise<MemoRecallResponse> {
-    // For query-based recall, use getMemoryContext (userId + query + limit)
     const context = await getMemoryContext(
       req.userId ?? "anonimo",
       req.query,
       req.topK ?? 10,
     );
 
-    const graph = await getMemoryGraph(req.userId);
+    const records = Array.isArray((context as MemoryCoreContextResult).matches)
+      ? (context as MemoryCoreContextResult).matches
+      : [];
 
-    return {
-      records: context.records,
-      graph,
-    };
+    const graph = await getMemoryGraph(req.userId);
+    return { records, graph };
   }
 
   async getMemoryContextForRecord(userId: string, query: string, limit?: number): Promise<MemoryCoreContextResult> {
     return getMemoryContext(userId, query, limit ?? 8);
   }
 
-  // ─── Query index ────────────────────────────────────────
+  async getMemoryGraph(userId: string): Promise<MemoryGraph> {
+    return getMemoryGraph(userId);
+  }
 
   async searchIndex(query: string, topK?: number): Promise<{ results: QuerySearchResult[] }> {
     const request: QuerySearchRequest = {
       query,
-      topK: topK ?? 20,
+      limit: topK ?? 20,
     };
-    return searchQueryIndex(request);
+    const result = await searchQueryIndex(request);
+    return { results: result.results };
   }
 
   async rebuildIndex(): Promise<void> {
     await rebuildQueryIndex();
   }
-
-  // ─── Container health ───────────────────────────────────
 
   async getHealth(): Promise<TBitHealthReport> {
     return getContainerHealthReport();
@@ -198,8 +290,6 @@ export class TBitService {
   async reconcileHealth() {
     return reconcileContainerHealth();
   }
-
-  // ─── Encryption keys ────────────────────────────────────
 
   getEncryptionKeyInfo(): EncryptionKeyInfo {
     const status = getEncryptionKeyStatus();
@@ -215,8 +305,6 @@ export class TBitService {
   getEncryptionKeyRing(): EncryptionKeyMaterial[] {
     return getEncryptionKeyRing();
   }
-
-  // ─── Asset management ───────────────────────────────────
 
   async listAllAssets(userId?: string): Promise<TBitAssetRecord[]> {
     return listAssets(userId);
@@ -241,18 +329,24 @@ export class TBitService {
 
   async importMarkdownFile(filePath: string): Promise<MarkdownImportResult> {
     const storage = await this.getStorage();
+    const fileBuffer = await readFile(filePath);
+    const filename = filePath.split(/[/\\]/).pop() ?? "document.md";
     const request: MarkdownImportRequest = {
-      filePath,
       userId: "aios",
+      filename,
+      content: fileBuffer.toString("utf-8"),
     };
     return importMarkdownDocument(storage, request);
   }
 
   async importUniversalFile(filePath: string): Promise<UniversalDocumentImportResult> {
     const storage = await this.getStorage();
+    const fileBuffer = await readFile(filePath);
+    const filename = filePath.split(/[/\\]/).pop() ?? "document.bin";
     const request: UniversalDocumentImportRequest = {
-      filePath,
       userId: "aios",
+      filename,
+      contentBase64: fileBuffer.toString("base64"),
     };
     return importUniversalDocument(storage, request);
   }

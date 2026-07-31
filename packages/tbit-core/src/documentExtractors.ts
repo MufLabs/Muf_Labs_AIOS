@@ -1,6 +1,5 @@
 import mammoth from "mammoth";
 import { PDFParse } from "pdf-parse";
-import readXlsxFile from "read-excel-file/node";
 
 export type ExtractedOfficeDocument = {
   kind: "pdf" | "docx" | "xlsx";
@@ -117,6 +116,8 @@ export async function extractOfficeDocument(request: {
   }
 
   if (isXlsx(request.filename, request.mimeType)) {
+    const readXlsxFileModule = await import("read-excel-file/node");
+    const readXlsxFile = readXlsxFileModule.default;
     const sheets = await readXlsxFile(buffer);
     const sections: string[] = [`# ${title}`];
 

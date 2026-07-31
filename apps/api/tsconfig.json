@@ -4,14 +4,13 @@
     "rootDir": "src",
     "outDir": "dist",
     "paths": {
-      "@muf/tbit-core": ["../../packages/tbit-core/src"],
-      "@muf/tbit-core/*": ["../../packages/tbit-core/src/*"]
+      "@muf/tbit-core": ["../../packages/tbit-core/dist"],
+      "@muf/tbit-core/*": ["../../packages/tbit-core/dist/*"]
     }
   },
   "include": [
     "src",
-    "../../types/external-modules.d.ts",
-    "../../packages/tbit-core/src/external-modules.d.ts"
+    "../../types/external-modules.d.ts"
   ],
   "exclude": [
     "node_modules",

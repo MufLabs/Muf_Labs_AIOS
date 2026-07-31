@@ -1,21 +1,32 @@
 {
   "name": "@aios/api",
   "private": true,
-  "version":  "0.1.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "express": "^5.1.0",
+    "@aios/agents": "workspace:*",
     "@aios/kernel": "workspace:*",
     "@aios/workflow": "workspace:*",
-    "@aios/agents": "workspace:*",
-    "@muf/tbit-core": "workspace:*"
+    "@muf/tbit-core": "workspace:*",
+    "cors": "^2.8.6",
+    "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
-    "tsx": "^4.20.5"
+    "@vitest/coverage-v8": "^1.6.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3",
+    "undici": "^6.19.0",
+    "vitest": "^1.6.1"
   }
 }

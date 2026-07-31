@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+build
+*.tsbuildinfo
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test coverage
+coverage
+.nyc_output
+
+# Turbo
+.turbo
+
+# Docker
+docker-compose.override.yml
+.docker
+
+# Environment files (secrets)
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# Git
+.git
+.gitignore
+
+# Misc
+*.tgz
+.cache

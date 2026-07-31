@@ -1,598 +1,802 @@
-# AIOS BOOK
+# AIOS Book — Living Architecture Document
 
-## Documento Maestro de Integración: T-BIT → AIOS v2.0
-
-**Fecha de inicio:** 23 de Julio 2026
-**Última actualización:** 28 de Julio 2026
-**Autor:** MufLabs Engineering
-**Repositorio base:** D:\Ai_tools\Muf_Labs (monorepo con Turborepo + pnpm)
-**Repositorio fuente:** c:\Git\T-Bit (motor de almacenamiento determinista, 95 fases completadas)
-
-> 📖 **Cómo leer este libro (guía para no-programadores):** Este documento explica TODO lo que se ha construido. Cada sección técnica incluye un bloque **"En simple"** que cualquier persona puede entender, seguido del detalle para quien quiera profundizar. No se necesita saber programar para entender el "En simple". Las IA también usan este archivo como memoria del proyecto.
+> **Single source of truth** for architecture, engineering principles, and implementation status.
+> Updated after every Phase completion. No external docs.
 
 ---
 
-# Sección 1: Contexto y Visión
+## 📋 Phase Status Overview
 
-## 1.1 Origen de los Dos Proyectos
-
-### AIOS MVP
-
-AIOS es un sistema operativo de inteligencia artificial diseñado como monorepo modular. Su arquitectura utiliza:
-
-- **Turborepo** como build system
-- **pnpm** como gestor de paquetes con workspaces
-- **Packages desacoplados**: kernel, agents, ui, llm, database, sdk, shared, workflow
-- **Apps**: api, web, desktop
-
-### T-Bit
-
-T-Bit es una plataforma de almacenamiento determinista para la era de la IA. Con 95 fases de desarrollo completadas, incluye:
-
-- Motor de almacenamiento binario `.tbit` con direccionamiento espacial determinista
-- Cifrado AES-256-GCM obligatorio en reposo
-- Dualidad Vit/Anti-Vit para verificación de integridad continua
-- WAL (Write-Ahead Logging) para protección transaccional
-- IA multi-provider (OpenAI, Gemini, Ollama, NVIDIA NIM, LM Studio)
-- Búsqueda semántica con SemanticIndex y QueryIndex
-- Importación de documentos (PDF, DOCX, XLSX, Markdown, código fuente)
-- Visualización 3D con React Three Fiber (QuantumEngine + QVault)
-- GuardianObserver para monitoreo de integridad
-- 14 paneles de gestión de subsistemas
-
-El problema de T-Bit: es monolítico. Su `server.ts` tiene 91KB en un solo archivo.
-
-## 1.2 Decisión de Integración
-
-La integración sigue el principio: **"AIOS como arquitecto, T-Bit como ingeniero"**
-
-- AIOS se queda como el armazón arquitectónico (monorepo, packages, build system)
-- T-Bit se convierte en la implementación real de los paquetes vacíos de AIOS
-- El server.ts de T-Bit se descompone en las rutas correspondientes de `apps/`
-- Nada se pierde — todas las 95 fases de T-Bit se convierten en código vivo dentro de AIOS
-
-## 1.3 Mapeo de Componentes
-
-| Componente de T-Bit | Destino en AIOS | Estado |
-|---------------------|-----------------|--------|
-| Motor .tbit + cifrado + WAL | `packages/database` | ✅ Completado |
-| AiProviderFactory + multi-provider | `packages/llm` | ✅ Completado |
-| SemanticIndex + QueryIndex | `packages/database/src/indexing/` | ✅ Completado |
-| MarkdownBridge | `packages/database/src/bridges/` | ✅ Completado |
-| BinaryAssetBridge | `packages/database/src/bridges/` | ✅ Completado |
-| UniversalDocumentBridge | `packages/database/src/bridges/` | ✅ Completado |
-| DocumentExtractors | `packages/database/src/bridges/` | ✅ Completado |
-| CodeGraphExtractor | `packages/database/src/bridges/` | ✅ Completado |
-| MemoryCore | `packages/database/src/memory/` | ✅ Completado |
-| AssetManager | `packages/database/src/assets/` | ✅ Completado |
-| GuardianObserver | `packages/kernel/src/monitoring/` | ✅ Completado |
-| ContainerHealth | `packages/kernel/src/monitoring/` | ✅ Completado |
-| AiPermissions | `packages/kernel/src/security/` | ✅ Completado |
-| Subsistema IA providers (adapters) | `packages/kernel/src/providers/` | ✅ Completado |
-| Orquestación cognitiva | `packages/kernel/src/orchestration/` | ✅ Completado |
-| Motor de consenso | `packages/kernel/src/consensus/` | ✅ Completado |
-| **NUEVO: Motor T-Bit completo como paquete independiente** | **`packages/tbit-core`** (`@muf/tbit-core`) | ✅ **Completado (Phase 0)** |
-| **NUEVO: API REST para T-Bit (controlador)** | **`apps/api/src/controllers/TBitController.ts`** | ⏳ **Parcial (Phase 1)** |
-| **NUEVO: Servicio de integración T-Bit** | **`apps/api/src/services/TBitService.ts`** | ⏳ **Parcial (Phase 1)** |
-| QuantumEngine 3D | `apps/web/src/views/quantum/` | ⏳ Pendiente (Fase 6) |
-| QVault UI | `apps/web/src/panels/` | ⏳ Pendiente (Fase 6) |
-| 14 Paneles UI | `apps/web/src/panels/` | ⏳ Pendiente (Fase 6) |
-| tbitRuntimePaths | `packages/shared` | ⏳ Pendiente |
-
-## 1.4 El sistema en pocas palabras (para no-programadores)
-
-Imagina **AIOS** como un cerebro digital con distintos órganos, y **T-Bit** como la memoria indeleble y a prueba de manipulación de ese cerebro.
-
-- **AIOS = el entrevistador inteligente.** Cuando tú le pides algo ("resume este PDF", "analiza este código", "decide entre 3 modelos"), AIOS hace este proceso mental:
-  1. **Entiende** de qué tipo de tarea se trata (clasifica).
-  2. **Piensa** qué pasos la resuelven y qué "expertos" (modelos de IA) conviene llamar (analiza y rankea).
-  3. **Habla** con los expertos correctos y combina sus respuestas.
-  4. **Verifica** que las respuestas coincidan y no se contradigan (consenso).
-- **T-Bit = la caja fuerte de la memoria.** Es como un archivo contenedor binario impenetrable:
-  - Guarda cada dato **dos veces de forma complementaria** (Vit y Anti-Vit): si alguien altera una copia, la otra ya no cuadra y el sistema lo detecta al instante. Es como un sello de integridad que se rompe al falsificarlo.
-  - Todo va **cifrado** (AES-256-GCM), así que ni siquiera quien tenga el archivo puede leerlo sin la llave.
-  - Lleva un **diario (WAL)** de operaciones: si se corta la luz a mitad de una escritura, al volver arranca desde un estado seguro, sin datos a medias.
-  - Tiene **búsqueda por significado**: no solo por palabra exacta, sino "cosas que hablan de lo mismo".
-- **Multi-proveedor de IA.** AIOS puede hablar con varias "inteligencias" externas (OpenAI, Gemini, Claude/Anthropic, Ollama, NVIDIA, LM Studio, OpenRouter) y con un proveedor local determinista (T-BIT) que responde sin internet — útil para pruebas y entornos sin red.
-
-**En resumen:** AIOS decide y orquesta; T-Bit recuerda y protege. Cada bloque técnico del resto del libro tiene un equivalente en esta analogía.
+| Phase | Status | Description |
+|-------|--------|-------------|
+| **Phase 0** | ✅ Complete | @muf/tbit-core package created and compiling |
+| **Phase 1** | ✅ Complete | REST API for T-Bit (TBitController, TBitService) |
+| **Phase 2** | ✅ Complete | Frontend connected to real API (memoryCoreClient, MemoryGraphPanel) |
+| **Phase 3** | ✅ Complete | First-run setup (key generation, space manifest, OnboardingView wizard) |
+| **Phase 4** | ✅ Complete | Full monorepo build verified (9 packages, FULL TURBO) |
+| **Phase 4 Extended** | ✅ Complete | 10 T-Bit UI panels created |
+| **Phase 6** | ✅ Complete | 3D UI / QuantumEngine + QVault + 16 panels wired (build green) |
+| **Phase 7** | ✅ **Complete** | Connect apps/api and apps/web (Docker, decompose server.ts) |
+| **Phase 8** | 🔄 **In Progress** | Testing and deployment (integration tests, production build, deploy) |
 
 ---
 
-# Sección 2: Paquete `@aios/database` — Motor .tbit (Completado)
-
-**En simple:** Este es el "almacén indeleble". Guarda información en un archivo `.tbit` imposible de corromper en silencio: cada dato se escribe junto con su "negativo" (Anti-Vit), de modo que cualquier alteración se detecta automáticamente. Todo va cifrado (candado AES-256), lleva un diario de operaciones para no perder datos ante cortes, y permite buscar "por significado", no solo por palabra. Aquí también entran los "traductores" (bridges) que importan PDFs, Word, Excel, Markdown y código al almacén, y el gestor de archivos adjuntos (assets).
-
-**Versión:** 0.1.0  •  **Estado:** ✅ Migración del motor completada e indexando
-
-## 2.1 Configuración
-
-- `packages/database/package.json` — paquete `@aios/database`, privado, entry `src/index.ts`.
-- `packages/database/tsconfig.json` — extiende `../../tsconfig.base.json`, output `dist/`, composite.
-
-## 2.2 Núcleo y normalización
-
-- `src/core/textEncoding.ts`
-  - `normalizeUnicodeText(text)` — normaliza a NFC.
-  - `normalizeTBitKey(key)` — NFC + lowercase + colapsa espacios + trim.
-- `src/core/RuntimePaths.ts`
-  - `getTBitDataDir`, `resolveActiveTBitDataPath`, `resolveContainerPath`, `resolveMetadataPath`, `resolveWalPath`, `resolveSnapshotsDir`, `resolveReplicasDir`, `resolveExportsDir`, `resolveLockPath` — resolución determinista de rutas del contenedor.
-
-## 2.3 Almacenamiento determinista
-
-- `src/storage/AllocationMap.ts`
-  - Tipos: `AllocationRange`, `AllocationRegion`.
-  - Clase `AllocationMap`: `load/canAllocate/allocate/remove/circularRanges`. Previene solapamiento de Vit/Anti-Vit en el contenedor.
-- `src/storage/TBitContainer.ts` (migrado de `TBitFileSystem.ts`)
-  - Clase `TBitContainer`; tipos `TBitOffsets`, `TBitProjection`.
-  - Formato binario `.tbit` con magic headers (TBITFS1 + salt), frame magic (TBIT) little-endian, direccionamiento espacial `hash(salt+clave) × PiScaled mod usableSize`, dual-write Vit/Anti-Vit (`~byte & 0xff`), validación zero-sum `(data[i]+antiData[i]+1)&0xff===0`, cifrado AES-256-GCM (nonce+authTag+AAD), payload v1/v2 (keyId), I/O circular y proyección 3D offset→esférica.
-- `src/storage/TBitStorageService.ts` (migrado de `TBitStorageService.ts`)
-  - Clase `TBitStorageService`; tipos `TBitMetadataEntry`, `TBitMetadata`, `TBitWalState`, `TBitWalRecord`, `TBitBatchWriteInput`, `TBitBatchCollapseResult`, `TBitStorageConfig`.
-  - Cola serializada con file lock, recovery WAL→ABORTED al iniciar, `inject/injectMany/recoverData/collapse/collapseMany/snapshot/rollback/exportBundle/importBundle`, cuotas dinámicas, HMAC con `timingSafeEqual`, replicación local + remota opcional.
-
-## 2.4 Seguridad
-
-- `src/security/EncryptionKeyManager.ts`
-  - `getActiveEncryptionKey`, `getEncryptionKeyRing`, `getEncryptionKeyById`, `getEncryptionKeyStatus`; tipo `EncryptionKeyMaterial`.
-  - Gestión de llaves AES-256-GCM con rotación (env: `TBIT_ENCRYPTION_SECRET`, `TBIT_ENCRYPTION_KEY_ID`, `TBIT_ENCRYPTION_PREVIOUS_SECRETS`).
-
-## 2.5 Memoria
-
-- `src/memory/MemoryCore.ts` — núcleo de memoria determinista del contenedor.
-
-## 2.6 Puentes de documentos (Bridges)
-
-- `src/bridges/MarkdownBridge.ts` — importación/exportación Markdown ↔ contenedor.
-- `src/bridges/BinaryAssetBridge.ts` — ingesta de archivos binarios como assets.
-- `src/bridges/UniversalDocumentBridge.ts` — puente universal para múltiples formatos.
-- `src/bridges/DocumentExtractors.ts` — extractores PDF / DOCX / XLSX y otros.
-- `src/bridges/CodeGraphExtractor.ts` — extracción de grafo de símbolos desde código fuente.
-
-## 2.7 Indexación y búsqueda
-
-- `src/indexing/SemanticIndex.ts` — índice semántico (búsqueda por significado).
-- `src/indexing/QueryIndex.ts`
-  - `rebuildQueryIndex`, `syncQueryIndexIncremental`, `getQueryIndex`, `searchQueryIndex`, `getQueryIndexStats` — índice de consulta invertido/refresh incremental.
-
-## 2.8 Assets
-
-- `src/assets/AssetManager.ts` — gestión del ciclo de vida de assets binarios.
-
-## 2.9 Barrel
-
-- `src/index.ts` — reexporta la API pública de todos los submódulos.
-
----
-
-# Sección 3: Paquete `@aios/llm` — Proveedores de IA (Completado)
-
-**En simple:** Este paquete es la "centralita de teléfonos" que conecta a AIOS con varias inteligencias externas (OpenAI, Gemini, Claude, Ollama, NVIDIA, LM Studio, OpenRouter) y con una local que responde sin internet. Ofrece una sola forma de hablar con todas ellas (no importa cuál uses, el diálogo es igual) y un catálogo de qué sabe hacer cada una, para que el núcleo (kernel) pueda elegir al "experto" más adecuado para cada tarea. También "comprime" las conversaciones largas para no saturar la memoria.
-
-**Versión:** 0.1.0  •  **Estado:** ✅ Migración completada (Fase 2 del plan)
-
-## 3.1 Contrato de proveedores
-
-- `src/AiProvider.ts`
-  - Tipos: `AiRole`, `AiToolCall`, `AiMessage`, `AiToolSchema`, `AiProviderRequest`, `AiProviderResponse`.
-  - Proveedor determinístico local **T-BIT** basado en reglas (sin red, para tests/offline).
-
-## 3.2 Fábrica y catálogo
-
-- `src/AiProviderFactory.ts`
-  - `getAiProvider(id)` — obtiene instancia de proveedor por id.
-  - `getAiProviderCatalog()` — catálogo de proveedores registrados con su info (usado por el kernel para rankear candidatos).
-
-## 3.3 Proveedores
-
-- `src/providers/OpenAICompatibleProvider.ts` — base compatible con API OpenAI (chat completions, streaming, tools, timeout diferenciado 60s remoto / 180s local).
-- `src/providers/UniversalAiProviders.ts` — adaptadores concretos: OpenAI, Gemini, Ollama, NVIDIA NIM, LM Studio y otros vía OpenAICompatible.
-
-## 3.4 Compresión
-
-- `src/compression/SemanticCompression.ts` — compresión semántica de contexto/prompt.
-
-## 3.5 Barrel
-
-- `src/index.ts` — reexporta `AiProvider`, `AiProviderFactory`, `providers/*`, `compression/SemanticCompression`.
-
----
-
-# Sección 4: Paquete `@aios/kernel` — Sistema Operativo Cognitivo (Completado)
-
-**En simple:** Este es el **cerebro que dirige todo**. Cuando le pides algo, hace cuatro cosas como un buen gerente:
-
-1. **Clasifica** tu pedido (¿es programar? ¿analizar? ¿diseñar? ¿necesita varias opiniones?).
-2. **Planifica** los pasos para resolverlo.
-3. **Elige** las inteligencias (modelos) más adecuadas para esa tarea concreta.
-4. **Pone a votar** cuando conviene: pide la opinión a varios modelos y elige la mejor respuesta con un "motor de consenso" que usa 5 métodos (mayoría, peso por experto, especialización, validación cruzada y desempate).
-
-Además controla la seguridad (qué se permite y qué no), lleva un diario de eventos, vigila la salud del almacén (GuardianObserver) y se repara solo cuando detecte algo raro. Es el "sistema operativo" del que depende todo lo demás.
-
-**Versión:** 0.1.0  •  **Estado:** ✅ Subsistemas migrados + orquestación y consenso implementados
-
-> Nota de arquitectura: coexisten dos clases `Kernel`:
->
-> - `src/Kernel.ts` (raíz) — **orquestador cognitivo** (`classify → analyze → rank providers`).
-> - `src/core/Kernel.ts` — implementación de `IKernel` que delega al pipeline de ejecución y al `ProviderRegistry`.
-
-## 4.1 Contexto y Kernel raíz
-
-- `src/Kernel.ts`
-  - `class Kernel`: `public readonly context: KernelContext`, `boot()/shutdown()/isRunning()` (emite `kernel.started`/`kernel.stopped`), **`orchestrate(prompt): ExecutionPlan`** (pipeline classifier→analyzer→selector), `selectRelevantContext(history, plan)`.
-- `src/context/KernelContext.ts` — contexto principal (sessionId, services, events, state, memory).
-- `src/context/KernelState.ts` / `src/context/index.ts` — estados del kernel y barrel.
-- `src/core/IKernel.ts`, `src/core/Kernel.ts` — interfaz `IKernel` e implementación que usa `ExecutionPipeline` + `ProviderRegistry`.
-- `src/index.ts` — barrel de toda la API pública (monitoreo, seguridad, contexto, Kernel raíz, orquestación y consenso).
-
-## 4.2 Orquestación cognitiva (nuevo)
-
-- `src/orchestration/TaskIntent.ts` — tipos de intención: `TaskCategory`, `TaskIntent`, agentes sugeridos, prioridad, método de consenso.
-- `src/orchestration/ExecutionPlan.ts` — `PlanStep` y `ExecutionPlan` (goal, steps, requiredProviders).
-- `src/orchestration/TaskClassifier.ts` — `classify(prompt): TaskIntent`. Clasifica categoría + agentes + proveedores sugeridos por keywords.
-- `src/orchestration/GoalAnalyzer.ts` — `analyze(prompt, intent): ExecutionPlan`. Genera steps según categoría (programming/architecture/automation, review/analysis, documentation, consensus-multi, devops, ui-ux/design, conversation).
-- `src/orchestration/ContextManager.ts` — `selectRelevant(history, plan)`: ventana deslizante de 6 + recuperación por keywords del plan.
-- `src/orchestration/SelectionEngine.ts` — `rankProviders(intent, catalog)` rankea proveedores por dominio.
-
-## 4.3 Consenso determinista (nuevo)
-
-- `src/consensus/ConsensusTypes.ts` — tipos: `CandidateResponse`, `ConsensusMethod`, `ConsensusResult`.
-- `src/consensus/ConsensusEngine.ts` — motor con los 5 métodos de la visión:
-  - `majority` — similitud Jaccard entre candidatos.
-  - `weighted` — peso × longitud de respuesta.
-  - `specialization` — proveedor prioritario por dominio.
-  - `cross-validation` — estabilidad de líneas coincidentes (trim + intersección).
-  - `arbiter` — desempate ante desacuerdo.
-  - Incluye detección de divergencia (`collectDifferences`) entre candidatos.
-
-## 4.4 Eventos y servicios
-
-- `src/events/EventBus.ts` — bus de eventos del kernel (emisión/suscripción tipada).
-- `src/services/ServiceContainer.ts` — contenedor de servicios (IoC ligero).
-
-## 4.5 Comandos, ejecución y sesión
-
-- `src/commands/CommandRegistry.ts` — registro de comandos del kernel.
-- `src/execution/` — `IExecutionPipeline`, `ExecutionPipeline`, `PipelineContext`, `PipelineResult`, `PromptBuilder`, `ExecutionEvents`, barrel `index.ts`. Pipeline de ejecución de prompts con bind de providers.
-- `src/session/Conversation.ts`, `src/session/ConversationMessage.ts` — modelo de conversación y mensaje.
-
-## 4.6 Memoria y monitoreo
-
-- `src/memory/MemoryStore.ts` — almacén de memoria del kernel.
-- `src/monitoring/GuardianObserver.ts` — observador de integridad (estándar T-Bit).
-- `src/monitoring/ContainerHealth.ts` — salud del contenedor.
-- `src/monitoring/HealthReconciliation.ts` — reconciliación de salud / auto-reparación.
-
-## 4.7 Seguridad
-
-- `src/security/AiPermissions.ts` — permisos de IA (control de capacidades/acciones permitidas).
-
-## 4.8 Providers — adaptadores de IA
-
-- `src/providers/IProvider.ts`, `src/providers/ProviderInfo.ts`, `src/providers/ProviderCapabilities.ts` — contrato e info de capacidades.
-- `src/providers/ProviderManager.ts` (y `ProviderManagerFactory.ts`) — manager/fábrica de proveedores.
-- `src/providers/common/` — `AbortManager`, `Authentication`, `HttpClient`/`HttpRequest`/`HttpResponse`, `JsonSerializer`, `ProviderException`, `RetryPolicy`, `StreamingClient` (utilidades HTTP comunes a todos los adapters).
-- `src/providers/adapters/` — 7 adapters + base `OpenAICompatible`:
-  - **Anthropic** — `AnthropicProvider`, `AnthropicClient`, `AnthropicAuthentication`, `AnthropicConfiguration`, `AnthropicModels`, `AnthropicMapper`, `AnthropicErrorMapper`, `AnthropicStream`, `AnthropicProviderInfo`.
-  - **OpenAI** — `OpenAIProvider`, `OpenAIConfiguration`, `OpenAIModels`, `OpenAIProviderInfo`.
-  - **OpenAICompatible** — base reutilizable (`Client`, `Authentication`, `Configuration`, `ErrorMapper`, `Mapper`, `Models`, `Stream`).
-  - **Gemini**, **Ollama**, **Nvidia** (NIM), **LMStudio**, **OpenRouter** — configuration/models/provider/providerInfo + barrel `index.ts`.
-
-## 4.9 Registro y enrutamiento de providers
-
-- `src/providers/IProviderManager.ts`, `src/providers/ProviderNotFoundError.ts`.
-- `src/registry/` — `IProviderRegistry`, `ProviderRegistry`, `ProviderSelector`, `RegistryInspector`, `RegistryStatistics`, barrel `index.ts`.
-- `src/routing/` — `IRoutingEngine`/`RoutingEngine`, `IRoutingPolicy`/`RoutingPolicy`(+`RoutingPolicyBuilder`), `IModelSelector`/`ModelSelector`, `IProviderResolver`/`ProviderResolver`, `ICapabilityResolver`/`CapabilityResolver`, `IFallbackManager`/`FallbackManager`, barrel `index.ts`.
-- `src/routing/types/` — `ProviderCandidate`, `ProviderScore`, `RoutingContext`, `RoutingCriteria`, `RoutingRequest`, `RoutingResult`, `RoutingTypes` barrel.
-
-## 4.10 Workflow y tipos
-
-- `src/workflow/WorkflowState.ts`, `src/workflow/WorkflowCommand.ts` — definición de workflows.
-- `src/types/` — `KernelOptions`, `KernelRequest`, `KernelResponse`, `KernelTypes` barrel.
-
-## 4.11 Dependencias y enlace
-
-- `packages/kernel/package.json` declara dependencias `@aios/database` y `@aios/llm` (`workspace:*`).
-- Tras `pnpm install`, `@aios/llm` y `@aios/database` quedan enlazados como workspace (verificado: `packages/kernel/node_modules/@aios/llm` existe).
-
-## 4.12 Verificación de build
-
-- `tsc -p packages/kernel/tsconfig.json --noEmit` → **exit 0** (kernel compila sin errores).
-- `tsc -p packages/llm/tsconfig.json --noEmit` → **exit 0** (LLM_OK).
-- `tsc -p packages/database/tsconfig.json --noEmit` → **exit 0** (DATABASE_OK).
-- `tsc -p packages/tbit-core/tsconfig.json --noEmit` → **exit 0** (TBIT_CORE_OK, verificado el 27-Jul-2026).
-- `tsc -b` raíz falla por referencia *stale* preexistente a `packages/core/tsconfig.json` (no existe); ajeno a estos cambios y no bloquea los paquetes migrados.
-
----
-
-# Sección 5: Fases Pendientes (Plan)
-
-## Phase 0 — Crear paquete `packages/tbit-core`  ✅ COMPLETADO (27-Jul-2026)
-
-**En simple:** Se creó un nuevo paquete independiente que contiene TODO el motor T-Bit original (el almacén determinista, cifrado, memoria, búsqueda, importación de documentos, etc.) dentro de una caja llamada `@muf/tbit-core`. Este paquete compila sin errores y puede ser usado tanto por la API como por otros paquetes del monorepo.
-
-- Scaffold: `packages/tbit-core/package.json`, `tsconfig.json`, `src/index.ts` (barrel)
-- Motor completo: `TBitFileSystem.ts`, `TBitStorageService.ts`, `AllocationMap.ts`
-- Seguridad: `EncryptionKeyManager.ts`, `textEncoding.ts`, `temporalSemantics.ts`
-- Memoria: `memoryCore.ts`, `queryIndex.ts`, `semanticIndex.ts`
-- Puentes AI: `aiPermissions.ts`, `assetManager.ts`, `markdownBridge.ts`, `universalDocumentBridge.ts`, `binaryAssetBridge.ts`, `documentExtractors.ts`, `codeGraphExtractor.ts`
-- Utilidades: `containerHealth.ts`, `healthReconciliation.ts`, `tbitRuntimePaths.ts`, `semanticCompression.ts`, `guardianObserver.ts`, `webResearch.ts`, `documentQa.ts`
-- Verificado: `tsc --noEmit` → exit 0
-
-## Phase 1 — Crear rutas API REST para T-Bit  ⏳ EN PROGRESO
-
-**En simple:** Estamos construyendo los "enchutes" (controladores y servicios) para que la API de AIOS pueda hablar con T-Bit a través de internet (HTTP). Cuando esté listo, cualquier aplicación web podrá enviar memorias, buscar información, importar documentos y verificar la salud del almacén usando URLs.
-
-- `apps/api/src/controllers/TBitController.ts` — 15 endpoints REST (crear contenedor, almacenar/recuperar memoria, buscar índice, salud, cifrado, assets, importación de documentos)
-- `apps/api/src/services/TBitService.ts` — lógica de negocio que conecta los controladores con el motor `@muf/tbit-core`
-- **Estado actual:** Archivos creados pero con errores de compilación (firmas de tipos por alinear)
-- **Lo que falta:** Corregir tipos, conectar las rutas en el router de Express, verificar compilación
-
-## Phase 2 — Conectar el frontend con la API real de T-Bit  ❌ NO INICIADA
-
-- Reemplazar el hook `useMemoryGraph` (mock) por llamadas HTTP reales a los endpoints de T-Bit
-- Integrar `TBitAuth` en el flujo de autenticación
-
-## Phase 3 — Flujo de registro de usuario (First-run setup)  ❌ NO INICIADA
-
-- Pantalla de bienvenida/registro en el primer inicio
-- Creación de espacio T-Bit por usuario
-- Generación de claves de cifrado
-
-## Phase 4 — Build completo del monorepo  ❌ NO INICIADA
-
-- Verificar que todo el monorepo compila sin errores (`pnpm build`)
-- Corregir referencias stale y dependencias cruzadas
-
-## Fase 6 — Migrar UI y visualización 3D  ⏳ PENDIENTE
-
-- QuantumEngine 3D (React Three Fiber)
-- QVault 3D limpio
-- 14 paneles de gestión
-- Stores (useTBitStore, useTBitCognitiveStore)
-- Clientes API (todos los *Client.ts)
-
-## Fase 7 — Conectar apps/api y apps/web  ⏳ PENDIENTE
-
-- Descomponer server.ts (91KB) en rutas modulares
-- Dockerización
-- Conectar kernel + agents + database + llm + tbit-core
-
-## Fase 8 — Testing y despliegue  ⏳ PENDIENTE
-
-- Tests de integración
-- Build de producción
-- Deploy
-
-**Completado (resumen):**
-
-- ✅ Phase 0 — Paquete `@muf/tbit-core` creado y compilando
-- ✅ Fase 2 — Migrar paquete llm (AI Providers)
-- ✅ Fase 3 — Migrar bridges restantes + DocumentExtractors
-- ✅ Fase 4 (parcial) — Subsistemas del kernel migrados; agentes/tools pendientes
-- ✅ Fase 5 — Migrar monitoreo (GuardianObserver, ContainerHealth, HealthReconciliation, AiPermissions)
-- ✅ NUEVO — Orquestación cognitiva + Motor de consenso
-
----
-
-# Sección 6: Registro de Cambios (Changelog)
-
-## [0.1.0-tbit-core-phase-0] — 2026-07-27/28
-
-### Creado paquete `packages/tbit-core` (Phase 0 completada)
-
-- Creado scaffold: `package.json`, `tsconfig.json`, `src/index.ts` (barrel)
-- Migrado motor completo desde T-Bit original: `TBitFileSystem.ts`, `TBitStorageService.ts`, `AllocationMap.ts`
-- Migrados seguridad y encoding: `EncryptionKeyManager.ts`, `textEncoding.ts`, `temporalSemantics.ts`
-- Migrada capa de memoria: `memoryCore.ts`, `queryIndex.ts`, `semanticIndex.ts`
-- Migrados puentes AI y documentos: `aiPermissions.ts`, `assetManager.ts`, `markdownBridge.ts`, `universalDocumentBridge.ts`, `binaryAssetBridge.ts`, `documentExtractors.ts`, `codeGraphExtractor.ts`
-- Migradas utilidades: `containerHealth.ts`, `healthReconciliation.ts`, `tbitRuntimePaths.ts`, `semanticCompression.ts`, `guardianObserver.ts`, `webResearch.ts`, `documentQa.ts`
-- Actualizado barrel `index.ts` con todos los exports, incluyendo `QuerySearchRequest`, `QuerySearchResult`, `MarkdownImportRequest`, `UniversalDocumentImportRequest`, `UniversalDocumentImportResult`
-- Verificación de build: `tsc -p packages/tbit-core/tsconfig.json --noEmit` → **exit 0**
-- **Creados controlador y servicio API** (`TBitController.ts`, `TBitService.ts`) con 15 endpoints REST
-- **Pendiente:** Corregir errores de tipos en TBitService.ts para compilación exitosa de `apps/api`
-
-## [0.1.0] — 2026-07-23
-
-### Inicialización
-
-- Creado `packages/database/package.json` como paquete `@aios/database`
-- Creado `packages/database/tsconfig.json` con configuración composite
-- Migrado `textEncoding.ts` → `src/core/textEncoding.ts`
-- Migrado `AllocationMap.ts` → `src/storage/AllocationMap.ts`
-- Migrado `EncryptionKeyManager.ts` → `src/security/EncryptionKeyManager.ts`
-- Iniciada migración de `TBitFileSystem.ts` → `src/storage/TBitContainer.ts`
-- Creado este documento `AIOS_Book.md`
-
-## [0.1.0-database-complete] — 2026-07-23/24
-
-- Completada migración de `TBitContainer.ts` (motor .tbit: magic headers, Vit/Anti-Vit, zero-sum, AES-256-GCM, I/O circular, proyección 3D).
-- Migrado `TBitStorageService.ts` (WAL, recovery, inject/injectMany, collapse, snapshot/rollback, export/import, cuotas, HMAC, replicación).
-- Migrada memoria: `src/memory/MemoryCore.ts`.
-- Migrados puentes: `MarkdownBridge`, `BinaryAssetBridge`, `UniversalDocumentBridge`, `DocumentExtractors`, `CodeGraphExtractor`.
-- Migrada indexación: `SemanticIndex`, `QueryIndex` (rebuild/incremental/search/stats).
-- Migrados assets: `AssetManager`; rutas: `core/RuntimePaths.ts`.
-- Creado barrel `src/index.ts` para `@aios/database`.
-
-## [0.1.0-llm] — 2026-07-23/24
-
-- Creado paquete `@aios/llm` (Fase 2 completada).
-- Definido contrato de proveedores en `AiProvider.ts` (tipos + proveedor determinístico T-BIT local).
-- Implementado `AiProviderFactory.ts` con `getAiProvider` y `getAiProviderCatalog`.
-- Migrado `OpenAICompatibleProvider.ts` (chat completions, streaming, tools, timeout diferenciado).
-- Migrado `UniversalAiProviders.ts` (OpenAI, Gemini, Ollama, NVIDIA NIM, LM Studio, OpenRouter vía OpenAICompatible).
-- Migrado `compression/SemanticCompression.ts`.
-- Creado barrel `src/index.ts`.
-
-## [0.1.0-kernel-subsystems] — 2026-07-24
-
-- Migrados subsistemas del kernel: `context/`, `events/EventBus`, `services/ServiceContainer`, `commands/CommandRegistry`.
-- Migrado pipeline de ejecución `execution/` (`ExecutionPipeline`, `PromptBuilder`, `PipelineContext/Result`, `ExecutionEvents`).
-- Migrados `memory/MemoryStore`, `session/Conversation` + `ConversationMessage`.
-- Migrado monitoreo (Fase 5): `GuardianObserver`, `ContainerHealth`, `HealthReconciliation`.
-- Migrada seguridad: `security/AiPermissions`.
-- Migrado el subsistema de providers con 7 adapters (`providers/adapters/`: Anthropic, OpenAI, OpenAICompatible, Gemini, Ollama, Nvidia, LMStudio, OpenRouter) + capas comunes (`providers/common/`).
-- Migrados registro/enrutamiento: `registry/` (`ProviderRegistry`, `ProviderSelector`, `RegistryInspector/Statistics`) y `routing/` (`RoutingEngine`, `RoutingPolicy`, `ModelSelector`, `ProviderResolver`, `CapabilityResolver`, `FallbackManager`) + tipos de routing.
-- Migrados `workflow/` (`WorkflowState`, `WorkflowCommand`) y `types/` (`KernelOptions`, `KernelRequest`, `KernelResponse`).
-
-## [0.1.0-kernel-orchestration-consensus] — 2026-07-25
-
-- Implementada **orquestación cognitiva** en `Kernel.ts` (raíz): método `orchestrate(prompt)` con pipeline `classify → analyze → rankProviders`.
-- Creados `orchestration/TaskIntent.ts`, `ExecutionPlan.ts`, `TaskClassifier.ts`, `GoalAnalyzer.ts`, `ContextManager.ts`, `SelectionEngine.ts`.
-- Implementado **motor de consenso determinista** `consensus/ConsensusEngine.ts` con 5 métodos (majority/weighted/specialization/cross-validation/arbiter) + `ConsensusTypes.ts`.
-- Corregido bug `TS2367` en `TaskClassifier.ts` (comparación imposible `category === "security"` fuera del `TaskCategory` union).
-- Conectadas dependencias en `packages/kernel/package.json` (`@aios/database`, `@aios/llm` como `workspace:*`) y enlazadas vía `pnpm install`.
-- Verificación de build: `tsc --noEmit` pasa para `@aios/kernel`, `@aios/llm` y `@aios/database` (exit 0).
-- Actualizado este documento `AIOS_Book.md` al estado real del repositorio.
-
-## [0.1.0-agents-context-engineer] — 2026-07-26
-
-- Integrado el nuevo agente **Context Engineer** (`.github/agents/ContextEngineer.agent.md`) como agente de orquestación de primera clase: gatekeeper entre la petición del usuario y los agentes especializados.
-- Responsabilidad única: **qué información** necesita cada agente (recuperar conocimiento, buscar docs/repos, cargar memoria y estándares, seleccionar archivos relevantes, descartar lo irrelevante, rankear, resolver dependencias, ensamblar el **Execution Context Package** estandarizado, detectar vacíos de conocimiento, validar y persistir/versionar el contexto).
-- Refactorizado **Prompt Engineer** (`.github/agents/PromptEngineer.agent.md`) para consumir el Execution Context Package y dejar de duplicar la recuperación de contexto; ahora es dueño solo de **cómo presentar** la información al modelo (system prompts, plantillas, CoT, few-shot, optimización de tokens, adaptación por proveedor, prompt caching).
-- Pipeline de orquestación de agentes consolidado: Usuario → Intent Analyzer → Workflow Manager → **Context Engineer** → **Prompt Engineer** → Model Router → Agentes Especializados → Consensus Agent → Validation Agent → Response Generator.
-- Actualizado `AIOS_Book.md` con la Sección 8 (sistema de agentes) y este changelog.
-
----
-
-# Sección 9: Paquete `@muf/tbit-core` — Motor T-Bit Independiente (NUEVO)
-
-**Versión:** 0.1.0  •  **Estado:** ✅ Creado y compilando (Phase 0 completada)
-
-**En simple:** Este es el corazón de T-Bit convertido en un paquete propio que se puede usar desde cualquier lugar del monorepo. Contiene TODO lo que T-Bit sabe hacer: guardar datos en un archivo `.tbit` indeleble, cifrarlos, buscarlos por significado, importar documentos (PDF, Word, Excel, Markdown, código fuente), gestionar archivos adjuntos, verificar la salud del almacén y más. Es como tener un "T-Bit portátil" dentro de AIOS.
-
-## 9.1 ¿Por qué un paquete separado?
-
-El motor original de T-Bit vivía en un repositorio aparte (`c:\Git\T-Bit`) y era monolítico — todo en un `server.ts` de 91KB. Para integrarlo correctamente en AIOS, se decidió:
-
-1. **Extraer el motor completo** como un paquete independiente (`packages/tbit-core`, publicado como `@muf/tbit-core`)
-2. **Mantenerlo autocontenido** — no depende de otros paquetes del monorepo
-3. **Usarlo desde `apps/api`** a través de un servicio intermediario (`TBitService`) y un controlador REST (`TBitController`)
-
-## 9.2 Archivos del paquete
+## 🏗️ Architecture — Package Structure (Monorepo)
 
 ```
-packages/tbit-core/
-├── package.json          # @muf/tbit-core, privado, entry src/index.ts
-├── tsconfig.json         # Extiende tsconfig.base.json, composite, outDir dist/
-├── src/
-│   ├── index.ts          # Barrel: exporta TODA la API pública
-│   ├── TBitFileSystem.ts       # Formato binario .tbit, Vit/Anti-Vit, I/O circular
-│   ├── TBitStorageService.ts   # Servicio de almacenamiento con WAL, recovery, cuotas
-│   ├── AllocationMap.ts        # Mapa de asignación de espacio en el contenedor
-│   ├── EncryptionKeyManager.ts # Gestión de llaves AES-256-GCM
-│   ├── textEncoding.ts         # Normalización Unicode NFC
-│   ├── temporalSemantics.ts    # Semántica temporal (fechas, contexto)
-│   ├── memoryCore.ts           # Núcleo de memoria: remember/recall/context/graph
-│   ├── queryIndex.ts           # Índice de consulta invertido con búsqueda
-│   ├── semanticIndex.ts        # Índice semántico (búsqueda por significado)
-│   ├── aiPermissions.ts        # Políticas de permisos para IA
-│   ├── assetManager.ts         # Gestión de assets binarios
-│   ├── markdownBridge.ts       # Importación/exportación Markdown
-│   ├── universalDocumentBridge.ts # Importación universal (PDF, DOCX, XLSX)
-│   ├── binaryAssetBridge.ts    # Ingesta de archivos binarios como assets
-│   ├── documentExtractors.ts   # Extractores de documentos (PDF, DOCX, XLSX)
-│   ├── codeGraphExtractor.ts   # Extracción de grafos de código fuente
-│   ├── containerHealth.ts      # Reporte de salud del contenedor
-│   ├── healthReconciliation.ts # Auto-reparación/reconciliación de salud
-│   ├── tbitRuntimePaths.ts     # Resolución determinista de rutas
-│   ├── semanticCompression.ts  # Compresión semántica
-│   ├── guardianObserver.ts     # Observador de integridad continua
-│   ├── webResearch.ts          # Investigación web automática
-│   ├── documentQa.ts           # QA sobre documentos
-│   └── (otros archivos de soporte)
+Muf_Labs/
+├── apps/
+│   ├── api/          # Express REST API (@aios/api)
+│   ├── web/          # Vite + React frontend (@aios/web)
+│   └── desktop/      # Tauri desktop app (@aios/desktop)
+├── packages/
+│   ├── agents/       # @aios/agents
+│   ├── database/     # @aios/database
+│   ├── kernel/       # @aios/kernel
+│   ├── llm/          # @aios/llm
+│   ├── sdk/          # @aios/sdk
+│   ├── shared/       # @aios/shared (T-Bit runtime paths, text encoding)
+│   ├── tbit-core/    # @muf/tbit-core (T-Bit engine — canonical source)
+│   ├── ui/           # @aios/ui
+│   └── workflow/     # @aios/workflow
+├── aios-mvp/         # Legacy MVP (being phased out)
+├── Framework/        # AIOS Framework standards & templates
+├── docs/             # AIOS_Book.md, AIOS_AppBible.md
+├── scripts/          # Build & maintenance scripts
+└── turbo.json        # Turborepo config
 ```
 
-## 9.3 Funciones principales exportadas
+### Dependency Graph (Simplified)
 
-### Motor de almacenamiento
-- `TBitStorageService` — clase principal con métodos: `inject`, `recover`, `reinitializeContainer`, `collapse`, `snapshot`, `rollback`, `exportBundle`, `importBundle`
-- `TBitContainer` — clase de bajo nivel para el archivo `.tbit`
-- `AllocationMap` — mapa de asignación espacial
+```
+@aios/shared ◄── @muf/tbit-core
+     ▲                ▲
+     │                │
+@aios/api ◄───────────┘
+     ▲
+     │
+@aios/web
+```
 
-### Seguridad
-- `getActiveEncryptionKey()`, `getEncryptionKeyRing()`, `getEncryptionKeyById()`, `getEncryptionKeyStatus()`
-- `normalizeTBitKey()`, `normalizeUnicodeText()`
-
-### Memoria (Memory Core)
-- `rememberMemory(storage, request)` — guarda un recuerdo en el contenedor
-- `recallMemory(storage, key)` — recupera un recuerdo por su clave
-- `getMemoryContext(userId, query, limit)` — busca recuerdos por contexto
-- `getMemoryGraph(userId?)` — obtiene el grafo completo de memorias
-- `getMemoryLinks(key)` — obtiene enlaces y backlinks de una memoria
-
-### Índices y búsqueda
-- `searchQueryIndex(request)` — busca en el índice de consulta
-- `rebuildQueryIndex()` — reconstruye el índice desde cero
-- `syncQueryIndexIncremental()` — actualización incremental del índice
-- `searchSemanticIndex(query)` — búsqueda semántica
-
-### Puentes de documentos
-- `importMarkdownDocument(storage, request)` — importa un archivo Markdown
-- `importUniversalDocument(storage, request)` — importa PDF/DOCX/XLSX
-- `importBinaryAsset(storage, request)` — importa un archivo binario como asset
-- `parseMarkdownDocument(request)` — parsea un Markdown sin importarlo
-
-### Salud y monitoreo
-- `getContainerHealthReport()` — reporte completo de salud
-- `reconcileContainerHealth(dryRun?)` — auto-repara inconsistencias
-- `guardianObserver()` — observador de integridad
-
-### Assets
-- `listAssets(userId?)` — lista todos los assets
-- `getAssetStats(userId?)` — estadísticas de assets
-- `registerAsset(request)` — registra un nuevo asset
-- `deleteAsset(storage, key)` — elimina un asset
-
-## 9.4 Verificación de build
-
-- `tsc -p packages/tbit-core/tsconfig.json --noEmit` → **exit 0** (27-Jul-2026)
-- El paquete no tiene dependencias externas más allá de Node.js estándar
-
-## 9.5 Integración con la API REST
-
-Los controladores y servicios en `apps/api/src/` son los "traductores" entre HTTP y este paquete:
-
-| Endpoint REST | Método | Función T-Bit |
-|--------------|--------|---------------|
-| `POST /api/tbit/container` | Crear contenedor | `TBitStorageService` + `getActiveEncryptionKey()` |
-| `POST /api/tbit/memo` | Guardar memo | `rememberMemory()` |
-| `GET /api/tbit/memo` | Buscar memos | `getMemoryContext()` + `getMemoryGraph()` |
-| `GET /api/tbit/memo/context` | Contexto de memoria | `getMemoryContext()` |
-| `GET /api/tbit/search` | Buscar en índice | `searchQueryIndex()` |
-| `POST /api/tbit/search/rebuild` | Reconstruir índice | `rebuildQueryIndex()` |
-| `GET /api/tbit/health` | Salud del contenedor | `getContainerHealthReport()` |
-| `POST /api/tbit/health/reconcile` | Auto-reparar | `reconcileContainerHealth()` |
-| `GET /api/tbit/encryption` | Info de cifrado | `getEncryptionKeyStatus()` |
-| `GET /api/tbit/encryption/keys` | Anillo de llaves | `getEncryptionKeyRing()` |
-| `GET /api/tbit/assets` | Listar assets | `listAssets()` |
-| `GET /api/tbit/assets/stats` | Estadísticas assets | `getAssetStats()` |
-| `POST /api/tbit/assets/import/binary` | Importar binario | `importBinaryAsset()` |
-| `POST /api/tbit/assets/import/markdown` | Importar Markdown | `importMarkdownDocument()` |
-| `POST /api/tbit/assets/import/universal` | Importar universal | `importUniversalDocument()` |
+**Key Principle**: `@muf/tbit-core` is the **single source of truth** for T-Bit runtime paths, memory core, storage, encryption, and indices. All other packages consume via `@aios/shared` re-exports.
 
 ---
 
-# Sección 10: Glosario para no-programadores
+## 🔧 Phase 7 — Complete
 
-- **Paquete (`package`):** una caja con código que hace un grupo de tareas relacionadas. AIOS tiene varias cajas que se conectan entre sí (database, llm, kernel, tbit-core…).
-- **Barrel (`index.ts`):** la "portería" de un paquete. En lugar de que cada quien busque los archivos por separado, todo lo útil sale por esa única puerta.
-- **Kernel:** el "cerebro/orquestador", el corazón que decide qué hacer y con quién.
-- **Orquestación:** decisión automática de los pasos y los expertos (modelos de IA) para resolver una petición.
-- **Proveedor de IA (`provider`):** cada inteligencia externa (OpenAI, Gemini, Claude, Ollama, etc.).
-- **Adapter:** un "enchufe" que adapta la forma de hablar de AIOS a la forma particular de cada proveedor.
-- **Routing / Registry:** registro de proveedores y reglas para elegir el mejor según la tarea.
-- **Consenso:** pedir la opinión a varios modelos y combinar sus respuestas (mayoría, peso, especialización, validación cruzada, desempate).
-- **Vit / Anti-Vit:** el dato y su "negativo" binario; juntos sirven como sello de integridad (si alteras uno, ya no cuadran).
-- **WAL (diario de operaciones):** bitácora que garantiza que un corte de luz no deje datos a medias.
-- **AES-256-GCM:** el candado de cifrado actual; sin la llave, el contenido es ilegible.
-- **Búsqueda semántica:** encontrar resultados por significado, no solo por palabra exacta.
-- **Bridge:** "traductor" que importa documentos (PDF, Word, Excel, Markdown, código) al almacén.
-- **Phase / Fase:** cada etapa del plan de migración. Las Phase 0-4 son las actuales; las Fase 6-8 son las del plan original del libro.
-- **tsc (TypeScript):** el compilador que revisa que el código no tenga errores. "Exit 0" = todo correcto.
-- **`workspace:*`:** forma de decir que un paquete del monorepo usa a otro paquete del mismo monorepo (sin descargar nada de internet).
+### Objective
+Connect `apps/api` and `apps/web` for production deployment:
+1. Dockerize both services ✅
+2. Decompose `server.ts` monolith into modular routes ✅
+3. Configure production-ready Docker Compose ✅
+4. Validate end-to-end integration ✅
 
-> 🤖 **Nota para sistemas de IA que lean este archivo:** Este libro es la fuente de verdad del estado del proyecto. La estructura es: 1) visión y mapeo de componentes, 2) `@aios/database` (almacenamiento determinista), 3) `@aios/llm` (proveedores de IA), 4) `@aios/kernel` (orquestación + consenso + subsistemas), 5) fases pendientes (incluye nuevas Phase 0-4), 6) changelog, 7) [reservado], 8) sistema de agentes, 9) `@muf/tbit-core` (nuevo paquete), 10) glosario. Los bloques "En simple" son resúmenes en lenguaje natural; el resto es la referencia técnica exacta (firmas y propósito real verificado contra el código). Estado verificado el 2026-07-28: tbit-core compila; kernel, llm y database compilan; Phase 1 (API REST) está en progreso con errores de tipos por resolver.
+### Stage 7.1 — Dockerize apps/api ✅ **COMPLETED**
+- **Files**: `apps/api/Dockerfile`, `apps/api/.dockerignore`
+- **Validation**: `docker build -t aios-api apps/api` succeeds
+- **Configuration**: Multi-stage build, non-root user, port 3001, `/data` volume
+
+### Stage 7.2 — Dockerize apps/web ✅ **COMPLETED**
+- **Files**: `apps/web/Dockerfile`, `apps/web/.dockerignore`, `apps/web/nginx.conf`
+- **Validation**: `docker build -t aios-web apps/web` succeeds
+- **Configuration**: Nginx serves SPA, proxies `/api/` to `api:3001`
+
+### Stage 7.3 — Production Docker Compose ✅ **COMPLETED**
+- **Files**: Root `docker-compose.yml`, `apps/api/.env.example`, `apps/web/.env.example`
+- **Validation**: `docker compose up --build` brings up both services healthy
+- **Key Configuration**:
+  - API on port 3001, Web on port 3000 (nginx → 80)
+  - Persistent volume `tbit-data` mounted at `/data`
+  - Health checks with `wget` probes
+  - API depends on Web with `condition: service_healthy`
+  - Shared network `aios-network`
+
+### Stage 7.4 — Decompose server.ts ✅ **COMPLETED**
+- **Removed**: `apps/api/src/routes.ts` (legacy monolithic routes with `ChatController` + `TBitController`)
+- **Retained**: `apps/api/src/routes/index.ts` (modular route registration with 11 route modules)
+- **Entry point**: `apps/api/src/main.ts` → `createServer()` → `startServer()`
+- **Validation**: Full monorepo build passes (FULL TURBO, 11/11 packages)
+
+### Stage 7.5 — Health Checks & Observability ✅ **COMPLETED**
+- **API**: `/health` endpoint in `createServer()` (no auth required)
+- **Web**: `/health` endpoint in `nginx.conf` returns `200 "healthy"`
+- **Docker**: Both services have `healthcheck` configs with `wget --spider`
+
+### Stage 7.6 — Environment Configuration ✅ **COMPLETED**
+- **API**: `.env.example` with `PORT=3001`, `TBIT_VAULT_ROOT=/data/spaces`, `CORS_ORIGIN=http://localhost:3000`, `SYMBOLIC_API_KEY`
+- **Web**: `.env.example` with `VITE_API_BASE_URL=http://localhost:3001`
+- **No hardcoded secrets** — all config via environment variables
 
 ---
 
-*Este documento se actualizará continuamente conforme avance la migración.*
+## 📦 Package: @muf/tbit-core — Canonical Exports
+
+> **Source of truth** for all T-Bit functionality. Other packages MUST import via `@aios/shared` re-exports.
+
+### Core Engine
+```typescript
+export { TBitContainer, TBitOffsets, TBitProjection } from "./TBitFileSystem";
+export { TBitStorageService, TBitMetadataEntry, TBitMetadata, TBitWalState, TBitWalRecord, TBitBatchWriteInput, TBitBatchCollapseResult, TBitStorageConfig } from "./TBitStorageService";
+export { AllocationMap, AllocationRange } from "./AllocationMap";
+```
+
+### Security & Encoding
+```typescript
+export { getActiveEncryptionKey, getActiveEncryptionKeyAsync, getEncryptionKeyById, getEncryptionKeyRing, getEncryptionKeyStatus, generateEncryptionKey, activateStoredKey, isEncryptionConfigured, EncryptionKeyMaterial } from "./EncryptionKeyManager";
+export { normalizeTBitKey, normalizeUnicodeText } from "./textEncoding";
+export { obtenerContextoTemporalSistema, obtenerPromptTemporalSistema, construirMemoriaSemantica, inferirClaveConsulta, resolverFechaRelativa, TemporalContext, SemanticMemory } from "./temporalSemantics";
+```
+
+### Memory Core
+```typescript
+export { MemoryCoreRememberRequest, MemoryCoreRecord, MemoryCoreContextResult, MemoryGraphNode, MemoryGraphLink, MemoryGraph, rememberMemory, recallMemory, getMemoryContext, getMemoryLinks, getMemoryGraph, deleteMemoryRecord, deleteMemoryRecordsBatch, rememberMemoryBatch } from "./memoryCore";
+```
+
+### Memory Core API Compatibility Layer
+```typescript
+export { rememberMemoryCompat, rememberMemoryBatchCompat, recallMemoryCompat, getMemoryContextCompat, getMemoryLinksCompat, getMemoryGraphCompat, deleteMemoryRecordCompat, deleteMemoryRecordsBatchCompat } from "./memoryCoreCompat";
+```
+
+### Query & Semantic Index
+```typescript
+export { QueryIndexEntry, QuerySearchRequest, QuerySearchResult, getQueryIndex, getQueryIndexStats, rebuildQueryIndex, searchQueryIndex, syncQueryIndexIncremental } from "./queryIndex";
+export { SemanticIndexEntry, getSemanticIndexStats, rebuildSemanticIndex, searchSemanticIndex } from "./semanticIndex";
+```
+
+### AI Permissions
+```typescript
+export { getAiPermissionsPolicy, updateAiPermissionsPolicy, assertAiPermission, AiPermissionsPolicy, AiPermissionAction, AiPermissionDecision } from "./aiPermissions";
+```
+
+### Asset Manager
+```typescript
+export { listAssets, getAssetStats, registerAsset, deleteAsset, TBitAssetRecord, TBitAssetStatus, TBitAssetIndex, RegisterAssetRequest, DeleteAssetResult } from "./assetManager";
+```
+
+### Asset Manager API Compatibility Layer
+```typescript
+export { listAssetsCompat, getAssetStatsCompat, registerAssetCompat, deleteAssetCompat } from "./assetManagerCompat";
+```
+
+### Container Health
+```typescript
+export { getContainerHealthReport, TBitContainerHealth, TBitHealthReport } from "./containerHealth";
+export { reconcileContainerHealth } from "./healthReconciliation";
+```
+
+### Runtime Paths (Source of Truth)
+```typescript
+export { type TBitSpacePaths, type TBitSpaceManifest, getTBitSpacePaths, getTBitSpacesRoot, normalizeTBitVaultRoot, normalizeTBitSpaceId, setActiveTBitDataDir, setActiveTBitSpacesRoot, resolveActiveTBitDataPath, getActiveTBitDataDir, createSpaceManifest, listSpaceManifests } from "./tbitRuntimePaths";
+```
+
+### Markdown Bridge
+```typescript
+export { MarkdownImportResult, MarkdownImportRequest, importMarkdownDocument, parseMarkdownDocument, reconstructMarkdownDocument, listMarkdownDocuments, deleteMarkdownDocument, purgeOrphanMarkdownChunks } from "./markdownBridge";
+```
+
+### Markdown Bridge API Compatibility Layer
+```typescript
+export { importMarkdownDocumentCompat, parseMarkdownDocumentCompat, listMarkdownDocumentsCompat, deleteMarkdownDocumentCompat, reconstructMarkdownDocumentCompat, purgeOrphanMarkdownChunksCompat } from "./markdownBridgeCompat";
+```
+
+### Binary Asset Bridge
+```typescript
+export { importBinaryAsset, reconstructBinaryAsset, deleteBinaryAsset, BinaryAssetImportRequest, BinaryAssetImportResult, BinaryAssetReconstructResult } from "./binaryAssetBridge";
+```
+
+### Binary Asset Bridge API Compatibility Layer
+```typescript
+export { importBinaryAssetCompat, reconstructBinaryAssetCompat, deleteBinaryAssetCompat } from "./binaryAssetBridgeCompat";
+```
+
+### Universal Document Bridge
+```typescript
+export { importUniversalDocument, UniversalDocumentImportRequest, UniversalDocumentImportResult } from "./universalDocumentBridge";
+```
+
+### Universal Document Bridge API Compatibility Layer
+```typescript
+export { importUniversalDocumentCompat, answerDocumentQuestionCompat } from "./universalDocumentBridgeCompat";
+```
+
+### Semantic Compression
+```typescript
+export { compressSemanticGravity } from "./semanticCompression";
+```
+
+### Guardian Observer
+```typescript
+export { observeGuardian } from "./guardianObserver";
+```
+
+### Web Research
+```typescript
+export { isWebResearchIntent, extractFirstUrlFromText, researchWebPage, buildWebResearchPrompt } from "./webResearch";
+```
+
+### Document QA
+```typescript
+export { answerDocumentQuestion } from "./documentQa";
+```
+
+### Code Graph Extractor
+```typescript
+export { analyzeSourceCode, summarizeCodeGraph, isSourceCodeFile, buildCodeMarkdownDocument, CodeGraphAnalysis, CodeGraphSummary } from "./codeGraphExtractor";
+```
+
+### KV Store
+```typescript
+export { getKvValue, setKvValue, deleteKvValue, listKvKeys, getKvStats, KvValueOptions } from "./kvStore";
+```
+
+### Document Extractors
+```typescript
+export { extractOfficeDocument, ExtractedOfficeDocument } from "./documentExtractors";
+```
+
+### API Compatibility Layer (Legacy @aios/database API)
+```typescript
+export { injectMemory, injectManyMemories, recoverData, collapseMemory, collapseManyMemories, snapshotContainer, rollbackContainer, getContainerStats, readAllPayloads, exportBundle, importBundle, getNetworkState, exportNetworkRecord, importNetworkRecord, compareNetworkState } from "./apiCompat";
+```
+
+---
+
+## 📦 Package: @aios/shared — Re-exports
+
+```typescript
+// T-Bit Runtime Paths (from @muf/tbit-core)
+export { type TBitSpacePaths, type TBitSpaceManifest, getTBitSpacePaths, getTBitSpacesRoot, normalizeTBitVaultRoot, normalizeTBitSpaceId, setActiveTBitDataDir, setActiveTBitSpacesRoot, resolveActiveTBitDataPath, getActiveTBitDataDir, createSpaceManifest, listSpaceManifests } from "@muf/tbit-core";
+
+// Text Encoding (from @muf/tbit-core)
+export { normalizeTBitKey, normalizeUnicodeText } from "@muf/tbit-core";
+```
+
+---
+
+## 🌐 API Routes — apps/api
+
+All routes under `/api/v1/tbit/` require `requireSymbolicApiKey` middleware.
+
+### Memory Core
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/memory/remember` | Store a memory |
+| POST | `/memory/remember-batch` | Store multiple memories |
+| POST | `/memory/recall` | Recall a memory by key |
+| POST | `/memory/context` | Get memory context for user+query |
+| GET | `/memory/graph` | Get memory graph |
+| POST | `/memory/links` | Get links & backlinks |
+| POST | `/memory/delete` | Delete a memory record |
+| POST | `/memory/delete-batch` | Delete multiple memory records |
+
+### Query Index
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/query/stats` | Query index statistics |
+| POST | `/query/rebuild` | Rebuild query index |
+| POST | `/query/sync` | Incremental sync query index |
+| POST | `/query/search` | Search query index |
+| GET | `/query` | Get full query index (debug) |
+
+### Semantic Index
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/semantic/stats` | Semantic index statistics |
+| POST | `/semantic/rebuild` | Rebuild semantic index |
+| POST | `/semantic/search` | Search semantic index |
+
+### Network / Anti-Entropy
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/network/state` | Get network state |
+| POST | `/network/export-record` | Export network record |
+| POST | `/network/import-record` | Import network record |
+| POST | `/network/compare` | Compare network state |
+
+### Setup / Bootstrap
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/setup/status` | Get first-run status |
+| POST | `/setup/bootstrap` | Bootstrap first-run setup |
+
+---
+
+## 🎨 Frontend Panels — apps/web (16 Panels)
+
+| Panel | Component | Route | Status |
+|-------|-----------|-------|--------|
+| 1 | MemoryGraphPanel | `/memory-graph` | ✅ Wired to API |
+| 2 | MemoryCorePanel | `/memory-core` | ✅ Wired to API |
+| 3 | SemanticIndexPanel | `/semantic-index` | ✅ Wired to API |
+| 4 | QueryIndexPanel | `/query-index` | ✅ Wired to API |
+| 5 | ContainerHealthPanel | `/container-health` | ✅ Wired to API |
+| 6 | AssetManagerPanel | `/asset-manager` | ✅ Wired to API |
+| 7 | EncryptionKeyPanel | `/encryption-keys` | ✅ Wired to API |
+| 8 | AiPermissionsPanel | `/ai-permissions` | ✅ Wired to API |
+| 9 | MarkdownBridgePanel | `/markdown-bridge` | ✅ Wired to API |
+| 10 | BinaryAssetPanel | `/binary-assets` | ✅ Wired to API |
+| 11 | UniversalDocumentPanel | `/universal-document` | ✅ Wired to API |
+| 12 | QuantumEnginePanel | `/quantum-engine` | ✅ 3D Visualization |
+| 13 | QVaultPanel | `/qvault` | ✅ Quantum Vault UI |
+| 14 | TemporalSemanticsPanel | `/temporal-semantics` | ✅ Wired to API |
+| 15 | WebResearchPanel | `/web-research` | ✅ Wired to API |
+| 16 | CodeGraphPanel | `/code-graph` | ✅ Wired to API |
+
+---
+
+## 🐳 Docker Configuration (Phase 7)
+
+### Root docker-compose.yml
+```yaml
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: aios-api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - TBIT_VAULT_ROOT=/data/spaces
+      - CORS_ORIGIN=http://localhost:3000
+      - SYMBOLIC_API_KEY=${SYMBOLIC_API_KEY:-changeme}
+      - LOG_LEVEL=info
+    volumes:
+      - tbit-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: aios-web
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  tbit-data:
+    driver: local
+
+networks:
+  default:
+    name: aios-network
+```
+
+### apps/api/Dockerfile
+```dockerfile
+# Build stage
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json ./
+COPY packages ./packages
+COPY apps/api ./apps/api
+
+RUN corepack enable pnpm
+RUN pnpm install --frozen-lockfile
+RUN pnpm run build --filter=@aios/api...
+
+# Production stage
+FROM node:22-alpine AS runner
+
+WORKDIR /app
+
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/apps/api/dist ./dist
+
+RUN corepack enable pnpm && \
+    pnpm install --frozen-lockfile --prod
+
+RUN mkdir -p /data && chown -R nodejs:nodejs /data
+
+USER nodejs
+
+EXPOSE 3001
+
+ENV NODE_ENV=production
+ENV PORT=3001
+
+CMD ["node", "dist/server.js"]
+```
+
+### apps/web/Dockerfile
+```dockerfile
+# Build stage
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json ./
+COPY packages ./packages
+COPY apps/web ./apps/web
+
+RUN corepack enable pnpm
+RUN pnpm install --frozen-lockfile
+RUN pnpm run build --filter=@aios/web...
+
+# Production stage - nginx to serve static files
+FROM nginx:alpine AS runner
+
+COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+### apps/web/nginx.conf
+```nginx
+# nginx configuration for SPA (React/Vite)
+server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
+
+    # Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    # Main SPA entry - fallback to index.html for client-side routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Proxy API calls to backend (when not using separate domain)
+    location /api/ {
+        proxy_pass http://api:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    # Health check endpoint
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+}
+```
+
+---
+
+## 🔐 Security Architecture
+
+| Layer | Implementation |
+|-------|----------------|
+| **Encryption** | AES-256-GCM via `EncryptionKeyManager` |
+| **Integrity** | HMAC-SHA256 (Vit/Anti-Vit) on every record |
+| **Auth** | Symbolic API Key middleware (`requireSymbolicApiKey`) |
+| **Key Rotation** | Key ring with versioned activation |
+| **Network** | Anti-entropy sync via Merkle DAG comparison |
+
+---
+
+## 📊 Engineering Principles (Enforced)
+
+1. **Modularity** — Packages are independently buildable (`tsc --project tsconfig.json`)
+2. **Package Isolation** — No cross-package imports except via declared `dependencies` in `package.json`
+3. **Dependency Inversion** — Consumers depend on interfaces in `@aios/shared`, not implementations
+4. **Provider Abstraction** — T-Bit storage, encryption, and paths are provider-pattern abstractions
+5. **Kernel Responsibilities** — Kernel owns lifecycle, not business logic
+6. **T-Bit Independence** — `@muf/tbit-core` has zero dependencies on `@aios/*` packages
+
+---
+
+## ⚠️ Technical Risks (Tracked)
+
+| Risk | Mitigation |
+|------|------------|
+| Circular dependency: `@muf/tbit-core` → `@aios/shared` → `@muf/tbit-core` | **Resolved**: `@muf/tbit-core` is source of truth; `@aios/shared` only re-exports |
+| Chunk size > 500kB (Vite warning) | Phase 8: Implement code-splitting with `React.lazy` + `Suspense` for 3D panels |
+| Legacy `server.ts` monolith in apps/api | **Resolved**: Decomposed to modular routes in Phase 7.4 |
+| Hardcoded `dev-hmac-secret` in apiCompat | Phase 8: Move to env var / secret manager |
+
+---
+
+## 📝 Changelog — Phase 7
+
+### 2026-07-30 — Phase 7 Complete
+- ✅ Fixed `@muf/tbit-core` build: removed circular dependency on `@aios/shared`
+- ✅ Moved T-Bit runtime paths to `@muf/tbit-core` as canonical source
+- ✅ `@aios/shared` now re-exports from `@muf/tbit-core`
+- ✅ Fixed API route type errors (tbit-memory, tbit-network, tbit-query, tbit-semantic, tbit-setup)
+- ✅ Implemented `exportNetworkRecord`, `importNetworkRecord`, `compareNetworkState` in `apiCompat.ts`
+- ✅ Full monorepo build passes (11/11 packages)
+- ✅ Dockerized apps/api (multi-stage, non-root user, port 3001)
+- ✅ Dockerized apps/web (nginx, SPA routing, API proxy to port 3001)
+- ✅ Created production `docker-compose.yml` with health checks, persistent volume, proper networking
+- ✅ Updated `.env.example` files for both services
+- ✅ Updated nginx.conf to proxy to `api:3001`
+- ✅ Removed legacy `apps/api/src/routes.ts` (monolithic routes with ChatController + TBitController)
+- ✅ Retained modular `apps/api/src/routes/index.ts` with 11 route modules
+- ✅ Validated: Full monorepo build passes (FULL TURBO, 11/11 packages)
+
+### 2026-07-30 — Phase 7 Build Fix (Stage 7.7)
+- ✅ Added `idb@^8.0.2` dependency to `apps/web/package.json` for IndexedDB vault persistence
+- ✅ Fixed TypeScript errors in `apps/web/src/hooks/useVaultPicker.ts`:
+  - Added declaration merging for `FileSystemDirectoryHandle` (permission methods + `name` property)
+  - Removed non-existent `UpgradeDB` import from `idb` (not exported in v8)
+  - Fixed implicit `any` type in `upgrade` callback
+- ✅ Full monorepo build passes (FULL TURBO, 11/11 packages) — verified after fixes
+- ✅ Architecture validation: all 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
+
+---
+
+## 📝 Changelog — Phase 8 (In Progress)
+
+### 2026-07-31 — Phase 8 Engineering Analysis Approved
+- ✅ Phase 8 Engineering Analysis documented with 11 implementation stages
+- ✅ Architecture validation: all 6 principles will be preserved during test implementation
+- ✅ Coverage thresholds defined: Core ≥90%, API ≥85%, UI ≥80%
+- ✅ T-Bit resilience test categories defined (encryption, WAL recovery, concurrent access, corruption recovery, large vaults)
+- ✅ Kernel integration test scope defined (lifecycle, workflows, provider routing, memory orchestration, event bus, sessions)
+- ✅ Test infrastructure setup (Stage 8.1) ready to begin
+
+### 2026-07-31 — Stage 8.1: Test Infrastructure Setup ✅ **COMPLETED**
+- **Objective**: Establish Vitest configuration for all packages with shared utilities
+- **Files Created**:
+  - Root `vitest.config.ts` (monorepo orchestration with path aliases)
+  - `packages/tbit-core/vitest.config.ts` (Core: ≥90% coverage)
+  - `packages/kernel/vitest.config.ts` (≥75% coverage)
+  - `packages/shared/vitest.config.ts` (≥75% coverage)
+  - `packages/agents/vitest.config.ts` (≥75% coverage)
+  - `packages/workflow/vitest.config.ts` (≥75% coverage)
+  - `packages/llm/vitest.config.ts` (≥75% coverage)
+  - `packages/database/vitest.config.ts` (≥75% coverage)
+  - `packages/ui/vitest.config.ts` (≥75% coverage)
+  - `apps/api/vitest.config.ts` (API: ≥85% coverage)
+  - `apps/web/vitest.config.ts` (UI: ≥80% coverage, jsdom + React Testing Library)
+  - `tests/setup.ts` (global test setup, custom matchers)
+  - `tests/setup-web.ts` (web-specific setup, jsdom polyfills)
+  - `tests/utils/test-vault.ts` (temporary vault fixture for T-Bit tests)
+  - `tests/utils/test-kernel.ts` (kernel test harness with mock services)
+  - `tests/utils/test-api.ts` (typed API test client for integration tests)
+- **Dependencies Added**:
+  - Root: `@vitest/coverage-v8`, `resize-observer-polyfill`, `undici`
+  - `@muf/tbit-core`: vitest, coverage-v8
+  - `@aios/kernel`: vitest, coverage-v8
+  - `@aios/shared`: vitest, coverage-v8 + `@muf/tbit-core` as dependency
+  - `@aios/agents`: vitest, coverage-v8
+  - `@aios/workflow`: vitest, coverage-v8
+  - `@aios/llm`: vitest, coverage-v8
+  - `@aios/database`: vitest, coverage-v8
+  - `@aios/ui`: vitest, coverage-v8, @testing-library/jest-dom, resize-observer-polyfill
+  - `@aios/api`: vitest, coverage-v8, undici
+  - `@aios/web`: vitest, coverage-v8, @testing-library/jest-dom, @testing-library/react, @testing-library/user-event, resize-observer-polyfill
+- **Turbo.json** updated with `test`, `test:watch`, `test:coverage` tasks
+- **Coverage Thresholds** (defined upfront):
+  - `@muf/tbit-core` (Core): **≥90%** lines, functions, statements; **≥85%** branches
+  - `@aios/api` (API): **≥85%** lines, functions, statements; **≥80%** branches
+  - `@aios/web` (UI): **≥80%** lines, functions, statements; **≥75%** branches
+  - Other packages: **≥75%** lines, functions, statements; **≥70%** branches
+- **Validation**: Full monorepo build passes (FULL TURBO, 11/11 packages)
+- **Test Infrastructure Verified**: `pnpm test --filter=@muf/tbit-core` runs Vitest successfully (no test files yet — expected)
+
+### 2026-07-31 — Stage 8.2: Unit Tests — @muf/tbit-core ✅ **COMPLETED**
+- **Objective**: Test T-Bit core engine storage operations, WAL, batch operations, encryption, and large data handling
+- **Files Created/Modified**:
+  - `packages/tbit-core/src/TBitStorageService.test.ts` — 15 comprehensive unit tests
+  - `tests/utils/test-vault.ts` — Updated to match actual `TBitStorageService` API (`inject`, `recoverData`, `collapse`, `listKeys`, `injectMany`, `getStats`)
+  - `packages/tbit-core/vitest.config.ts` — Added `TBIT_ENCRYPTION_SECRET` env for test encryption
+  - `packages/tbit-core/tsconfig.json` — Excluded `*.test.ts` from build compilation
+- **Test Categories Covered** (15 tests, all passing):
+  - **Basic CRUD Operations**: inject/recover, collapse (delete), listKeys (4 tests)
+  - **WAL (Write-Ahead Log) Operations**: WAL persistence, WAL recovery on new instance (2 tests)
+  - **Batch Operations**: injectMany, concurrent reads/writes (2 tests)
+  - **Encryption Integration**: Transparent encryption/decryption, different keys (2 tests)
+  - **Large Data Handling**: Payloads within 64KB limit, many records (100) (2 tests)
+  - **Error Handling**: Oversized data rejection, integrity corruption detection (2 tests)
+  - **Statistics and Monitoring**: Storage stats retrieval (1 test)
+  - **Resilience Tests**: Concurrent access patterns, encryption integrity validation
+- **Dependencies**: Uses `tests/utils/test-vault.ts` for isolated temporary vault per test
+- **Coverage Target**: Core ≥90% (enforced via vitest.config.ts thresholds)
+- **Validation**: 
+  - All 15 tests pass (`pnpm test --filter=@muf/tbit-core` ✅)
+  - Full monorepo build passes (FULL TURBO, 11/11 packages ✅)
+  - TypeScript compilation clean with no errors
+  - Architecture validation: All 6 principles preserved
+
+---
+
+## 📋 Phase 8 — Master Plan
+
+### Objective
+Implement comprehensive testing and deployment pipeline for AIOS:
+1. **Test Infrastructure** — Vitest config per package, shared test utilities ✅ **Stage 8.1 DONE**
+2. **Unit Tests** — Core engine, API routes, shared utilities, kernel services
+3. **Integration Tests** — API contracts, Kernel integration, T-Bit resilience
+4. **System Tests** — End-to-end UI → API → Kernel → T-Bit flows
+5. **E2E Tests** — Critical user journeys (onboarding, vault, panels)
+6. **CI/CD Pipeline** — GitHub Actions with security scanning, bundle analysis
+7. **Production Deploy** — Staging/prod environments, rollback procedures
+8. **Quality Gates** — Coverage thresholds, performance budgets
+
+### Stage 8.2 — Unit Tests: @muf/tbit-core 🔄 **NEXT**
+- **Objective**: Test T-Bit core engine against temporary vaults (no test DB)
+- **Test Categories**:
+  - **Storage & WAL**: `TBitStorageService`, `AllocationMap`, WAL recovery
+  - **Encryption**: `EncryptionKeyManager` (key gen, rotation, HMAC integrity)
+  - **Memory Core**: `memoryCore.ts` (remember, recall, context, graph, batch ops)
+  - **Indices**: `queryIndex`, `semanticIndex` (build, search, incremental sync)
+  - **Runtime Paths**: `tbitRuntimePaths` (space manifests, path resolution)
+  - **Assets**: `assetManager`, `markdownBridge`, `binaryAssetBridge`, `universalDocumentBridge`
+  - **Permissions**: `aiPermissions` (policy enforcement)
+  - **Health**: `containerHealth`, `healthReconciliation`
+  - **Temporal**: `temporalSemantics` (context, prompts, semantic memory)
+  - **Web Research**: `webResearch` (intent detection, extraction)
+  - **Code Graph**: `codeGraphExtractor` (analysis, summarization)
+  - **KV Store**: `kvStore` (CRUD, stats)
+  - **API Compat**: `apiCompat` (legacy API compatibility layer)
+- **Resilience Tests** (T-Bit specific):
+  - Encryption key rotation under load
+  - WAL recovery after crash simulation
+  - Concurrent read/write access patterns
+  - Corruption detection and recovery
+  - Large vault performance (>100k records)
+- **Validation**: All tests pass, Core coverage ≥90%
+
+### Stage 8.3 — Unit Tests: @aios/api
+- **Objective**: Test API route handlers, middleware, and services
+- **Test Categories**:
+  - **Middleware**: `requireSymbolicApiKey`, CORS, error handling
+  - **Routes**: All 13 route modules (memory, query, semantic, network, setup, assets, encryption, permissions, markdown, binary, universal, health, kv)
+  - **Services**: Route-level service logic
+  - **Integration**: Route → T-Bit core contract validation
+- **Validation**: All tests pass, API coverage ≥85%
+
+### Stage 8.4 — Unit Tests: @aios/shared, @aios/kernel, @aios/agents, @aios/workflow, @aios/llm, @aios/database, @aios/ui
+- **Objective**: Test shared utilities and supporting packages
+- **Test Categories**:
+  - `@aios/shared`: Re-export correctness, text encoding
+  - `@aios/kernel`: Lifecycle, workflows, provider routing, memory orchestration, event bus, sessions
+  - `@aios/agents`: Agent logic, tool integration
+  - `@aios/workflow`: Workflow engine, step execution
+  - `@aios/llm`: LLM provider abstraction
+  - `@aios/database`: Database abstractions
+  - `@aios/ui`: Shared UI components
+- **Validation**: All tests pass, other packages coverage ≥75%
+
+### Stage 8.5 — Integration Tests: API Contracts
+- **Objective**: Validate API contracts against running services
+- **Test Categories**:
+  - Health endpoint (no auth)
+  - Auth middleware (valid/invalid/expired keys)
+  - All 13 route modules: request/response schemas, error codes
+  - Anti-entropy: network export/import/compare round-trip
+  - Setup bootstrap: first-run → key gen → space manifest → ready
+- **Test Vaults**: Use temporary vaults via `tests/utils/test-vault.ts`
+- **Validation**: All contracts validated, no breaking changes
+
+### Stage 8.6 — Integration Tests: Kernel
+- **Objective**: Test Kernel integration (lifecycle, workflows, provider routing, memory orchestration, event bus, sessions)
+- **Test Categories**:
+  - Kernel boot/shutdown sequence
+  - Provider registration and resolution
+  - Workflow execution and state management
+  - Memory orchestration across providers
+  - Event bus publish/subscribe patterns
+  - Session lifecycle and context isolation
+- **Validation**: Kernel integration tests pass
+
+### Stage 8.7 — Frontend Tests: @aios/web
+- **Objective**: Test React components, hooks, and panel wiring
+- **Test Categories**:
+  - **Hooks**: `useVaultPicker`, `memoryCoreClient`, TanStack Query hooks
+  - **Panels**: All 16 panel components (rendering, API integration, state)
+  - **3D Panels**: `QuantumEnginePanel`, `QVaultPanel` (lazy loading, chunk splitting)
+  - **Onboarding**: Wizard flow, vault selection, first-run bootstrap
+  - **Routing**: React Router navigation, protected routes
+- **Tools**: React Testing Library, Vitest, @testing-library/user-event
+- **Validation**: All tests pass, UI coverage ≥80%
+
+### Stage 8.8 — System Tests (UI → API → Kernel → T-Bit)
+- **Objective**: Full stack integration tests distinguishing from API-only integration tests
+- **Test Categories**:
+  - **Memory Flow**: UI remember → API → Kernel → T-Bit storage → UI recall
+  - **Query Flow**: UI search → API → Kernel → Query Index → results
+  - **Vault Flow**: Onboarding → vault pick → bootstrap → space manifest → panels active
+  - **3D Visualization**: QuantumEngine/QVault data pipeline
+  - **Document Pipeline**: Upload → parse → index → search → reconstruct
+- **Distinction**: System tests exercise the complete stack; Integration tests stop at API boundary
+
+### Stage 8.9 — E2E Tests: Critical User Journeys
+- **Objective**: Playwright tests for production-critical flows
+- **Test Journeys**:
+  1. **First Run**: Fresh install → onboarding → vault creation → dashboard
+  2. **Memory Operations**: Create memory → graph visualization → context recall
+  3. **Vault Management**: Switch vaults → permissions → persistence
+  4. **Document Processing**: Upload → index → semantic search → QA
+  5. **3D Exploration**: QuantumEngine navigation → QVault interaction
+- **Tools**: Playwright, Docker Compose test environment
+- **Validation**: All journeys pass in CI
+
+### Stage 8.10 — CI/CD Pipeline
+- **Objective**: GitHub Actions workflow with quality gates
+- **Pipeline Stages**:
+  1. **Lint & Typecheck**: `pnpm lint`, `pnpm typecheck` (all packages)
+  2. **Unit Tests**: `pnpm test:unit` (parallel per package)
+  3. **Integration Tests**: `pnpm test:integration` (API + Kernel)
+  4. **System Tests**: `pnpm test:system` (full stack)
+  5. **Build**: `pnpm build` (FULL TURBO)
+  6. **Security Scan**: `npm audit`, `snyk`/`trivy` for Docker images
+  7. **Bundle Analysis**: Vite bundle analyzer, chunk size validation (<500kB)
+  8. **E2E Tests**: `pnpm test:e2e` (Playwright on staging)
+  9. **Deploy Staging**: Docker Compose deploy to staging environment
+  10. **Post-Deploy Health**: Automated health checks, smoke tests
+  11. **Deploy Production**: Manual approval → production deploy
+  12. **Rollback**: Automated rollback on health check failure
+- **Quality Gates**: Coverage thresholds enforced, bundle size limits, zero critical vulnerabilities
+
+### Stage 8.11 — Production Deployment Configuration
+- **Objective**: Staging/prod environment configs, deploy scripts, rollback procedures
+- **Deliverables**:
+  - `docker-compose.staging.yml`, `docker-compose.prod.yml`
+  - `.env.staging.example`, `.env.prod.example`
+  - `scripts/deploy.sh` (with rollback support)
+  - `scripts/health-check.sh` (comprehensive service validation)
+  - `docs/DEPLOYMENT.md` (runbook)
+  - Secret management strategy (GitHub Secrets, 1Password, or Vault)
+- **Validation**: Staging deploy successful, rollback tested
+
+---
+
+## ✅ Architecture Validation Checklist (Pre-Implementation)
+
+| Principle | Validated |
+|-----------|-----------|
+| Modularity preserved | ✅ |
+| Package isolation preserved | ✅ |
+| Dependency inversion preserved | ✅ |
+| Provider abstraction preserved | ✅ |
+| Kernel responsibilities preserved | ✅ |
+| T-Bit independence preserved | ✅ |
+
+---
+
+## 📚 References
+
+- `docs/AIOS_AppBible.md` — Product requirements & user flows
+- `Framework/FRAMEWORK_MANIFEST.md` — Engineering standards
+- `Framework/standards/` — Coding standards, naming conventions
+- `turbo.json` — Build pipeline configuration

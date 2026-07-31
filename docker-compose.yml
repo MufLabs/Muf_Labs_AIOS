@@ -1,0 +1,49 @@
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: aios-api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - TBIT_VAULT_ROOT=/data/spaces
+      - CORS_ORIGIN=http://localhost:3000
+      - SYMBOLIC_API_KEY=${SYMBOLIC_API_KEY:-changeme}
+      - LOG_LEVEL=info
+    volumes:
+      - tbit-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: aios-web
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  tbit-data:
+    driver: local
+
+networks:
+  default:
+    name: aios-network

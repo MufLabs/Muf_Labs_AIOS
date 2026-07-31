@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import * as api from '../api/client';
+import { tbitRegistrationClient } from '../api/tbit/tbitRegistrationClient';
 import type { Session, WorkflowInstance, EngineeringCommand, AgentStatus } from '../types/api';
 
 const USER_ID = 'user-001';
@@ -24,6 +25,16 @@ export function useSession() {
       const s = await api.createSession(USER_ID, projectPath);
       setSession(s);
       log(`Sesión creada: ${s.id.slice(0, 8)}...`);
+      
+      // Bootstrap T-Bit container on first run
+      if (!tbitRegistrationClient.hasExistingContainer()) {
+        log('Inicializando contenedor T-Bit...');
+        const container = await tbitRegistrationClient.bootstrap(USER_ID, `AIOS Space ${USER_ID}`);
+        log(`Contenedor T-Bit creado: ${container.containerId}`);
+      } else {
+        log(`Contenedor T-Bit existente: ${tbitRegistrationClient.getContainerId()}`);
+      }
+
       const agentList = await api.listAgents();
       setAgents(agentList);
       log(`${agentList.length} agente(s) disponible(s)`);

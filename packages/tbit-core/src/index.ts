@@ -15,9 +15,13 @@ export { AllocationMap, AllocationRange } from "./AllocationMap";
 // ─── Security & Encoding ─────────────────────────────────────────
 export {
   getActiveEncryptionKey,
+  getActiveEncryptionKeyAsync,
   getEncryptionKeyById,
   getEncryptionKeyRing,
   getEncryptionKeyStatus,
+  generateEncryptionKey,
+  activateStoredKey,
+  isEncryptionConfigured,
   EncryptionKeyMaterial,
 } from "./EncryptionKeyManager";
 export {
@@ -51,6 +55,18 @@ export {
   deleteMemoryRecordsBatch,
   rememberMemoryBatch,
 } from "./memoryCore";
+
+// ─── Memory Core API Compatibility Layer ─────────────────────────────
+export {
+  rememberMemoryCompat,
+  rememberMemoryBatchCompat,
+  recallMemoryCompat,
+  getMemoryContextCompat,
+  getMemoryLinksCompat,
+  getMemoryGraphCompat,
+  deleteMemoryRecordCompat,
+  deleteMemoryRecordsBatchCompat,
+} from "./memoryCoreCompat";
 
 // ─── Query & Semantic Index ──────────────────────────────────────
 export {
@@ -93,6 +109,14 @@ export {
   DeleteAssetResult,
 } from "./assetManager";
 
+// ─── Asset Manager API Compatibility Layer ─────────────────────────────
+export {
+  listAssetsCompat,
+  getAssetStatsCompat,
+  registerAssetCompat,
+  deleteAssetCompat,
+} from "./assetManagerCompat";
+
 // ─── Container Health ────────────────────────────────────────────
 export {
   getContainerHealthReport,
@@ -105,7 +129,8 @@ export {
 
 // ─── Runtime Paths ───────────────────────────────────────────────
 export {
-  TBitSpacePaths,
+  type TBitSpacePaths,
+  type TBitSpaceManifest,
   getTBitSpacePaths,
   getTBitSpacesRoot,
   normalizeTBitVaultRoot,
@@ -114,6 +139,8 @@ export {
   setActiveTBitSpacesRoot,
   resolveActiveTBitDataPath,
   getActiveTBitDataDir,
+  createSpaceManifest,
+  listSpaceManifests,
 } from "./tbitRuntimePaths";
 
 // ─── Markdown Bridge ─────────────────────────────────────────────
@@ -128,12 +155,32 @@ export {
   purgeOrphanMarkdownChunks,
 } from "./markdownBridge";
 
+// ─── Markdown Bridge API Compatibility Layer ─────────────────────────────
+export {
+  importMarkdownDocumentCompat,
+  parseMarkdownDocumentCompat,
+  listMarkdownDocumentsCompat,
+  deleteMarkdownDocumentCompat,
+  reconstructMarkdownDocumentCompat,
+  purgeOrphanMarkdownChunksCompat,
+} from "./markdownBridgeCompat";
+
 // ─── Binary Asset Bridge ─────────────────────────────────────────
 export {
   importBinaryAsset,
   reconstructBinaryAsset,
   deleteBinaryAsset,
+  BinaryAssetImportRequest,
+  BinaryAssetImportResult,
+  BinaryAssetReconstructResult,
 } from "./binaryAssetBridge";
+
+// ─── Binary Asset Bridge API Compatibility Layer ─────────────────────────────
+export {
+  importBinaryAssetCompat,
+  reconstructBinaryAssetCompat,
+  deleteBinaryAssetCompat,
+} from "./binaryAssetBridgeCompat";
 
 // ─── Universal Document Bridge ───────────────────────────────────
 export {
@@ -141,6 +188,12 @@ export {
   UniversalDocumentImportRequest,
   UniversalDocumentImportResult,
 } from "./universalDocumentBridge";
+
+// ─── Universal Document Bridge API Compatibility Layer ─────────────────────────────
+export {
+  importUniversalDocumentCompat,
+  answerDocumentQuestionCompat,
+} from "./universalDocumentBridgeCompat";
 
 // ─── Semantic Compression ────────────────────────────────────────
 export {
@@ -175,8 +228,37 @@ export {
   CodeGraphSummary,
 } from "./codeGraphExtractor";
 
+// ─── KV Store ──────────────────────────────────────────────────────
+export {
+  getKvValue,
+  setKvValue,
+  deleteKvValue,
+  listKvKeys,
+  getKvStats,
+  KvValueOptions,
+} from "./kvStore";
+
 // ─── Document Extractors ─────────────────────────────────────────
 export {
   extractOfficeDocument,
   ExtractedOfficeDocument,
 } from "./documentExtractors";
+
+// ─── API Compatibility Layer ────────────────────────────────────────
+export {
+  injectMemory,
+  injectManyMemories,
+  recoverData,
+  collapseMemory,
+  collapseManyMemories,
+  snapshotContainer,
+  rollbackContainer,
+  getContainerStats,
+  readAllPayloads,
+  exportBundle,
+  importBundle,
+  getNetworkState,
+  exportNetworkRecord,
+  importNetworkRecord,
+  compareNetworkState,
+} from "./apiCompat";

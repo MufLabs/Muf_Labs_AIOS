@@ -20,6 +20,25 @@
         },
         "clean": {
             "cache": false
+        },
+        "test": {
+            "dependsOn": [
+                "^build"
+            ],
+            "cache": false
+        },
+        "test:watch": {
+            "cache": false,
+            "persistent": true
+        },
+        "test:coverage": {
+            "dependsOn": [
+                "^build"
+            ],
+            "cache": false,
+            "outputs": [
+                "coverage/**"
+            ]
         }
     }
 }

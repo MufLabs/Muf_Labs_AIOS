@@ -5,7 +5,8 @@
     "rootDir": "src",
     "declarationMap": true,
     "sourceMap": true,
-    "composite": true
+    "composite": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": [
     "src/**/*.ts",
@@ -15,5 +16,6 @@
     "node_modules",
     "dist",
     "src/__tests__"
-  ]
+  ],
+  "references": []
 }

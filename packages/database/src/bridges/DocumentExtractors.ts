@@ -119,11 +119,12 @@ export async function extractOfficeDocument(request: {
   }
 
   if (isXlsx(request.filename, request.mimeType)) {
-    const { readXlsxFile } = await import("read-excel-file/node");
-    const rows = (await readXlsxFile(buffer)) as unknown[][];
+    const readXlsxFileModule = await import("read-excel-file/node");
+    const readXlsxFile = readXlsxFileModule.default;
+    const rows = await readXlsxFile(buffer) as unknown[][];
     const sections: string[] = ["# " + title];
 
-    const table = sheetRowsToMarkdown(rows);
+    const table = rows.length > 0 ? sheetRowsToMarkdown(rows) : "";
     if (table) {
       sections.push(table);
     }

@@ -24,6 +24,18 @@ export class TBitController {
     res.status(201).json(result);
   };
 
+  // ─── First-run setup (Phase 3) ─────────────────────────────
+
+  getSetupStatus = async (_req: Request, res: Response) => {
+    const result = await this.service.getSetupStatus();
+    res.json(result);
+  };
+
+  bootstrapSetup = async (req: Request, res: Response) => {
+    const result = await this.service.bootstrapSetup(req.body);
+    res.status(201).json(result);
+  };
+
   // ─── Memo operations ────────────────────────────────────
 
   storeMemo = async (req: Request, res: Response) => {
@@ -46,6 +58,11 @@ export class TBitController {
       qs(req.query.q),
       qn(req.query.limit),
     );
+    res.json(result);
+  };
+
+  getMemoryGraph = async (req: Request, res: Response) => {
+    const result = await this.service.getMemoryGraph(qs(req.query.userId) || "anonimo");
     res.json(result);
   };
 

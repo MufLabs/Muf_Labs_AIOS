@@ -1,0 +1,39 @@
+{
+  "name": "@aios/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@tanstack/react-query": "^5.101.2",
+    "idb": "^8.0.2",
+    "lucide-react": "^0.511.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.185.1",
+    "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/coverage-v8": "^1.6.1",
+    "resize-observer-polyfill": "^1.5.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vitest": "^1.6.1"
+  }
+}
