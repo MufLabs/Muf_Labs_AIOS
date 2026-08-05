@@ -7,6 +7,8 @@ import {
   generateEncryptionKey,
   normalizeTBitSpaceId,
   getTBitSpacePaths,
+  normalizeTBitVaultRoot,
+  setActiveTBitSpacesRoot,
 } from "@muf/tbit-core";
 import { TBitStorageService, TBitStorageConfig } from "@muf/tbit-core";
 import { createHash } from "crypto";
@@ -43,14 +45,22 @@ router.get("/setup/status", async (_req: Request, res: Response) => {
 /**
  * POST /api/v1/tbit/setup/bootstrap
  * Bootstrap first-run setup
+ * Optional vaultRoot parameter allows vault-aware initialization
  */
 router.post("/setup/bootstrap", async (req: Request, res: Response) => {
   try {
-    const { userId, label, generateKey } = req.body ?? {};
+    const { userId, label, generateKey, vaultRoot } = req.body ?? {};
 
     if (!userId?.trim()) {
       res.status(400).json({ ok: false, error: "bootstrapSetup requiere userId." });
       return;
+    }
+
+    // If vaultRoot provided, set it as the active spaces root
+    if (vaultRoot?.trim()) {
+      const normalizedVaultRoot = normalizeTBitVaultRoot(vaultRoot.trim());
+      const spacesRoot = path.join(normalizedVaultRoot, "spaces");
+      setActiveTBitSpacesRoot(spacesRoot);
     }
 
     const spaceId = `user:${normalizeTBitSpaceId(userId.trim())}`;
@@ -100,14 +110,21 @@ router.post("/setup/bootstrap", async (req: Request, res: Response) => {
     const storage = new TBitStorageService(config);
     await storage.recover();
 
-    res.status(201).json({
+    const response: Record<string, unknown> = {
       containerId: manifest.spaceId,
       spaceId: manifest.spaceId,
       label: manifest.label,
       manifest,
       encryptionKeyId,
       ready: true,
-    });
+    };
+
+    // Include vaultRoot in response if it was provided
+    if (vaultRoot?.trim()) {
+      response.vaultRoot = normalizeTBitVaultRoot(vaultRoot.trim());
+    }
+
+    res.status(201).json(response);
   } catch (error) {
     res.status(500).json({
       ok: false,

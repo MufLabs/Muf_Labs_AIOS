@@ -12,6 +12,7 @@ import tbitMarkdownRoutes from "./tbit-markdown.routes";
 import tbitNetworkRoutes from "./tbit-network.routes";
 import tbitSetupRoutes from "./tbit-setup.routes";
 import tbitKvRoutes from "./tbit-kv.routes";
+import tbitVaultRoutes from "./tbit-vault.routes";
 
 /**
  * Register all T-Bit API routes
@@ -58,6 +59,9 @@ export function registerRoutes(app: ReturnType<typeof Router>): void {
 
   // Key-Value Store (get, set, delete, list, stats)
   apiRouter.use("/", tbitKvRoutes);
+
+  // Vault Management (init, verify)
+  apiRouter.use("/", tbitVaultRoutes);
 
   // Mount all T-Bit routes under /api/v1/tbit
   app.use("/api/v1/tbit", apiRouter);

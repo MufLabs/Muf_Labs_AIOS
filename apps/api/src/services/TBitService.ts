@@ -1,4 +1,6 @@
 import { readFile } from "fs/promises";
+import path from "path";
+import { createHash } from "crypto";
 import {
   TBitStorageService,
   TBitStorageConfig,
@@ -37,6 +39,9 @@ import {
   listSpaceManifests,
   TBitSpaceManifest,
   normalizeTBitSpaceId,
+  normalizeTBitVaultRoot,
+  setActiveTBitSpacesRoot,
+  getTBitSpacePaths,
 } from "@muf/tbit-core";
 
 export type ContainerCreateRequest = {
@@ -110,6 +115,23 @@ export type SetupBootstrapResponse = {
   manifest: TBitSpaceManifest;
   encryptionKeyId: string;
   ready: boolean;
+};
+
+export type VaultInitRequest = {
+  vaultRoot: string;
+  userId: string;
+  label?: string;
+  generateKey?: boolean;
+};
+
+export type VaultInitResponse = {
+  containerId: string;
+  spaceId: string;
+  label: string;
+  vaultRoot: string;
+  encryptionKeyId: string;
+  kernelReady: boolean;
+  subsystems: Record<string, boolean>;
 };
 
 export class TBitService {
@@ -349,5 +371,90 @@ export class TBitService {
       contentBase64: fileBuffer.toString("base64"),
     };
     return importUniversalDocument(storage, request);
+  }
+
+  /**
+   * Vault-aware bootstrap (Phase 8).
+   * Initializes the full T-Bit stack against a user-selected vault root.
+   * 1. Sets the vault root as the active spaces root
+   * 2. Generates/uses encryption key
+   * 3. Creates space manifest + directory scaffold at vaultRoot/spaces
+   * 4. Recovers storage to validate container is usable
+   */
+  async bootstrapWithVault(req: VaultInitRequest): Promise<VaultInitResponse> {
+    if (!req.vaultRoot?.trim()) {
+      throw new Error("vaultRoot is required.");
+    }
+    if (!req.userId?.trim()) {
+      throw new Error("userId is required.");
+    }
+
+    // 0) Normalize and set the vault root as the active spaces root
+    const normalizedVaultRoot = normalizeTBitVaultRoot(req.vaultRoot.trim());
+    const spacesRoot = path.join(normalizedVaultRoot, "spaces");
+    setActiveTBitSpacesRoot(spacesRoot);
+
+    const spaceId = `user:${normalizeTBitSpaceId(req.userId.trim())}`;
+    const label = req.label?.trim() ?? `AIOS Space ${req.userId.trim()}`;
+
+    // 1) Encryption key — generate if requested and none configured yet
+    let encryptionKeyId: string;
+    const configured = await isEncryptionConfigured();
+
+    if (req.generateKey && !configured) {
+      const key = await generateEncryptionKey(`key-${normalizeTBitSpaceId(req.userId.trim())}`);
+      encryptionKeyId = key.id;
+    } else {
+      const key = configured
+        ? await getActiveEncryptionKeyAsync()
+        : await generateEncryptionKey(`key-${normalizeTBitSpaceId(req.userId.trim())}`);
+      encryptionKeyId = key.id;
+    }
+
+    // 2) Persist space manifest + directory scaffold at vaultRoot/spaces/<spaceId>
+    const manifest = await createSpaceManifest({ spaceId, label, userId: req.userId.trim() });
+
+    // 3) Recover storage to validate container is usable with the active key
+    const paths = getTBitSpacePaths(spaceId);
+    const activeKey = await getActiveEncryptionKeyAsync();
+    const hmacKeyId = activeKey?.id ?? "hmac-v1";
+    const hmacSecret = activeKey?.secret
+      ? createHash("sha256").update(activeKey.secret).digest("hex")
+      : createHash("sha256").update("dev-hmac-secret").digest("hex");
+
+    const config: TBitStorageConfig = {
+      name: "default",
+      containerPath: paths.containerPath,
+      metadataPath: paths.metadataPath,
+      walPath: paths.walPath,
+      snapshotsDir: paths.snapshotsDir,
+      replicasDir: paths.replicasDir,
+      exportsDir: path.join(paths.rootDir, "exports"),
+      lockPath: paths.lockPath,
+      hmacSecrets: new Map([[hmacKeyId, hmacSecret]]),
+      hmacKeyId,
+      maxDatoBytes: 64 * 1024,
+      maxRecords: 500,
+      containerSizeMB: 10,
+    };
+
+    const storage = new TBitStorageService(config);
+    await storage.recover();
+
+    return {
+      containerId: manifest.spaceId,
+      spaceId: manifest.spaceId,
+      label: manifest.label,
+      vaultRoot: normalizedVaultRoot,
+      encryptionKeyId,
+      kernelReady: true,
+      subsystems: {
+        memory: true,
+        workflow: true,
+        provider: true,
+        agent: true,
+        qvault: true,
+      },
+    };
   }
 }

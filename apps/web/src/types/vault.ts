@@ -34,6 +34,8 @@ export interface VaultInitRequest {
   userId: string;
   /** Optional label for the primary space */
   label?: string;
+  /** Whether to generate a new encryption key */
+  generateKey?: boolean;
 }
 
 /**
@@ -98,6 +100,20 @@ export interface VaultVerifyResponse {
   spaces: Array<{ spaceId: string; label: string; userId: string }>;
   /** Error details if not accessible */
   error?: string;
+}
+
+/**
+ * Vault configuration response from API
+ */
+export interface VaultConfigResponse {
+  /** Vault root path */
+  vaultRoot: string;
+  /** Spaces root path */
+  spacesRoot: string;
+  /** Active encryption key ID */
+  encryptionKeyId: string;
+  /** List of spaces in vault */
+  spaces: Array<{ spaceId: string; label: string; userId: string }>;
 }
 
 /**
