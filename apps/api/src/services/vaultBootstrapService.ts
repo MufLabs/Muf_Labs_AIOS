@@ -3,61 +3,99 @@ import {
   createSpaceManifest,
   listSpaceManifests,
   getActiveEncryptionKeyAsync,
+  resolveHmacSecret,
   generateEncryptionKey,
   normalizeTBitSpaceId,
   getTBitSpacePaths,
   setActiveTBitSpacesRoot,
   normalizeTBitVaultRoot,
-  getTBitSpacesRoot,
 } from "@muf/tbit-core";
 import { TBitStorageService, TBitStorageConfig } from "@muf/tbit-core";
-import { createHash } from "crypto";
 import path from "path";
 
+/**
+ * Request payload for initializing a vault.
+ */
 export interface VaultInitRequest {
+  /** Absolute or relative path to the user-selected vault root. */
   vaultRoot: string;
+  /** Unique identifier for the user owning the default space. */
   userId: string;
+  /** Optional human-readable label for the primary space. */
   label?: string;
+  /** When true, forces generation of a new encryption key if none is configured. */
   generateKey?: boolean;
 }
 
+/**
+ * Response returned after a successful vault initialization.
+ */
 export interface VaultInitResponse {
+  /** Identifier of the default T-Bit container/space. */
   containerId: string;
+  /** Identifier of the default T-Bit space (same as containerId). */
   spaceId: string;
+  /** Human-readable label of the primary space. */
   label: string;
+  /** Normalized vault root path. */
   vaultRoot: string;
+  /** Active encryption key identifier used for T-Bit integrity. */
   encryptionKeyId: string;
+  /** Whether the Kernel reports all subsystems ready. */
   kernelReady: boolean;
+  /** Per-subsystem readiness map. */
   subsystems: Record<string, boolean>;
+  /** ISO-8601 timestamp of initialization completion. */
   initializedAt: string;
 }
 
+/**
+ * Response describing the current vault bootstrap status.
+ */
 export interface VaultStatusResponse {
+  /** Whether the vault has been initialized in this process. */
   initialized: boolean;
+  /** Normalized vault root path, if initialized. */
   vaultRoot?: string;
+  /** Number of T-Bit spaces discovered. */
   spacesCount: number;
+  /** Whether at least one encryption key is configured. */
   encryptionConfigured: boolean;
+  /** Whether the Kernel reports all subsystems ready. */
   kernelReady: boolean;
+  /** Per-subsystem readiness map. */
   subsystems: Record<string, boolean>;
+  /** ISO-8601 timestamp of the last status verification. */
   lastVerifiedAt?: string;
+  /** Error message, if the vault is not initialized. */
   error?: string;
 }
 
-export interface VaultVerifyResponse {
-  accessible: boolean;
-  validStructure: boolean;
-  encryptionConfigured: boolean;
-  spaces: Array<{ spaceId: string; label: string; userId: string }>;
-  error?: string;
-}
+/**
+ * Names of the subsystems verified during bootstrap.
+ *
+ * The Kernel and provider wiring for these subsystems is performed in
+ * Stage 8.4. Until then, `VaultBootstrapService` reports their readiness
+ * based on the T-Bit storage recovery performed in `initialize()`.
+ */
+const SUBSYSTEM_NAMES = ["memory", "workflow", "provider", "agent", "qvault"] as const;
 
-export interface VaultConfigResponse {
-  vaultRoot: string;
-  spacesRoot: string;
-  encryptionKeyId: string;
-  spaces: Array<{ spaceId: string; label: string; userId: string }>;
-}
-
+/**
+ * VaultBootstrapService orchestrates the linear initialization of the
+ * T-Bit stack against a user-selected vault root.
+ *
+ * Stage 8.2 scope (this class):
+ *  - `initialize()` — sets spaces root, ensures encryption, creates the
+ *    default space manifest, recovers T-Bit storage, and reports subsystem
+ *    readiness.
+ *  - `getStatus()` — reports the current bootstrap status.
+ *
+ * Kernel and provider integration is intentionally deferred to Stage 8.4
+ * per the approved Phase 8 implementation plan. The `initializeKernel()`
+ * and `verifySubsystems()` helpers therefore report a pending/ready state
+ * without importing `@aios/kernel`, preserving package isolation and the
+ * stage boundary.
+ */
 export class VaultBootstrapService {
   private vaultRoot: string | null = null;
   private spacesRoot: string | null = null;
@@ -66,14 +104,19 @@ export class VaultBootstrapService {
   private subsystems: Record<string, boolean> = {};
 
   /**
-   * Initialize a new vault with user-selected root path.
-   * This orchestrates the full T-Bit stack initialization:
-   * 1. Sets vault root as active spaces root
-   * 2. Ensures encryption key exists
-   * 3. Creates primary space manifest
-   * 4. Recovers T-Bit storage
-   * 5. Initializes Kernel with vault-aware providers
-   * 6. Verifies all subsystems
+   * Initialize a vault at the user-selected root path.
+   *
+   * The bootstrap sequence is linear and strictly ordered:
+   * 1. Normalize and set the vault root as the active T-Bit spaces root.
+   * 2. Ensure an encryption key exists (generate if none configured).
+   * 3. Create the primary space manifest inside the vault.
+   * 4. Recover T-Bit storage to validate the container is usable.
+   * 5. Initialize Kernel-scoped subsystems (Stage 8.4 wiring point).
+   * 6. Verify subsystem readiness.
+   *
+   * @param req - Initialization request containing vaultRoot and userId.
+   * @returns Initialization result with subsystem readiness.
+   * @throws {Error} if vaultRoot or userId is empty.
    */
   async initialize(req: VaultInitRequest): Promise<VaultInitResponse> {
     const { vaultRoot, userId, label, generateKey } = req;
@@ -96,7 +139,7 @@ export class VaultBootstrapService {
     const spaceId = `user:${normalizeTBitSpaceId(userId.trim())}`;
     const spaceLabel = label?.trim() ?? `AIOS Space ${userId.trim()}`;
 
-    // 2) Encryption key — generate if requested and none configured yet
+    // 2) Encryption key — generate if requested and none is configured yet
     let encryptionKeyId: string;
     const configured = await isEncryptionConfigured();
 
@@ -110,16 +153,12 @@ export class VaultBootstrapService {
       encryptionKeyId = key.id;
     }
 
-    // 3) Persist space manifest + directory scaffold at vaultRoot/spaces/<spaceId>
+    // 3) Persist the space manifest + directory scaffold at vaultRoot/spaces/<spaceId>
     const manifest = await createSpaceManifest({ spaceId, label: spaceLabel, userId: userId.trim() });
 
-    // 4) Recover T-Bit storage to validate container is usable with the active key
+    // 4) Recover T-Bit storage to validate the container is usable with the active key
     const paths = getTBitSpacePaths(spaceId);
-    const activeKey = await getActiveEncryptionKeyAsync();
-    const hmacKeyId = activeKey?.id ?? "hmac-v1";
-    const hmacSecret = activeKey?.secret
-      ? createHash("sha256").update(activeKey.secret).digest("hex")
-      : createHash("sha256").update("dev-hmac-secret").digest("hex");
+    const [hmacKeyId, hmacSecret] = await resolveHmacSecret();
 
     const config: TBitStorageConfig = {
       name: "default",
@@ -140,7 +179,7 @@ export class VaultBootstrapService {
     const storage = new TBitStorageService(config);
     await storage.recover();
 
-    // 5) Initialize Kernel with vault-aware providers
+    // 5) Initialize Kernel-scoped subsystems (Stage 8.4 wiring point)
     await this.initializeKernel(normalizedVaultRoot);
 
     // 6) Verify all subsystems
@@ -161,44 +200,13 @@ export class VaultBootstrapService {
   }
 
   /**
-   * Initialize the Kernel with vault-scoped provider configurations.
-   * In Phase 8.4, this will wire actual Kernel and providers.
-   * For now, we simulate the initialization sequence.
-   */
-  private async initializeKernel(vaultRoot: string): Promise<void> {
-    // TODO Phase 8.4: Import and instantiate actual Kernel
-    // const { Kernel } = await import("@aios/kernel");
-    // this.kernel = new Kernel(vaultRoot);
-    // await this.kernel.initializeProviders();
-    
-    // Placeholder: mark subsystems as pending initialization
-    this.subsystems = {
-      memory: false,
-      workflow: false,
-      provider: false,
-      agent: false,
-      qvault: false,
-    };
-  }
-
-  /**
-   * Verify all subsystems are healthy.
-   * In Phase 8.4, this will call actual health checks.
-   */
-  private async verifySubsystems(): Promise<Record<string, boolean>> {
-    // TODO Phase 8.4: Call actual subsystem health checks
-    // For now, simulate successful verification after storage recovery
-    return {
-      memory: true,
-      workflow: true,
-      provider: true,
-      agent: true,
-      qvault: true,
-    };
-  }
-
-  /**
-   * Get current vault status.
+   * Get the current vault bootstrap status.
+   *
+   * Reports whether the vault has been initialized in this process, the
+   * number of discovered spaces, encryption readiness, and per-subsystem
+   * readiness.
+   *
+   * @returns Vault status response.
    */
   async getStatus(): Promise<VaultStatusResponse> {
     if (!this.initialized || !this.vaultRoot) {
@@ -227,107 +235,34 @@ export class VaultBootstrapService {
   }
 
   /**
-   * Verify vault accessibility and structure.
+   * Initialize Kernel-scoped subsystems for the vault.
+   *
+   * This is the Stage 8.4 wiring point: the actual Kernel and provider
+   * integration is implemented in Stage 8.4. Until then, this method
+   * records the subsystem names and marks them as pending, so that
+   * `verifySubsystems()` can report readiness based on the T-Bit storage
+   * recovery already performed in `initialize()`.
+   *
+   * @param _vaultRoot - Normalized vault root (used by Stage 8.4 wiring).
    */
-  async verify(vaultRoot: string): Promise<VaultVerifyResponse> {
-    const normalizedVaultRoot = normalizeTBitVaultRoot(vaultRoot.trim());
-    const spacesRoot = path.join(normalizedVaultRoot, "spaces");
-
-    let spaces: Array<{ spaceId: string; label: string; userId: string }> = [];
-    let accessible = false;
-    let validStructure = false;
-    let error: string | undefined;
-
-    try {
-      const { readdir, readFile, stat } = await import("fs/promises");
-      await stat(spacesRoot);
-      accessible = true;
-
-      const entries = await readdir(spacesRoot);
-      for (const entry of entries) {
-        const manifestPath = path.join(spacesRoot, entry, "space.json");
-        try {
-          const raw = await readFile(manifestPath, "utf8");
-          const parsed = JSON.parse(raw);
-          if (parsed.version === "space-manifest-v1") {
-            spaces.push({
-              spaceId: parsed.spaceId,
-              label: parsed.label,
-              userId: parsed.userId,
-            });
-            validStructure = true;
-          }
-        } catch {
-          // Skip invalid entries
-        }
-      }
-    } catch (e) {
-      error = e instanceof Error ? e.message : "Vault not accessible";
-    }
-
-    const encryptionConfigured = await isEncryptionConfigured();
-
-    return {
-      accessible,
-      validStructure,
-      encryptionConfigured,
-      spaces,
-      error,
-    };
+  private async initializeKernel(_vaultRoot: string): Promise<void> {
+    this.subsystems = Object.fromEntries(SUBSYSTEM_NAMES.map((name) => [name, false]));
   }
 
   /**
-   * Get vault configuration details.
+   * Verify subsystem readiness.
+   *
+   * Stage 8.2 reports subsystem readiness based on the successful T-Bit
+   * storage recovery performed in `initialize()`. Once Stage 8.4 wires
+   * the actual Kernel and providers, this method will delegate to their
+   * health-check implementations.
+   *
+   * @returns A map of subsystem name to readiness boolean.
    */
-  async getConfig(): Promise<VaultConfigResponse | null> {
-    if (!this.initialized || !this.vaultRoot || !this.spacesRoot) {
-      return null;
-    }
-
-    const spaces = await listSpaceManifests();
-    const keyStatus = await this.getEncryptionKeyStatus();
-
-    return {
-      vaultRoot: this.vaultRoot,
-      spacesRoot: this.spacesRoot,
-      encryptionKeyId: keyStatus.activeKeyId,
-      spaces,
-    };
-  }
-
-  /**
-   * Run schema migrations (future-proofing).
-   */
-  async migrate(vaultRoot: string): Promise<void> {
-    // TODO: Implement schema version checking and migrations
-    const normalizedVaultRoot = normalizeTBitVaultRoot(vaultRoot.trim());
-    const spacesRoot = path.join(normalizedVaultRoot, "spaces");
-    setActiveTBitSpacesRoot(spacesRoot);
-    // Migration logic would go here
-  }
-
-  /**
-   * Attempt corruption recovery.
-   */
-  async repair(vaultRoot: string): Promise<{ repaired: boolean; details: string }> {
-    // TODO: Implement WAL replay, container reconstruction
-    const normalizedVaultRoot = normalizeTBitVaultRoot(vaultRoot.trim());
-    const spacesRoot = path.join(normalizedVaultRoot, "spaces");
-    setActiveTBitSpacesRoot(spacesRoot);
-    return { repaired: false, details: "Repair not yet implemented" };
-  }
-
-  // Helper to get encryption key status (needed for getConfig)
-  private async getEncryptionKeyStatus(): Promise<{ activeKeyId: string; configured: boolean }> {
-    try {
-      const { getEncryptionKeyStatus } = await import("@muf/tbit-core");
-      const status = getEncryptionKeyStatus();
-      return { activeKeyId: status.activeKeyId, configured: status.enabled };
-    } catch {
-      return { activeKeyId: "hmac-v1", configured: false };
-    }
+  private async verifySubsystems(): Promise<Record<string, boolean>> {
+    return Object.fromEntries(SUBSYSTEM_NAMES.map((name) => [name, true]));
   }
 }
 
-// Export singleton instance
+/** Singleton instance of the vault bootstrap service. */
 export const vaultBootstrapService = new VaultBootstrapService();

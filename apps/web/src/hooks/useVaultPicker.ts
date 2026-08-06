@@ -67,8 +67,6 @@ export interface UseVaultPickerResult {
   clearVaultConfig: () => Promise<void>;
   /** Restore permission for saved FileSystemDirectoryHandle */
   restorePermission: (config: VaultConfig) => Promise<boolean>;
-  /** Fallback: manual path entry for unsupported browsers */
-  useManualConfig: (manualConfig: VaultManualConfig) => Promise<VaultConfig>;
 }
 
 /**
@@ -208,26 +206,6 @@ export function useVaultPicker(): UseVaultPickerResult {
     }
   }
 
-  /**
-   * Fallback for browsers without File System Access API
-   * Creates a VaultConfig from manually entered path
-   */
-  async function useManualConfig(manualConfig: VaultManualConfig): Promise<VaultConfig> {
-    const config: VaultConfig = {
-      id: crypto.randomUUID(),
-      label: manualConfig.label ?? `AIOS Vault ${new Date().toLocaleDateString()}`,
-      // Create a mock handle - actual API calls will use the path directly
-      rootHandle: null as unknown as FileSystemDirectoryHandle,
-      rootPath: manualConfig.vaultRoot,
-      spacesRoot: `${manualConfig.vaultRoot}/spaces`,
-      createdAt: new Date().toISOString(),
-      schemaVersion: 1,
-    };
-
-    await saveVaultConfig(config);
-    return config;
-  }
-
   // Helper to get a displayable path from a handle
   function getDisplayPath(handle: FileSystemDirectoryHandle): string {
     // FileSystemDirectoryHandle doesn't expose full path for security
@@ -236,13 +214,12 @@ export function useVaultPicker(): UseVaultPickerResult {
     return handle.name ? `/${handle.name}` : "Selected Vault";
   }
 
-return {
+  return {
     isSupported,
     pickVaultFolder,
     loadVaultConfig,
     saveVaultConfig,
     clearVaultConfig,
     restorePermission,
-    useManualConfig,
   };
 }

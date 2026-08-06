@@ -60,7 +60,7 @@ export function registerRoutes(app: ReturnType<typeof Router>): void {
   // Key-Value Store (get, set, delete, list, stats)
   apiRouter.use("/", tbitKvRoutes);
 
-  // Vault Management (init, verify)
+  // Vault Management (init, status)
   apiRouter.use("/", tbitVaultRoutes);
 
   // Mount all T-Bit routes under /api/v1/tbit

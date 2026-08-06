@@ -19,8 +19,8 @@
 
 | Category | Assessment |
 |----------|------------|
-| **Implemented & Functional** | Core T-Bit engine (`@muf/tbit-core`), Kernel orchestration (`@aios/kernel`), LLM Gateway (`@aios/llm`), Workflow Engine (`@aios/workflow`), Agents framework skeleton (`@aios/agents`), Database abstraction (`@aios/database`), 11 modular API route groups, React 19 web app with 16 panels, Docker/Compose production infra (Phase 7), test infrastructure (Vitest, React Testing Library, MSW, Playwright config). |
-| **Planned / In-Progress** | Phase 8 redefined as **T-Bit Vault Setup** (client-first folder picker, Vault Bootstrap Service, startup loader) — engineering analysis complete, awaiting implementation approval per `TASK_PROGRESS.md` and `PHASE8_ENGINEERING_ANALYSIS.md`. |
+| **Implemented & Functional** | Core T-Bit engine (`@muf/tbit-core`), Kernel orchestration (`@aios/kernel`), LLM Gateway (`@aios/llm`), Workflow Engine (`@aios/workflow`), Agents framework skeleton (`@aios/agents`), Database abstraction (`@aios/database`), 11 modular API route groups, React 19 web app with 16 panels, Docker/Compose production infra (Phase 7), test infrastructure (Vitest, React Testing Library, MSW, Playwright config), **Phase 8 Stage 8.1: Client-Side Vault Selection UI (File System Access API + IndexedDB, no fake fallback)**. |
+| **Planned / In-Progress** | Phase 8 Stage 8.2: **Vault Bootstrap Service** (backend orchestrator), Stage 8.3: Application Startup & Vault Loader, Stage 8.4: Kernel & Provider Vault Integration, Stages 8.6–8.7: Testing & Documentation. Stage 8.1 COMPLETED. |
 | **Future / Reserved** | `@aios/sdk` (empty), `@aios/desktop` (empty Tauri scaffold), `@aios/ui` (design system only, no app integration), packages described in `AIOS_MVP_ARCHITECTURE.md` but not created (`memory`, `semantic`, `query`, `guardian`, `assets`, `network`). |
 | **Known Blockers** | See §9 — limited to items that halt development or a functional release. |
 

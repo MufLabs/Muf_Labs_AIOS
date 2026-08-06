@@ -24,6 +24,7 @@ export {
   isEncryptionConfigured,
   EncryptionKeyMaterial,
 } from "./EncryptionKeyManager";
+export { resolveHmacSecret } from "./hmacSecret";
 export {
   normalizeTBitKey,
   normalizeUnicodeText,

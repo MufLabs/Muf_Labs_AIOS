@@ -62,11 +62,6 @@ export const tbitRegistrationClient = {
 
     const result = (await response.json()) as SetupBootstrapResult;
 
-    // Persist the container ID for subsequent API calls
-    localStorage.setItem("tbit:activeContainerId", result.containerId);
-    localStorage.setItem("tbit:activeSpaceId", result.spaceId);
-    localStorage.setItem("tbit:userId", userId);
-
     return { containerId: result.containerId, spaceId: result.spaceId, label: result.label };
   },
 
@@ -108,12 +103,6 @@ export const tbitRegistrationClient = {
       subsystems: Record<string, boolean>;
     };
 
-    // Persist the container ID for subsequent API calls
-    localStorage.setItem("tbit:activeContainerId", result.containerId);
-    localStorage.setItem("tbit:activeSpaceId", result.spaceId);
-    localStorage.setItem("tbit:userId", userId);
-    localStorage.setItem("tbit:vaultRoot", result.vaultRoot);
-
     return { containerId: result.containerId, spaceId: result.spaceId, label: result.label };
   },
 
@@ -141,33 +130,5 @@ export const tbitRegistrationClient = {
     }
 
     return (await response.json()) as EncryptionKeyInfo;
-  },
-
-  /**
-   * Check if a container has already been bootstrapped for this user.
-   */
-  hasExistingContainer(): boolean {
-    return !!localStorage.getItem("tbit:activeContainerId");
-  },
-
-  /**
-   * Get the current container ID (or null if not bootstrapped).
-   */
-  getContainerId(): string | null {
-    return localStorage.getItem("tbit:activeContainerId");
-  },
-
-  /**
-   * Get the user id used during bootstrap (or null).
-   */
-  getUserId(): string | null {
-    return localStorage.getItem("tbit:userId");
-  },
-
-  /**
-   * Get the vault root path (or null if not set).
-   */
-  getVaultRoot(): string | null {
-    return localStorage.getItem("tbit:vaultRoot");
   },
 };

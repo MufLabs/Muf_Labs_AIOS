@@ -4,7 +4,7 @@
 
 import { TBitStorageService, TBitStorageConfig } from "./TBitStorageService";
 import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths";
-import { getActiveEncryptionKeyAsync } from "./EncryptionKeyManager";
+import { resolveHmacSecret } from "./hmacSecret";
 import { createHash } from "crypto";
 import path from "path";
 
@@ -15,11 +15,7 @@ async function createDefaultStorage(): Promise<TBitStorageService> {
   const spaceId = normalizeTBitSpaceId("default");
   const paths = getTBitSpacePaths(spaceId);
 
-  const activeKey = await getActiveEncryptionKeyAsync();
-  const hmacKeyId = activeKey?.id ?? "hmac-v1";
-  const hmacSecret = activeKey?.secret
-    ? createHash("sha256").update(activeKey.secret).digest("hex")
-    : createHash("sha256").update("dev-hmac-secret").digest("hex");
+  const [hmacKeyId, hmacSecret] = await resolveHmacSecret();
 
   const config: TBitStorageConfig = {
     name: "default",

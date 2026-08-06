@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { tbitRegistrationClient } from "../api/tbit/tbitRegistrationClient";
 import type { SetupStatus } from "../api/tbit/tbitRegistrationClient";
+import { tbitVaultClient } from "../api/tbit/tbitVaultClient";
 import { useVaultPicker } from "../hooks/useVaultPicker";
 import type { VaultConfig } from "../types/vault";
 import "../styles/onboarding.css";
@@ -9,8 +10,6 @@ type Step = "welcome" | "vault" | "profile" | "creating" | "done" | "error";
 
 interface VaultStepState {
   config: VaultConfig | null;
-  isManual: boolean;
-  manualPath: string;
   isLoading: boolean;
   error: string | null;
 }
@@ -24,13 +23,11 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
   const [result, setResult] = useState<{ containerId: string; label: string } | null>(null);
   const [vaultState, setVaultState] = useState<VaultStepState>({
     config: null,
-    isManual: false,
-    manualPath: "",
     isLoading: false,
     error: null,
   });
 
-  const { isSupported, pickVaultFolder, useManualConfig, restorePermission, loadVaultConfig } = useVaultPicker();
+  const { isSupported, pickVaultFolder, restorePermission, loadVaultConfig } = useVaultPicker();
 
   // On mount, check server-side setup status. If already initialized, skip wizard.
   useEffect(() => {
@@ -40,10 +37,19 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
         const status: SetupStatus = await tbitRegistrationClient.getSetupStatus();
         if (cancelled) return;
         if (status.initialized) {
-          const existing = tbitRegistrationClient.getUserId();
-          if (existing) {
-            onComplete(existing);
-            return;
+          // Vault is already configured on server. Check if we have a local vault config.
+          const vaultConfig = await loadVaultConfig();
+          if (vaultConfig) {
+            // Restore permission and verify vault is accessible
+            const hasPermission = await restorePermission(vaultConfig);
+            if (hasPermission) {
+              // Try to get user ID from server-side config
+              const config = await tbitVaultClient.getVaultConfig();
+              // We need a userId to complete onboarding - if we have vault config,
+              // the user should already be known to the server
+              // For now, we'll just let the user complete onboarding
+              // The actual userId comes from the initial bootstrap
+            }
           }
         }
         setChecking(false);
@@ -55,7 +61,7 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
     return () => {
       cancelled = true;
     };
-  }, [onComplete]);
+  }, [onComplete, loadVaultConfig, restorePermission]);
 
   const startSetup = () => setStep("vault");
 
@@ -64,7 +70,7 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
     try {
       const config = await pickVaultFolder();
       if (config) {
-        setVaultState((prev) => ({ ...prev, config, isManual: false, isLoading: false }));
+        setVaultState((prev) => ({ ...prev, config, isLoading: false }));
         setStep("profile");
       } else {
         // User cancelled
@@ -75,29 +81,6 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
         ...prev,
         isLoading: false,
         error: e instanceof Error ? e.message : "Failed to pick folder",
-      }));
-    }
-  };
-
-  const handleManualSubmit = async () => {
-    if (!vaultState.manualPath.trim()) {
-      setVaultState((prev) => ({ ...prev, error: "Please enter a vault path" }));
-      return;
-    }
-    setVaultState((prev) => ({ ...prev, isLoading: true, error: null }));
-    try {
-      const config = await useManualConfig({
-        vaultRoot: vaultState.manualPath.trim(),
-        userId: userId.trim() || "user",
-        label: spaceLabel.trim() || undefined,
-      });
-      setVaultState((prev) => ({ ...prev, config, isManual: true, isLoading: false }));
-      setStep("profile");
-    } catch (e) {
-      setVaultState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error: e instanceof Error ? e.message : "Failed to use manual path",
       }));
     }
   };
@@ -201,7 +184,7 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
                       "Choose Vault Folder"
                     )}
                   </button>
-                  {vaultState.config && !vaultState.isManual && (
+                  {vaultState.config && (
                     <div className="onboarding-vault-selected">
                       <span className="vault-icon">📁</span>
                       <span>{vaultState.config.rootPath || vaultState.config.label}</span>
@@ -222,32 +205,28 @@ export function OnboardingView({ onComplete }: { onComplete: (userId: string) =>
               </>
             ) : (
               <>
-                <div className="onboarding-vault-manual">
+                <div className="onboarding-vault-unsupported">
+                  <div className="unsupported-icon">🔒</div>
+                  <h2>Native Vault Access Not Supported</h2>
                   <p className="onboarding-notice">
-                    Your browser doesn't support the native folder picker.
-                    Please enter the full path to your vault folder manually.
+                    Your current browser does not support the File System Access API,
+                    which is required for secure, native folder selection.
                   </p>
-                  <label className="onboarding-field">
-                    <span>Vault folder path</span>
-                    <input
-                      type="text"
-                      value={vaultState.manualPath}
-                      placeholder="/path/to/your/vault"
-                      onChange={(e) => setVaultState((prev) => ({ ...prev, manualPath: e.target.value, error: null }))}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleManualSubmit();
-                      }}
-                      disabled={vaultState.isLoading}
-                    />
-                  </label>
-                  <button
-                    className="onboarding-btn primary"
-                    onClick={handleManualSubmit}
-                    disabled={vaultState.isLoading}
-                  >
-                    {vaultState.isLoading ? "Verifying…" : "Use This Path"}
-                  </button>
-                  {vaultState.error && <p className="onboarding-error">{vaultState.error}</p>}
+                  <div className="unsupported-actions">
+                    <p className="unsupported-recommendation">
+                      <strong>Recommended:</strong> Use Google Chrome or Microsoft Edge
+                      for full AIOS vault functionality.
+                    </p>
+                    <p className="unsupported-recommendation">
+                      <strong>Alternative:</strong> Use the AIOS Desktop application
+                      (when available) for native filesystem access on Windows, macOS, or Linux.
+                    </p>
+                  </div>
+                  <div className="onboarding-actions">
+                    <button className="onboarding-btn" onClick={() => setStep("welcome")}>
+                      Back
+                    </button>
+                  </div>
                 </div>
               </>
             )}

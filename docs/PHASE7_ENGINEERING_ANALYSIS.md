@@ -1,199 +1,407 @@
 # Phase 7 Engineering Analysis — AIOS
 
-> **Status**: Phase 7 is **COMPLETE** per AIOS Book (single source of truth)
-> **Date**: 2026-07-30 (per AIOS Book changelog)
-> **Validation**: Full monorepo build passes (11/11 packages, FULL TURBO)
+> **Prepared by**: AIOS Chief Software Architect  
+> **Date**: 2026-08-05  
+> **Status**: Analysis Complete — Ready for Architecture Validation
 
 ---
 
 ## 1. Current Architecture Analysis
 
-### Package Structure
+### 1.1 Package Structure
+
 ```
 Muf_Labs/
 ├── apps/
-│   ├── api/          # Express REST API (@aios/api) — PORT 3001
-│   ├── web/          # Vite + React frontend (@aios/web) — PORT 3000 (nginx:80)
-│   └── desktop/      # Tauri desktop app (@aios/desktop)
+│   ├── api/          # Express REST API (@aios/api) — port 3001
+│   ├── web/          # Vite + React frontend (@aios/web) — port 3000 (nginx)
+│   └── desktop/      # Tauri desktop app (@aios/desktop) — placeholder
 ├── packages/
-│   ├── agents/       # @aios/agents
-│   ├── database/     # @aios/database
-│   ├── kernel/       # @aios/kernel
-│   ├── llm/          # @aios/llm
-│   ├── sdk/          # @aios/sdk
-│   ├── shared/       # @aios/shared (re-exports @muf/tbit-core)
-│   ├── tbit-core/    # @muf/tbit-core (canonical T-Bit engine)
-│   ├── ui/           # @aios/ui
-│   └── workflow/     # @aios/workflow
+│   ├── agents/       # @aios/agents — agent orchestration, tool integration
+│   ├── database/     # @aios/database — database abstractions (being phased out)
+│   ├── kernel/       # @aios/kernel — Kernel, orchestration, consensus, monitoring
+│   ├── llm/          # @aios/llm — LLM provider abstraction
+│   ├── sdk/          # @aios/sdk — external SDK (not yet implemented)
+│   ├── shared/       # @aios/shared — re-exports from @muf/tbit-core (runtime paths, text encoding)
+│   ├── tbit-core/    # @muf/tbit-core — **CANONICAL SOURCE** for T-Bit engine
+│   ├── ui/           # @aios/ui — shared UI components
+│   └── workflow/     # @aios/workflow — workflow engine, step execution
+├── aios-mvp/         # Legacy MVP (being phased out)
+├── Framework/        # AIOS Framework standards & templates
+├── docs/             # AIOS_Book.md (this document), AIOS_AppBible.md
+├── scripts/          # Build & maintenance scripts
+└── turbo.json        # Turborepo config
 ```
 
-### Dependency Graph (Validated)
+### 1.2 Dependency Graph
+
 ```
-@aios/shared ◄── @muf/tbit-core
-     ▲                ▲
-     │                │
-@aios/api ◄───────────┘
-     ▲
-     │
-@aios/web
+                    ┌─────────────────────┐
+                    │   @muf/tbit-core    │  ◄── ZERO deps on @aios/*
+                    │  (canonical source) │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   @aios/shared      │  ◄── Re-exports ONLY from @muf/tbit-core
+                    │  (re-export layer)  │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+       ┌────────────┐   ┌────────────┐   ┌────────────┐
+       │ @aios/api  │   │ @aios/web  │   │ @aios/kernel│
+       │ (Express)  │   │ (React)    │   │ (Kernel)   │
+       └────────────┘   └────────────┘   └────────────┘
+              ▲                ▲                ▲
+              │                │                │
+              ▼                ▼                ▼
+       ┌────────────┐   ┌────────────┐   ┌────────────┐
+       │@aios/agents│   │@aios/llm   │   │@aios/workflow│
+       └────────────┘   └────────────┘   └────────────┘
 ```
 
-**Key Principle Verified**: `@muf/tbit-core` is the **single source of truth** for T-Bit runtime paths, memory core, storage, encryption, and indices. All other packages consume via `@aios/shared` re-exports.
+**Key Observations:**
+- ✅ `@muf/tbit-core` has **zero dependencies** on `@aios/*` packages (T-Bit Independence preserved)
+- ✅ `@aios/shared` is a **pure re-export layer** — no business logic
+- ✅ All `@aios/*` packages consume T-Bit functionality via `@aios/shared`
+- ⚠️ `apps/api/src/routes.ts` **legacy monolith still exists** (duplicate of modular routes)
+- ⚠️ `apps/api` depends on `@aios/kernel`, `@aios/agents`, `@aios/workflow` but **Kernel not yet integrated** in vault bootstrap
 
-### API Architecture (apps/api)
-- **Entry Point**: `apps/api/src/main.ts` → `createServer()` → `startServer()`
-- **Routes**: 13 modular route modules under `/api/v1/tbit/`
-- **Auth**: `requireSymbolicApiKey` middleware on all T-Bit routes
-- **Health**: `/health` endpoint (no auth required)
+### 1.3 API Architecture (apps/api)
 
-### Frontend Architecture (apps/web)
-- **Build**: Vite + React 19, TypeScript
-- **Proxy**: nginx serves SPA, proxies `/api/` to `api:3001`
-- **Panels**: 16 panels wired to API endpoints
-- **Onboarding**: Vault picker + first-run bootstrap wizard
+**Entry Point**: `src/main.ts` → `createServer()` → `startServer()`
 
-### Backend Services
-- **TBitService**: Core T-Bit operations (memory, query, assets, encryption, health)
-- **Routes**: 13 route modules (memory, query, semantic, network, setup, assets, encryption, permissions, markdown, binary, universal, health, kv)
+**Server Configuration** (`src/server.ts`):
+- Express 5.x with JSON parsing
+- CORS from `CORS_ORIGIN` env (comma-separated)
+- Health endpoint: `GET /health` (no auth)
+- Global error handler
+- Modular route registration via `registerRoutes(app)` from `src/routes/index.ts`
 
-### Kernel Integration
-- **@aios/kernel**: Independent package with ProviderRegistry, ExecutionPipeline
-- **No direct coupling** to T-Bit core — communicates via provider abstraction
+**Modular Routes** (`src/routes/index.ts` — 11 route modules):
+| Module | Path | Description |
+|--------|------|-------------|
+| `tbit-core.routes` | `/` | Core T-Bit operations (inject, recover, collapse, snapshot, rollback, stats, export/import) |
+| `tbit-memory.routes` | `/` | Memory Core (remember, recall, context, links, graph, delete) |
+| `tbit-query.routes` | `/` | Query Index (search, rebuild, sync, stats) |
+| `tbit-semantic.routes` | `/` | Semantic Index (search, rebuild, stats) |
+| `tbit-health.routes` | `/` | Container Health (report, reconcile) |
+| `tbit-encryption.routes` | `/` | Encryption (key status, ring, active key) |
+| `tbit-assets.routes` | `/` | Assets (list, stats, delete, reconstruct binary) |
+| `tbit-ai-permissions.routes` | `/` | AI Permissions (policy get/update) |
+| `tbit-documents.routes` | `/` | Documents (universal import, QA, binary, markdown) |
+| `tbit-markdown.routes` | `/` | Markdown Bridge (import, reconstruct, list, delete, purge) |
+| `tbit-network.routes` | `/` | Network/Anti-Entropy (state, export/import record, compare) |
+| `tbit-setup.routes` | `/` | First-Run Setup (status, bootstrap) |
+| `tbit-kv.routes` | `/` | Key-Value Store (CRUD, stats) |
+| `tbit-vault.routes` | `/` | **Vault Management (Phase 8)** — init, status, verify, config, migrate, repair |
 
-### T-Bit Integration
-- **@muf/tbit-core**: Canonical engine (storage, encryption, indices, paths)
-- **@aios/shared**: Re-exports runtime paths + text encoding only
-- **Zero circular dependencies** — resolved in Phase 7
+**All routes mounted under**: `/api/v1/tbit`
+
+**Authentication**: `requireSymbolicApiKey` middleware (checks `X-TBit-API-Key` header)
+
+**Legacy File** (`src/routes.ts`): ⚠️ **STILL EXISTS** — monolithic routes with `ChatController` + `TBitController` — should be removed per Phase 7.4
+
+### 1.4 Frontend Architecture (apps/web)
+
+**Entry Point**: `src/index.tsx` → `AppWrapper` with `useVaultInit()` hook
+
+**Vault Initialization Flow**:
+1. `useVaultInit()` loads `VaultConfig` from IndexedDB via `useVaultPicker`
+2. If no config → state = `onboarding`
+3. If config exists → restore File System Access permission
+4. If permission restored → verify vault via `tbitVaultClient.getVaultStatus()`
+5. If vault accessible + `kernelReady` → state = `ready`, mount `<App>`
+6. If vault inaccessible → state = `onboarding` with error
+
+**Onboarding Wizard** (`OnboardingView.tsx`):
+- Step 1: Welcome
+- Step 2: **Vault Selection** — `showDirectoryPicker()` (File System Access API)
+- Step 3: Profile (userId, space label)
+- Step 4: Creating (calls `tbitRegistrationClient.bootstrapWithVault()`)
+- Step 5: Done → calls `onComplete(userId)` → page reload
+
+**API Clients**:
+- `tbitRegistrationClient` — bootstrap, setup status, encryption status
+- `tbitVaultClient` — vault init, status, verify, config, migrate, repair
+- `memoryCoreClient` — memory operations
+- TanStack Query for server state management
+
+**Panels** (16 panels in `App.tsx`):
+- **3D/Quantum** (6): QVault, WikiLinks, QuantumRay, Topology, CognitiveTelemetry, TBitNetwork
+- **Management** (10): Health, Permissions, Encryption, Assets, Binary, KV, Memory, Query, Markdown, Guardian
+
+### 1.5 Backend Services
+
+**TBitService** (`src/services/TBitService.ts`): Legacy controller service (used by `routes.ts`)
+
+**VaultBootstrapService** (`src/services/vaultBootstrapService.ts`) — **Phase 8 Core**:
+- `initialize(req)` — Full vault bootstrap orchestration:
+  1. Normalize & set vault root as active spaces root
+  2. Ensure encryption key exists (generate if requested)
+  3. Create primary space manifest
+  4. Recover T-Bit storage (validate container)
+  5. **Initialize Kernel** (placeholder — Phase 8.4)
+  6. **Verify subsystems** (placeholder — Phase 8.4)
+- `getStatus()` — Current vault status
+- `verify(vaultRoot)` — Accessibility & structure check
+- `getConfig()` — Vault configuration details
+- `migrate(vaultRoot)` — Schema migrations (stub)
+- `repair(vaultRoot)` — Corruption recovery (stub)
+
+**Kernel Integration**: ⚠️ **NOT YET IMPLEMENTED** — `initializeKernel()` and `verifySubsystems()` are placeholders
+
+### 1.6 Docker & Deployment (Phase 7 Deliverables)
+
+**Root `docker-compose.yml`**:
+- `api` service: builds `apps/api/Dockerfile`, port 3001, volume `tbit-data:/data`
+- `web` service: builds `apps/web/Dockerfile`, port 3000→80, depends on `api:service_healthy`
+- Health checks: `wget --spider` on `/health`
+- Network: `aios-network`
+
+**API Dockerfile** (`apps/api/Dockerfile`):
+- Multi-stage: builder (Node 22) → runner (Node 22 alpine)
+- Non-root user (nodejs:1001)
+- Builds with `pnpm run build --filter=@aios/api...`
+- Copies built packages + dist
+- Creates `/data` directory with correct ownership
+- Exposes 3001, CMD: `node dist/server.js`
+
+**Web Dockerfile** (`apps/web/Dockerfile`):
+- Multi-stage: builder (Node 22) → runner (nginx:alpine)
+- Builds with `pnpm run build --filter=@aios/web...`
+- Copies dist to nginx html, copies `nginx.conf`
+- Exposes 80
+
+**nginx.conf** (`apps/web/nginx.conf`):
+- SPA routing fallback to `index.html`
+- API proxy: `/api/` → `http://api:3001`
+- Health endpoint: `/health` → `200 "healthy"`
+- Static asset caching (1 year)
+
+**Environment Config**:
+- `apps/api/.env.example`: `PORT=3001`, `TBIT_VAULT_ROOT=/data/spaces`, `CORS_ORIGIN`, `SYMBOLIC_API_KEY`
+- `apps/web/.env.example`: `VITE_API_BASE_URL=http://localhost:3001`
 
 ---
 
 ## 2. Gap Analysis
 
-| Category | Status | Details |
-|----------|--------|---------|
-| **Dockerize apps/api** | ✅ Complete | Multi-stage Dockerfile, non-root user, port 3001, `/data` volume |
-| **Dockerize apps/web** | ✅ Complete | nginx SPA + API proxy, port 80 → 3000 |
-| **Production Docker Compose** | ✅ Complete | Root `docker-compose.yml`, health checks, persistent volume `tbit-data`, network `aios-network` |
-| **Decompose server.ts** | ✅ Complete | Removed legacy `routes.ts` (ChatController + TBitController monolith); retained modular `routes/index.ts` with 11 route modules |
-| **Health Checks** | ✅ Complete | API `/health`, Web nginx `/health`, Docker healthcheck configs with `wget` |
-| **Environment Config** | ✅ Complete | `.env.example` for both services, no hardcoded secrets |
+### 2.1 What Exists (✅ Completed)
 
-**Missing/Refactored**: None — all Phase 7 objectives achieved.
+| Component | Status | Notes |
+|-----------|--------|-------|
+| `@muf/tbit-core` canonical package | ✅ Complete | Source of truth for all T-Bit functionality |
+| `@aios/shared` re-export layer | ✅ Complete | Pure re-exports, no business logic |
+| Modular API routes (11 modules) | ✅ Complete | All under `/api/v1/tbit`, auth protected |
+| API server with health checks | ✅ Complete | `createServer()` / `startServer()` pattern |
+| Docker multi-stage builds (API + Web) | ✅ Complete | Non-root users, proper volumes |
+| Production Docker Compose | ✅ Complete | Health checks, dependencies, networking |
+| nginx SPA + API proxy config | ✅ Complete | `/api/` → `api:3001`, `/health` endpoint |
+| Environment configuration | ✅ Complete | `.env.example` files, no hardcoded secrets |
+| Frontend vault selection UI | ✅ Complete | File System Access API + IndexedDB |
+| Onboarding wizard with vault step | ✅ Complete | 5-step flow with native folder picker |
+| Vault bootstrap API endpoints | ✅ Complete | init, status, verify, config, migrate, repair |
+| VaultBootstrapService orchestration | ✅ Complete | 6-step initialization (Kernel stubbed) |
 
-**Technical Risks**: 
-- Chunk size > 500kB (Vite warning) → Phase 8: code-splitting with React.lazy
-- Hardcoded `dev-hmac-secret` in apiCompat → Phase 8: move to env var
+### 2.2 What Is Missing / Incomplete (❌ Gaps)
 
-**Architectural Risks**: None — all 6 engineering principles preserved.
+| Gap | Severity | Impact |
+|-----|----------|--------|
+| **Legacy `src/routes.ts` still exists** | High | Duplicate routes, confusion, potential conflicts |
+| **Kernel not integrated in vault bootstrap** | Critical | `initializeKernel()` and `verifySubsystems()` are stubs |
+| **Provider abstraction not wired** | High | Kernel providers not registered/initialized |
+| **No test infrastructure** | Medium | Phase 8.1 addresses this (Vitest configs) |
+| **No integration tests** | Medium | API contracts, Kernel integration untested |
+| **Chunk size > 500kB (Vite warning)** | Low | Code-splitting needed for 3D panels |
+| **Hardcoded `dev-hmac-secret` in vaultBootstrapService** | High | Should use env var / secret manager |
+| **T-Bit runtime paths in `@aios/shared` vs `@muf/tbit-core`** | Medium | Book says `@muf/tbit-core` is canonical, but `@aios/shared` re-exports them |
+
+### 2.3 What Must Be Refactored
+
+1. **Remove `apps/api/src/routes.ts`** — Legacy monolith, duplicate of modular routes
+2. **Implement actual Kernel initialization** in `VaultBootstrapService.initializeKernel()`
+3. **Implement actual subsystem verification** in `VaultBootstrapService.verifySubsystems()`
+4. **Replace hardcoded HMAC secret** with environment variable
+5. **Wire Provider abstraction** — Kernel needs to register vault-aware providers
+6. **Add test infrastructure** — Phase 8.1 (Vitest configs for all packages)
+
+### 2.4 What Must Remain Untouched
+
+- `@muf/tbit-core` exports and internal structure (canonical source)
+- `@aios/shared` as pure re-export layer
+- Modular route structure in `apps/api/src/routes/index.ts`
+- Docker Compose configuration (working)
+- File System Access API + IndexedDB vault persistence (working)
+- Onboarding wizard flow (working)
+
+### 2.5 Technical Risks
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| Kernel integration breaks existing API routes | Medium | High | Integration tests before Kernel wiring |
+| HMAC secret exposure in production | High | Critical | Move to env var immediately |
+| Circular dependency if Kernel imports from API | Low | High | Enforce dependency direction: Kernel → shared → tbit-core |
+| IndexedDB handle serialization issues across browsers | Medium | Medium | Test Chrome/Edge/Firefox/Safari |
+| Large vault performance (>100k records) | Unknown | High | Resilience tests in Phase 8.2 |
+
+### 2.6 Architectural Risks
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| Kernel becomes god object | Medium | High | Enforce Kernel responsibilities: lifecycle only, not business logic |
+| Provider abstraction leaks into controllers | Low | Medium | Providers registered only in Kernel bootstrap |
+| T-Bit independence violated if Kernel imports tbit-core directly | Low | Critical | Kernel must consume via @aios/shared |
+| Vault bootstrap becomes monolithic | Medium | High | Keep VaultBootstrapService as orchestrator, delegate to Kernel |
 
 ---
 
-## 3. Phase 7 Master Plan (As Executed)
+## 3. Phase 7 Master Plan
 
-### Stage 7.1 — Dockerize apps/api ✅
-- **Files**: `apps/api/Dockerfile`, `apps/api/.dockerignore`
-- **Validation**: `docker build -t aios-api apps/api` succeeds
-- **Config**: Multi-stage build, non-root user, port 3001, `/data` volume
+> **Note**: According to AIOS_Book.md, Phase 7 is marked **Complete**. This analysis validates that completion and identifies remaining work for Phase 8.
 
-### Stage 7.2 — Dockerize apps/web ✅
-- **Files**: `apps/web/Dockerfile`, `apps/web/.dockerignore`, `apps/web/nginx.conf`
-- **Validation**: `docker build -t aios-web apps/web` succeeds
-- **Config**: Nginx serves SPA, proxies `/api/` to `api:3001`
+### Stage 7.1 — Dockerize apps/api ✅ **COMPLETED**
+- Files: `apps/api/Dockerfile`, `apps/api/.dockerignore`
+- Validation: `docker build -t aios-api apps/api` succeeds
+- Multi-stage build, non-root user, port 3001, `/data` volume
 
-### Stage 7.3 — Production Docker Compose ✅
-- **Files**: Root `docker-compose.yml`, `apps/api/.env.example`, `apps/web/.env.example`
-- **Validation**: `docker compose up --build` brings up both services healthy
-- **Config**: API:3001, Web:3000, volume `tbit-data`→`/data`, health checks, `depends_on: api condition:service_healthy`, network `aios-network`
+### Stage 7.2 — Dockerize apps/web ✅ **COMPLETED**
+- Files: `apps/web/Dockerfile`, `apps/web/.dockerignore`, `apps/web/nginx.conf`
+- Validation: `docker build -t aios-web apps/web` succeeds
+- Nginx serves SPA, proxies `/api/` to `api:3001`
 
-### Stage 7.4 — Decompose server.ts ✅
-- **Removed**: `apps/api/src/routes.ts` (legacy monolithic routes)
-- **Retained**: `apps/api/src/routes/index.ts` (modular registration with 11 modules)
-- **Entry**: `apps/api/src/main.ts` → `createServer()` → `startServer()`
+### Stage 7.3 — Production Docker Compose ✅ **COMPLETED**
+- Files: Root `docker-compose.yml`, `apps/api/.env.example`, `apps/web/.env.example`
+- Validation: `docker compose up --build` brings up both services healthy
+- Persistent volume `tbit-data` at `/data`, health checks, shared network
 
-### Stage 7.5 — Health Checks & Observability ✅
-- **API**: `/health` in `createServer()` (no auth)
-- **Web**: `/health` in `nginx.conf` returns `200 "healthy"`
-- **Docker**: Both services have `healthcheck` with `wget --spider`
+### Stage 7.4 — Decompose server.ts ✅ **COMPLETED (with caveat)**
+- **Completed**: Modular `src/routes/index.ts` with 11 route modules
+- **Entry point**: `src/main.ts` → `createServer()` → `startServer()`
+- **Remaining**: ⚠️ Legacy `src/routes.ts` **still exists** — should be deleted
+- Validation: Full monorepo build passes (11/11 packages)
 
-### Stage 7.6 — Environment Configuration ✅
-- **API**: `.env.example` with `PORT=3001`, `TBIT_VAULT_ROOT=/data/spaces`, `CORS_ORIGIN=http://localhost:3000`, `SYMBOLIC_API_KEY`
-- **Web**: `.env.example` with `VITE_API_BASE_URL=http://localhost:3001`
+### Stage 7.5 — Health Checks & Observability ✅ **COMPLETED**
+- API: `/health` in `createServer()` (no auth)
+- Web: `/health` in `nginx.conf` returns `200 "healthy"`
+- Docker: Both services have `healthcheck` with `wget --spider`
 
-### Stage 7.7 — Build Fix (idb dependency) ✅
-- **Added**: `idb@^8.0.2` to `apps/web/package.json`
-- **Fixed**: TypeScript errors in `useVaultPicker.ts` (declaration merging, removed `UpgradeDB` import)
+### Stage 7.6 — Environment Configuration ✅ **COMPLETED**
+- API: `.env.example` with all required vars
+- Web: `.env.example` with `VITE_API_BASE_URL`
+- No hardcoded secrets
+
+### Stage 7.7 — Build Fix & Validation ✅ **COMPLETED**
+- Added `idb@^8.0.2` to `apps/web/package.json`
+- Fixed TypeScript errors in `useVaultPicker.ts`
+- Full monorepo build passes (FULL TURBO, 11/11 packages)
 
 ---
 
 ## 4. Architecture Validation
 
-| Principle | Validated | Evidence |
-|-----------|-----------|----------|
-| **Modularity** | ✅ | All packages independently buildable (`tsc --project tsconfig.json`) |
-| **Package Isolation** | ✅ | No cross-package imports except declared `dependencies` |
-| **Dependency Inversion** | ✅ | Consumers depend on `@aios/shared` interfaces, not implementations |
-| **Provider Abstraction** | ✅ | T-Bit storage, encryption, paths are provider-pattern abstractions |
-| **Kernel Responsibilities** | ✅ | Kernel owns lifecycle, not business logic |
-| **T-Bit Independence** | ✅ | `@muf/tbit-core` has zero dependencies on `@aios/*` packages |
+### 4.1 Principle Compliance Check
 
-**No architectural violations detected.**
+| Principle | Status | Evidence |
+|-----------|--------|----------|
+| **Modularity** | ✅ Preserved | All packages independently buildable (`tsc --project tsconfig.json`) |
+| **Package Isolation** | ✅ Preserved | No cross-package imports except via declared `dependencies` |
+| **Dependency Inversion** | ✅ Preserved | Consumers depend on `@aios/shared` interfaces, not implementations |
+| **Provider Abstraction** | ⚠️ **Partial** | T-Bit storage/encryption/paths are provider-pattern, but **Kernel providers not yet wired** |
+| **Kernel Responsibilities** | ⚠️ **Partial** | Kernel exists but **not integrated** in vault bootstrap lifecycle |
+| **T-Bit Independence** | ✅ Preserved | `@muf/tbit-core` has zero deps on `@aios/*` packages |
+
+### 4.2 Identified Improvements (Pre-Implementation)
+
+1. **Delete `apps/api/src/routes.ts`** — Legacy file violates modularity
+2. **Implement `VaultBootstrapService.initializeKernel()`** — Wire actual Kernel
+3. **Implement `VaultBootstrapService.verifySubsystems()`** — Real health checks
+4. **Externalize HMAC secret** — Move `dev-hmac-secret` to environment variable
+5. **Add test infrastructure** — Phase 8.1 (Vitest configs for all packages)
 
 ---
 
 ## 5. Implementation Plan
 
-**Status**: All implementation complete. No further implementation required for Phase 7.
+### Priority Order (Lowest Dependency → Highest Dependency)
 
-**Build Order Verified** (lowest → highest dependency):
-1. `@muf/tbit-core` (canonical, no deps)
-2. `@aios/shared` (re-exports only)
-3. `@aios/kernel`, `@aios/agents`, `@aios/workflow`, `@aios/llm`, `@aios/database`, `@aios/ui`
-4. `@aios/api` (depends on @muf/tbit-core via @aios/shared)
-5. `@aios/web` (depends on @aios/api)
-6. `aios-mvp` (legacy)
+| Order | Task | Dependencies | Est. Effort |
+|-------|------|--------------|-------------|
+| 1 | **Delete `apps/api/src/routes.ts`** | None | 15 min |
+| 2 | **Externalize HMAC secret** in `vaultBootstrapService.ts` | None | 30 min |
+| 3 | **Implement `initializeKernel()`** with real Kernel import | `@aios/kernel` package | 2-4 hours |
+| 4 | **Implement `verifySubsystems()`** with real health checks | Kernel initialized | 1-2 hours |
+| 5 | **Wire Provider registration** in Kernel bootstrap | Kernel initialized | 1-2 hours |
+| 6 | **Add test infrastructure** (Phase 8.1) | All packages | 4-8 hours |
 
-All 11 packages build successfully (FULL TURBO).
+### Validation Gates (Each Step Must Pass)
 
----
-
-## 6. Verification Results
-
-| Check | Result |
-|-------|--------|
-| TypeScript compilation (`tsc --noEmit`) | ✅ Pass (api, web, tbit-core) |
-| Monorepo build (`turbo build`) | ✅ 11/11 packages successful |
-| Docker build (api) | ✅ Multi-stage, non-root, port 3001 |
-| Docker build (web) | ✅ nginx SPA + proxy |
-| Docker Compose up | ✅ Both services healthy, volume mounted |
-| Health endpoints | ✅ API `/health`, Web `/health` |
-| Architecture principles | ✅ All 6 preserved |
-| Circular dependencies | ✅ None (resolved) |
+```bash
+# After each change:
+pnpm run build          # FULL TURBO, 11/11 packages
+pnpm run typecheck      # All packages clean
+pnpm test               # Unit tests (when added)
+docker compose build    # Both services build
+docker compose up       # Both services healthy
+```
 
 ---
 
-## 7. Documentation Updates (AIOS Book)
+## 6. Verification Strategy
 
-The AIOS Book (`docs/AIOS_Book.md`) already contains complete Phase 7 documentation:
+### 6.1 Architectural Validation
+- ✅ Dependency graph analysis (no circular deps)
+- ✅ Package isolation (imports only via declared deps)
+- ✅ Provider abstraction boundary respected
+- ✅ Kernel only owns lifecycle
 
-- **Phase Status Overview**: Phase 7 marked ✅ Complete
-- **Phase 7 Section**: All 6 stages + Stage 7.7 documented with files, validation, config
-- **Docker Configuration**: Full docker-compose.yml, Dockerfiles, nginx.conf
-- **Changelog**: Two entries (2026-07-30 Phase 7 Complete, 2026-07-30 Stage 7.7 Build Fix)
-- **Architecture Validation Checklist**: All 6 principles ✅
+### 6.2 Dependency Validation
+- `pnpm run build --filter=@muf/tbit-core` — no @aios/* deps
+- `pnpm run build --filter=@aios/shared` — only re-exports
+- `pnpm run build --filter=@aios/api` — depends on kernel, agents, workflow, tbit-core
 
-**No additional documentation needed** — AIOS Book is current and accurate.
+### 6.3 Build Validation
+- `pnpm run build` — FULL TURBO, 11/11 packages succeed
+- `tsc --noEmit` — no type errors in any package
+
+### 6.4 Type Validation
+- All public exports have JSDoc comments
+- Strict TypeScript (`"strict": true` in tsconfig.base.json)
+- No `any` types in public APIs
+
+### 6.5 Integration Validation
+- `docker compose up --build` — both services start healthy
+- `curl http://localhost:3001/health` → `{"status":"ok"}`
+- `curl http://localhost:3000/health` → `healthy`
+- API routes accessible via nginx proxy: `curl http://localhost:3000/api/v1/tbit/health`
+
+---
+
+## 7. Documentation Requirements
+
+### 7.1 AIOS_Book.md Updates (After Each Stage)
+- Changelog entry with date, changes, validation results
+- Architecture diagrams if changed
+- API route tables if modified
+- Docker configuration if updated
+
+### 7.2 Additional Documentation
+- `docs/DEPLOYMENT.md` — Runbook for staging/prod (Phase 8.11)
+- Architecture decision records (ADRs) for major choices
+- Developer onboarding guide
 
 ---
 
 ## Conclusion
 
-**Phase 7 is fully implemented and validated.** The AIOS Book accurately reflects the current state. All objectives achieved:
+**Phase 7 is functionally complete** per the AIOS Book — Docker, modular routes, health checks, and environment config are all working. The **critical remaining work** for Phase 8 is:
 
-1. ✅ Both services dockerized with production-ready configurations
-2. ✅ Modular route architecture replacing monolithic `server.ts`
-3. ✅ Production Docker Compose with health checks, persistent volumes, proper networking
-4. ✅ Environment-based configuration (no hardcoded secrets)
-5. ✅ Full monorepo build passes (11/11 packages)
-6. ✅ All 6 engineering principles preserved
+1. **Delete legacy `routes.ts`** (cleanup)
+2. **Wire Kernel into vault bootstrap** (core Phase 8.4 work)
+3. **Externalize HMAC secret** (security)
+4. **Add test infrastructure** (Phase 8.1)
 
-**Next Phase**: Phase 8 (Testing and deployment) is in progress per AIOS Book, with Stage 8.1 (Test Infrastructure) and Stage 8.2 (Unit Tests: @muf/tbit-core) already completed.
+The architecture is sound and all 6 engineering principles are **mostly preserved** — the two partial items (Provider Abstraction, Kernel Responsibilities) are exactly what Phase 8 addresses.
+
+**Recommendation**: Proceed with Phase 8 implementation starting with Stage 8.1 (Test Infrastructure) and Stage 8.2 (Kernel Integration), while cleaning up the legacy `routes.ts` file immediately.

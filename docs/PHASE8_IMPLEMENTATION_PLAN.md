@@ -1,6 +1,6 @@
 # AIOS — Phase 8 Implementation Plan: T-Bit Vault Setup
 
-> **Status:** Planning Review — Awaiting Approval  
+> **Status:** Stage 8.1 Complete — Stage 8.2 Approved to Begin  
 > **Based on:** `AIOS_Book.md`, `PHASE8_ENGINEERING_ANALYSIS.md`, `AIOS_ENGINEERING_AUDIT_v2.md`, `TASK_PROGRESS.md`  
 > **Approved Architecture:** Client-first vault selection (File System Access API), VaultBootstrapService (linear sequence), startup loader, Kernel/provider vault integration, vault lifecycle API  
 > **Architectural Clarifications:** Kernel initialization unification, Cross-platform Vault abstraction, No fake fallback for unsupported browsers  
@@ -158,12 +158,12 @@ The **Vault abstraction is the platform boundary**. Everything above the Vault l
 4. Modify `tbitRegistrationClient.ts`:
    - Add `bootstrapWithVault(vaultConfig, userId, label)` → `POST /api/v1/tbit/vault/init`
 
-**Validation Gate 8.1:**
-- [ ] `pnpm run build --filter=@aios/web` passes
-- [ ] Manual test in Chrome/Edge: folder picker opens, path displayed
-- [ ] Manual test in Firefox/Safari: **shows unsupported-browser notification** (no fake fallback)
-- [ ] IndexedDB: `VaultConfig` persisted and reloadable
-- [ ] Permission re-request on simulated revocation works
+**Validation Gate 8.1:** ✅ **PASSED**
+- [x] `pnpm run build --filter=@aios/web` passes
+- [x] Manual test in Chrome/Edge: folder picker opens, path displayed
+- [x] Manual test in Firefox/Safari: **shows unsupported-browser notification** (no fake fallback)
+- [x] IndexedDB: `VaultConfig` persisted and reloadable
+- [x] Permission re-request on simulated revocation works
 
 ---
 

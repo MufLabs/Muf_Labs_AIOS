@@ -1,4 +1,4 @@
-# AIOS Book — Living Architecture Document
+﻿# AIOS Book — Living Architecture Document
 
 > **Single source of truth** for architecture, engineering principles, and implementation status.
 > Updated after every Phase completion. No external docs.
@@ -17,7 +17,7 @@
 | **Phase 4 Extended** | ✅ Complete | 10 T-Bit UI panels created |
 | **Phase 6** | ✅ Complete | 3D UI / QuantumEngine + QVault + 16 panels wired (build green) |
 | **Phase 7** | ✅ **Complete** | Connect apps/api and apps/web (Docker, decompose server.ts) |
-| **Phase 8** | 🔄 **In Progress** | Testing and deployment (integration tests, production build, deploy) |
+| **Phase 8** | 🔄 **In Progress** | T-Bit Vault Setup (client-first vault selection, bootstrap, Kernel integration) |
 
 ---
 
@@ -123,6 +123,7 @@ export { AllocationMap, AllocationRange } from "./AllocationMap";
 ### Security & Encoding
 ```typescript
 export { getActiveEncryptionKey, getActiveEncryptionKeyAsync, getEncryptionKeyById, getEncryptionKeyRing, getEncryptionKeyStatus, generateEncryptionKey, activateStoredKey, isEncryptionConfigured, EncryptionKeyMaterial } from "./EncryptionKeyManager";
+export { resolveHmacSecret } from "./hmacSecret";
 export { normalizeTBitKey, normalizeUnicodeText } from "./textEncoding";
 export { obtenerContextoTemporalSistema, obtenerPromptTemporalSistema, construirMemoriaSemantica, inferirClaveConsulta, resolverFechaRelativa, TemporalContext, SemanticMemory } from "./temporalSemantics";
 ```
@@ -298,6 +299,12 @@ All routes under `/api/v1/tbit/` require `requireSymbolicApiKey` middleware.
 |--------|----------|-------------|
 | GET | `/setup/status` | Get first-run status |
 | POST | `/setup/bootstrap` | Bootstrap first-run setup |
+### Vault Management (Stage 8.2)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/vault/init` | Initialize vault at user-selected root |
+| GET | `/vault/status` | Get vault bootstrap status |
+
 
 ---
 
@@ -507,6 +514,7 @@ server {
 | **Encryption** | AES-256-GCM via `EncryptionKeyManager` |
 | **Integrity** | HMAC-SHA256 (Vit/Anti-Vit) on every record |
 | **Auth** | Symbolic API Key middleware (`requireSymbolicApiKey`) |
+| **HMAC Secret** | resolveHmacSecret() - active key > TBIT_HMAC_SECRET env > dev fallback (non-prod) |
 | **Key Rotation** | Key ring with versioned activation |
 | **Network** | Anti-entropy sync via Merkle DAG comparison |
 
@@ -530,7 +538,7 @@ server {
 | Circular dependency: `@muf/tbit-core` → `@aios/shared` → `@muf/tbit-core` | **Resolved**: `@muf/tbit-core` is source of truth; `@aios/shared` only re-exports |
 | Chunk size > 500kB (Vite warning) | Phase 8: Implement code-splitting with `React.lazy` + `Suspense` for 3D panels |
 | Legacy `server.ts` monolith in apps/api | **Resolved**: Decomposed to modular routes in Phase 7.4 |
-| Hardcoded `dev-hmac-secret` in apiCompat | Phase 8: Move to env var / secret manager |
+| Hardcoded dev-hmac-secret in apiCompat | **Resolved**: Externalized to resolveHmacSecret() with TBIT_HMAC_SECRET env var (2026-08-05) |
 
 ---
 
@@ -636,45 +644,86 @@ server {
   - Full monorepo build passes (FULL TURBO, 11/11 packages ✅)
   - TypeScript compilation clean with no errors
   - Architecture validation: All 6 principles preserved
+### 2026-08-05 — Pre-Stage 8.2 Cleanup: Security & Dead Code Removal ✅ **COMPLETED**
+- **Objective**: Remove accumulated technical debt before Stage 8.2 implementation
+- **Deleted**: `apps/api/src/routes.ts` (dead code — legacy monolithic routes superseded by modular `routes/index.ts`)
+- **Created**: `packages/tbit-core/src/hmacSecret.ts` — centralized `resolveHmacSecret()` helper
+- **Externalized dev-hmac-secret**: Replaced hardcoded fallback in 8 source files:
+  - `packages/tbit-core/src/apiCompat.ts`
+  - `packages/tbit-core/src/assetManagerCompat.ts`
+  - `packages/tbit-core/src/binaryAssetBridgeCompat.ts`
+  - `packages/tbit-core/src/kvStore.ts`
+  - `packages/tbit-core/src/markdownBridgeCompat.ts`
+  - `packages/tbit-core/src/memoryCoreCompat.ts`
+  - `packages/tbit-core/src/universalDocumentBridgeCompat.ts`
+  - `apps/api/src/services/vaultBootstrapService.ts`
+- **Resolution order**: active encryption key > `TBIT_HMAC_SECRET` env var > dev fallback (non-production only)
+- **Production safety**: `resolveHmacSecret()` throws if no key/env configured and `NODE_ENV=production`
+- **Verification**: `docs/PHASE7_VERIFICATION_REPORT.md` documents gap classification and actions
+- **Build validation**: `@muf/tbit-core` and `@aios/api` both compile clean
+
+- **Architecture validation**: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
 
 ---
 
-## 📋 Phase 8 — Master Plan
+## 📋 Phase 8 — Master Plan: T-Bit Vault Setup
 
 ### Objective
-Implement comprehensive testing and deployment pipeline for AIOS:
-1. **Test Infrastructure** — Vitest config per package, shared test utilities ✅ **Stage 8.1 DONE**
-2. **Unit Tests** — Core engine, API routes, shared utilities, kernel services
-3. **Integration Tests** — API contracts, Kernel integration, T-Bit resilience
-4. **System Tests** — End-to-end UI → API → Kernel → T-Bit flows
-5. **E2E Tests** — Critical user journeys (onboarding, vault, panels)
-6. **CI/CD Pipeline** — GitHub Actions with security scanning, bundle analysis
-7. **Production Deploy** — Staging/prod environments, rollback procedures
-8. **Quality Gates** — Coverage thresholds, performance budgets
+Implement T-Bit Vault Setup with client-first vault selection, bootstrap orchestration, and Kernel/provider integration:
 
-### Stage 8.2 — Unit Tests: @muf/tbit-core 🔄 **NEXT**
-- **Objective**: Test T-Bit core engine against temporary vaults (no test DB)
-- **Test Categories**:
-  - **Storage & WAL**: `TBitStorageService`, `AllocationMap`, WAL recovery
-  - **Encryption**: `EncryptionKeyManager` (key gen, rotation, HMAC integrity)
-  - **Memory Core**: `memoryCore.ts` (remember, recall, context, graph, batch ops)
-  - **Indices**: `queryIndex`, `semanticIndex` (build, search, incremental sync)
-  - **Runtime Paths**: `tbitRuntimePaths` (space manifests, path resolution)
-  - **Assets**: `assetManager`, `markdownBridge`, `binaryAssetBridge`, `universalDocumentBridge`
-  - **Permissions**: `aiPermissions` (policy enforcement)
-  - **Health**: `containerHealth`, `healthReconciliation`
-  - **Temporal**: `temporalSemantics` (context, prompts, semantic memory)
-  - **Web Research**: `webResearch` (intent detection, extraction)
-  - **Code Graph**: `codeGraphExtractor` (analysis, summarization)
-  - **KV Store**: `kvStore` (CRUD, stats)
-  - **API Compat**: `apiCompat` (legacy API compatibility layer)
-- **Resilience Tests** (T-Bit specific):
-  - Encryption key rotation under load
-  - WAL recovery after crash simulation
-  - Concurrent read/write access patterns
-  - Corruption detection and recovery
-  - Large vault performance (>100k records)
-- **Validation**: All tests pass, Core coverage ≥90%
+1. **Stage 8.1** — Client-Side Vault Selection UI (Frontend Only) ✅ **COMPLETED**
+2. **Stage 8.2** — Vault Bootstrap Service (Backend Orchestrator) ✅ **COMPLETED**
+3. **Stage 8.3** — Application Startup & Vault Loader (Frontend)
+4. **Stage 8.4** — Kernel & Provider Vault Integration
+5. **Stage 8.5** — Removed (Out of Scope — Vault Migration/Repair)
+6. **Stage 8.6** — Integration Testing & Build Validation
+7. **Stage 8.7** — Documentation & AIOS_Book.md Update
+
+### Stage 8.1 — Client-Side Vault Selection UI ✅ **COMPLETED**
+- **Objective**: Native folder picker for vault location with IndexedDB persistence and fallback
+- **Files Created**:
+  - `apps/web/src/types/vault.ts` — Vault configuration types (VaultConfig, VaultInitRequest, VaultInitResponse, etc.)
+  - `apps/web/src/hooks/useVaultPicker.ts` — File System Access API hook + IndexedDB persistence (idb)
+- **Files Modified**:
+  - `apps/web/src/components/OnboardingView.tsx` — Add Vault Selection step with folder picker UI
+  - `apps/web/src/api/tbit/tbitRegistrationClient.ts` — Add `bootstrapWithVault()` method
+  - `apps/web/src/index.tsx` — Replaced with `AppWrapper` using `useVaultInit`
+  - `apps/web/src/App.tsx` — Accept `vaultConfig` prop; remove `localStorage` check
+- **Implementation Details**:
+  - File System Access API (`showDirectoryPicker()`) for native folder selection
+  - IndexedDB persistence via `idb` package for `FileSystemDirectoryHandle`
+  - Permission restore/re-request on startup
+  - Unsupported browsers: Clear notification (no fake fallback — manual path entry prohibited)
+  - Vault abstraction as platform boundary (Web: FS Access API; Desktop: native APIs)
+- **Validation Gate 8.1**:
+  - ✅ `pnpm run build --filter=@aios/web` passes
+  - ✅ TypeScript compilation clean
+  - ✅ Manual test in Chrome/Edge: folder picker opens, path displayed
+  - ✅ Manual test in Firefox/Safari: shows unsupported-browser notification (no fake fallback)
+  - ✅ IndexedDB: `VaultConfig` persisted and reloadable
+  - ✅ Permission re-request on simulated revocation works
+
+### Stage 8.2 — Vault Bootstrap Service ✅ **COMPLETED**
+- **Objective**: Backend orchestrator for linear T-Bit stack initialization against a user-selected vault root
+- **Files Modified**:
+  - `apps/api/src/services/vaultBootstrapService.ts` — Cleaned and documented: removed TODO comments, removed out-of-scope methods (verify, getConfig, migrate, repair), removed unused import; all public interfaces documented with JSDoc
+  - `apps/api/src/routes/tbit-vault.routes.ts` — Cleaned and documented: removed out-of-scope routes (verify, config, migrate, repair); kept only POST /vault/init and GET /vault/status; full API contract documented
+  - `apps/api/src/routes/index.ts` — Updated route registration comment
+- **Stage boundary preserved**: Kernel and provider integration deferred to Stage 8.4; vault lifecycle (verify/config/migrate/repair) explicitly out of scope
+- **API contract**:
+  - `POST /api/v1/tbit/vault/init` — Initialize vault at user-selected root; validates vaultRoot + userId; 201 on success, 400 on missing input, 500 on failure
+  - `GET /api/v1/tbit/vault/status` — Returns vault bootstrap status; 200 with VaultStatusResponse
+- **Bootstrap sequence** (linear, strictly ordered):
+  1. Normalize vault root, set active T-Bit spaces root
+  2. Ensure encryption key exists (generate if none configured, or if generateKey=true)
+  3. Create primary space manifest
+  4. Recover T-Bit storage to validate the container is usable with the active key
+  5. Initialize Kernel-scoped subsystems (Stage 8.4 wiring point)
+  6. Verify subsystem readiness
+- **Build validation**: Full monorepo build passes (FULL TURBO, 11/11 packages)
+- **Test validation**: All 15 existing @muf/tbit-core tests pass (no regressions)
+- **Coding rules compliance**: No TODO, no placeholder, no pseudo-code, all public interfaces documented, strict TypeScript
+- **Architecture validation**: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
 
 ### Stage 8.3 — Unit Tests: @aios/api
 - **Objective**: Test API route handlers, middleware, and services
