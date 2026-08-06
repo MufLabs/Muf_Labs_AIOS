@@ -70,8 +70,10 @@ export function useVaultInit(): UseVaultInitResult {
       // 3. Verify vault is accessible via API
       const status = await tbitVaultClient.getVaultStatus();
       
-      if (status.initialized && status.kernelReady) {
+      if (status.initialized && status.vaultReady) {
         // Vault is ready → mount app
+        // Note: kernelReady remains false until Stage 8.4; vaultReady indicates
+        // T-Bit storage recovery succeeded (Stage 8.2 boundary)
         setVaultConfig(config);
         setVaultStatus(status);
         setState("ready");

@@ -1,0 +1,11 @@
+{
+  "version": "encryption-keyring-v1",
+  "keys": [
+    {
+      "id": "key-e2e-user",
+      "secret": "KtENtxsiAKBqbgz2uMKp3uLzWEyppXyTk_FHyiwkPlnq8sZ5",
+      "active": true,
+      "createdAt": "2026-08-06T17:05:25.920Z"
+    }
+  ]
+}

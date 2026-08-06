@@ -50,6 +50,8 @@ export interface VaultInitResponse {
   encryptionKeyId: string;
   /** Whether Kernel and all providers initialized successfully */
   kernelReady: boolean;
+  /** Stage 8.2 vault readiness: true once T-Bit storage recovery succeeded. Kernel/Workflow/Provider/Agent remain NOT wired until Stage 8.4. */
+  vaultReady: boolean;
   /** Per-subsystem readiness status */
   subsystems: Record<string, boolean>;
   /** ISO timestamp of initialization */
@@ -70,6 +72,8 @@ export interface VaultStatusResponse {
   encryptionConfigured: boolean;
   /** Kernel readiness */
   kernelReady: boolean;
+  /** Stage 8.2 vault readiness: true once T-Bit storage recovery succeeded. Kernel/Workflow/Provider/Agent remain NOT wired until Stage 8.4. */
+  vaultReady: boolean;
   /** Subsystem health */
   subsystems: Record<string, boolean>;
   /** Last verification timestamp */

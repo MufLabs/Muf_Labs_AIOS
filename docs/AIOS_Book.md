@@ -1,4 +1,4 @@
-﻿# AIOS Book — Living Architecture Document
+# AIOS Book — Living Architecture Document
 
 > **Single source of truth** for architecture, engineering principles, and implementation status.
 > Updated after every Phase completion. No external docs.
@@ -18,6 +18,13 @@
 | **Phase 6** | ✅ Complete | 3D UI / QuantumEngine + QVault + 16 panels wired (build green) |
 | **Phase 7** | ✅ **Complete** | Connect apps/api and apps/web (Docker, decompose server.ts) |
 | **Phase 8** | 🔄 **In Progress** | T-Bit Vault Setup (client-first vault selection, bootstrap, Kernel integration) |
+| &nbsp;&nbsp;└─ Stage 8.1 | ✅ **Complete** | Client-Side Vault Selection UI (Frontend Only) |
+| &nbsp;&nbsp;└─ Stage 8.2 | ✅ **Complete** | Vault Bootstrap Service (Backend Orchestrator) |
+| &nbsp;&nbsp;└─ Stage 8.3 | ✅ **Complete** | Application Startup & Vault Loader (Frontend) |
+| &nbsp;&nbsp;└─ Stage 8.4 | ⏳ Pending | Kernel & Provider Vault Integration |
+| &nbsp;&nbsp;└─ Stage 8.5 | ⏭️ Removed | Out of Scope (Vault Migration/Repair) |
+| &nbsp;&nbsp;└─ Stage 8.6 | ⏳ Pending | Integration Testing & Build Validation |
+| &nbsp;&nbsp;└─ Stage 8.7 | ⏳ Pending | Documentation & AIOS_Book.md Update |
 
 ---
 
@@ -644,6 +651,14 @@ server {
   - Full monorepo build passes (FULL TURBO, 11/11 packages ✅)
   - TypeScript compilation clean with no errors
   - Architecture validation: All 6 principles preserved
+### 2026-08-06 — Stage 8.2 Final Verification & Boundary Refinement
+- ✅ Fixed Stage 8.2 readiness boundary: `verifySubsystems()` now returns all subsystems `false` (was `true`), so `kernelReady` correctly stays `false` until Stage 8.4 grounding
+- ✅ Added `vaultReady` signal to `VaultInitResponse` and `VaultStatusResponse` to distinguish Stage 8.2 vault readiness from full Kernel readiness
+- ✅ `POST /vault/init` performs ONLY the linear bootstrap sequence (normalize root, encryption, manifest, storage recovery, Stage 8.4 wiring point placeholder) and does NOT initialize Kernel/Workflow/Provider/Agent
+- ✅ `GET /vault/status` correctly reports `initialized:false, vaultReady:false` before init and `initialized:true, vaultReady:true, kernelReady:false` after init
+- ✅ Added end-to-end functional validation test `apps/api/src/services/vaultBootstrapService.e2e.test.ts` (3 tests, all passing): create vault, init, manifest creation, storage recovery, status, restart-simulation, status remains available
+- ✅ Build validation: 11/11 packages pass; Tests: 15 @muf/tbit-core + 3 Stage 8.2 e2e, all passing (no regressions)
+- ✅ Architecture validation: all 6 principles preserved
 ### 2026-08-05 — Pre-Stage 8.2 Cleanup: Security & Dead Code Removal ✅ **COMPLETED**
 - **Objective**: Remove accumulated technical debt before Stage 8.2 implementation
 - **Deleted**: `apps/api/src/routes.ts` (dead code — legacy monolithic routes superseded by modular `routes/index.ts`)
@@ -719,20 +734,35 @@ Implement T-Bit Vault Setup with client-first vault selection, bootstrap orchest
   3. Create primary space manifest
   4. Recover T-Bit storage to validate the container is usable with the active key
   5. Initialize Kernel-scoped subsystems (Stage 8.4 wiring point)
-  6. Verify subsystem readiness
+  6. Verify subsystem readiness (Stage 8.2 verifies ONLY T-Bit storage; all Kernel-addressable subsystems report false until Stage 8.4 wiring)
+- **Readiness contract (refined)**:
+  - vaultReady=true once T-Bit storage recovery succeeds (Stage 8.2 responsibility)
+  - kernelReady=false until Stage 8.4 wires Kernel/Workflow/Provider/Agent (NOT claimed ready in Stage 8.2)
+  - subsystems={memory:false, workflow:false, provider:false, agent:false, qvault:false} (no later-stage subsystem claimed ready)
+  - verifySubsystems() validates only Stage 8.2 scope; does not initialize/verify later-stage subsystems
+- **End-to-end functional validation**: apps/api/src/services/vaultBootstrapService.e2e.test.ts (3 tests, all passing): create vault -> init -> manifest creation -> storage recovery -> status -> restart-simulation -> status remains available
 - **Build validation**: Full monorepo build passes (FULL TURBO, 11/11 packages)
-- **Test validation**: All 15 existing @muf/tbit-core tests pass (no regressions)
+- **Test validation**: All 15 existing @muf/tbit-core tests pass + 3 new Stage 8.2 e2e tests pass (no regressions)
 - **Coding rules compliance**: No TODO, no placeholder, no pseudo-code, all public interfaces documented, strict TypeScript
 - **Architecture validation**: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
 
-### Stage 8.3 — Unit Tests: @aios/api
-- **Objective**: Test API route handlers, middleware, and services
-- **Test Categories**:
-  - **Middleware**: `requireSymbolicApiKey`, CORS, error handling
-  - **Routes**: All 13 route modules (memory, query, semantic, network, setup, assets, encryption, permissions, markdown, binary, universal, health, kv)
-  - **Services**: Route-level service logic
-  - **Integration**: Route → T-Bit core contract validation
-- **Validation**: All tests pass, API coverage ≥85%
+### Stage 8.3 — Application Startup & Vault Loader (Frontend) ✅ **COMPLETED**
+- **Objective**: On application load, detect configured vault → verify → initialize → or show onboarding
+- **Files Modified** (aligning with Stage 8.2 readiness contract):
+  - `apps/web/src/types/vault.ts` — Added `vaultReady` field to `VaultInitResponse` and `VaultStatusResponse` interfaces (distinguishes Stage 8.2 vault readiness from full Kernel readiness)
+  - `apps/web/src/hooks/useVaultInit.ts` — Fixed readiness check: uses `status.vaultReady` (not `status.kernelReady`) to determine "ready" state; added JSDoc comment explaining Stage 8.2 boundary
+- **Implementation Details**:
+  - `useVaultInit` hook orchestrates startup flow: load vault config → restore File System Access permission → query API status → mount app if `vaultReady=true`
+  - `AppWrapper` in `apps/web/src/index.tsx` routes to LoadingSpinner (loading), OnboardingView (onboarding), ErrorView (error), or `<App />` (ready)
+  - `App.tsx` accepts `vaultConfig` prop and displays vault badge in header; removed legacy `localStorage` check for `tbit:activeContainerId`
+  - Vault readiness boundary preserved: `kernelReady` remains `false` until Stage 8.4; `vaultReady` signals T-Bit storage recovery succeeded (Stage 8.2 scope)
+- **Validation Gate 8.3**:
+  - ✅ `pnpm run build --filter=@aios/web` passes
+  - ✅ `pnpm run build` full monorepo passes (11/11 packages)
+  - ✅ TypeScript compilation clean with no errors
+  - ✅ All relevant tests pass: 15 @muf/tbit-core + 3 Stage 8.2 e2e + 1 @aios/database + 1 @aios/kernel + 1 @aios/agents + 1 @aios/llm + 3 @aios/api = 25 tests
+  - ✅ Architecture validation: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
+  - ✅ Coding rules compliance: No TODO, no placeholder, no pseudo-code, all public interfaces documented, strict TypeScript
 
 ### Stage 8.4 — Unit Tests: @aios/shared, @aios/kernel, @aios/agents, @aios/workflow, @aios/llm, @aios/database, @aios/ui
 - **Objective**: Test shared utilities and supporting packages

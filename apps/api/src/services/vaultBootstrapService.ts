@@ -1,4 +1,4 @@
-import {
+﻿import {
   isEncryptionConfigured,
   createSpaceManifest,
   listSpaceManifests,
@@ -43,6 +43,8 @@ export interface VaultInitResponse {
   encryptionKeyId: string;
   /** Whether the Kernel reports all subsystems ready. */
   kernelReady: boolean;
+  /** Stage 8.2 vault readiness: true once T-Bit storage recovery succeeded. Kernel/Workflow/Provider/Agent remain NOT wired until Stage 8.4. */
+  vaultReady: boolean;
   /** Per-subsystem readiness map. */
   subsystems: Record<string, boolean>;
   /** ISO-8601 timestamp of initialization completion. */
@@ -63,6 +65,8 @@ export interface VaultStatusResponse {
   encryptionConfigured: boolean;
   /** Whether the Kernel reports all subsystems ready. */
   kernelReady: boolean;
+  /** Stage 8.2 vault readiness: true once T-Bit storage recovery succeeded. Kernel/Workflow/Provider/Agent remain NOT wired until Stage 8.4. */
+  vaultReady: boolean;
   /** Per-subsystem readiness map. */
   subsystems: Record<string, boolean>;
   /** ISO-8601 timestamp of the last status verification. */
@@ -86,15 +90,17 @@ const SUBSYSTEM_NAMES = ["memory", "workflow", "provider", "agent", "qvault"] as
  *
  * Stage 8.2 scope (this class):
  *  - `initialize()` — sets spaces root, ensures encryption, creates the
- *    default space manifest, recovers T-Bit storage, and reports subsystem
- *    readiness.
+ *    default space manifest, recovers T-Bit storage, and reports Stage 8.2
+ *    readiness (vaultReady=true, kernelReady=false until Stage 8.4).
  *  - `getStatus()` — reports the current bootstrap status.
  *
  * Kernel and provider integration is intentionally deferred to Stage 8.4
  * per the approved Phase 8 implementation plan. The `initializeKernel()`
- * and `verifySubsystems()` helpers therefore report a pending/ready state
- * without importing `@aios/kernel`, preserving package isolation and the
- * stage boundary.
+ * and `verifySubsystems()` helpers therefore do NOT import `@aios/kernel`,
+ * do NOT initialize Kernel/Workflow/Provider/Agent, and report all subsystems
+ * as NOT ready (false) until Stage 8.4 performs the actual wiring. A separate
+ * `vaultReady` signal (true once T-Bit storage recovery succeeds) lets
+ * Stage 8.3 proceed without misinterpreting `kernelReady` as full readiness.
  */
 export class VaultBootstrapService {
   private vaultRoot: string | null = null;
@@ -194,6 +200,7 @@ export class VaultBootstrapService {
       vaultRoot: normalizedVaultRoot,
       encryptionKeyId,
       kernelReady: this.kernelReady,
+      vaultReady: true,
       subsystems: this.subsystems,
       initializedAt: new Date().toISOString(),
     };
@@ -215,6 +222,7 @@ export class VaultBootstrapService {
         spacesCount: 0,
         encryptionConfigured: false,
         kernelReady: false,
+        vaultReady: false,
         subsystems: {},
         error: "Vault not initialized",
       };
@@ -229,6 +237,7 @@ export class VaultBootstrapService {
       spacesCount: spaces.length,
       encryptionConfigured,
       kernelReady: this.kernelReady,
+      vaultReady: true,
       subsystems: this.subsystems,
       lastVerifiedAt: new Date().toISOString(),
     };
@@ -260,7 +269,7 @@ export class VaultBootstrapService {
    * @returns A map of subsystem name to readiness boolean.
    */
   private async verifySubsystems(): Promise<Record<string, boolean>> {
-    return Object.fromEntries(SUBSYSTEM_NAMES.map((name) => [name, true]));
+    return Object.fromEntries(SUBSYSTEM_NAMES.map((name) => [name, false]));
   }
 }
 
