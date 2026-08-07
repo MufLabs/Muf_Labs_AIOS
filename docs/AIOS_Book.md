@@ -873,99 +873,74 @@ Vault events are emitted on the Kernel event bus:
 - ✅ Dependency injection: Zero global state; VaultContext is constructor/`setVaultContext()`-injected only
 - ✅ No hardcoded paths in vault-aware providers — all paths via `tbitRuntimePaths`
 
-### Stage 8.4 — Unit Tests: @aios/shared, @aios/kernel, @aios/agents, @aios/workflow, @aios/llm, @aios/database, @aios/ui
-- **Objective**: Test shared utilities and supporting packages
-- **Test Categories**:
-  - `@aios/shared`: Re-export correctness, text encoding
-  - `@aios/kernel`: Lifecycle, workflows, provider routing, memory orchestration, event bus, sessions
-  - `@aios/agents`: Agent logic, tool integration
-  - `@aios/workflow`: Workflow engine, step execution
-  - `@aios/llm`: LLM provider abstraction
-  - `@aios/database`: Database abstractions
-  - `@aios/ui`: Shared UI components
-- **Validation**: All tests pass, other packages coverage ≥75%
+> **Roadmap Consistency Notice (2026-08-06):**
+>
+> The section above this notice (lines preceding the Stage 8.4 freeze section) describes the **current** Phase 8 roadmap: **T-Bit Vault Setup**. The completed stages under that roadmap are 8.1, 8.2, 8.3, and 8.4. The remaining stages are **8.6 — Integration Testing & Build Validation** and **8.7 — Documentation & AIOS_Book.md Update**.
+>
+> **Stage 8.5 was intentionally removed.** Vault Migration and Repair endpoints are out of scope for Phase 8 and have been explicitly deferred to future phases. No implementation is missing. The roadmap proceeds directly from **Stage 8.4 → Stage 8.6**.
+>
+> The legacy `Stage 8.4 → 8.11` section that previously lived in this file (referencing Unit/Integration/System/E2E/CI/CD/Deployment sub-stages) was part of the **OLD Phase 8 = "Testing & Deployment"** roadmap that was **superseded** by the current Phase 8 = "T-Bit Vault Setup" roadmap. Those legacy testing/deployment sub-stages have been **re-mapped** to:
+>
+> - **Phase 9 — Testing & Validation** (Kernel, Workflow, Agents, LLM, API, Web, E2E, Coverage, CI Validation)
+> - **Phase 10 — Deployment & Production Hardening** (Production Hardening, Docker Production, CI/CD, Secrets, Observability, Monitoring, Release Management)
+>
+> See `docs/AIOS_ENGINEERING_AUDIT_v2.md` §14 Consolidated Roadmap for the authoritative phase layout.
 
-### Stage 8.5 — Integration Tests: API Contracts
-- **Objective**: Validate API contracts against running services
-- **Test Categories**:
-  - Health endpoint (no auth)
-  - Auth middleware (valid/invalid/expired keys)
-  - All 13 route modules: request/response schemas, error codes
-  - Anti-entropy: network export/import/compare round-trip
-  - Setup bootstrap: first-run → key gen → space manifest → ready
-- **Test Vaults**: Use temporary vaults via `tests/utils/test-vault.ts`
-- **Validation**: All contracts validated, no breaking changes
+### Stage 8.6 — Integration Testing & Build Validation (⏳ Next)
+- **Objective**: Full end-to-end verification of the Phase 8 vault-aware system (Stages 8.1–8.4).
+- **Validation scope**:
+  - Full monorepo build (`pnpm -r build`) — 11/11 packages PASS
+  - TypeScript verification (`tsc --noEmit`) — clean on all packages
+  - Lint verification (`pnpm -r lint`) — no errors
+  - Complete automated test execution (`pnpm -r test`) — every package's suite green
+  - Docker Compose validation (`docker compose up --build`) — both services healthy
+  - Fresh installation validation
+  - Complete onboarding flow (UI → API → Kernel → T-Bit)
+  - Vault creation, restoration, application restart, automatic Vault loading
+  - Kernel startup, Provider startup, Workflow initialization, Agent initialization
+  - Runtime path validation (`tbitRuntimePaths` resolves into active vault)
+  - Vault persistence validation
+  - Cross-package integration validation
+  - Build artifact validation, bundle size validation
+- **System validation sequence** (end-to-end):
+  ```
+  User launches AIOS
+    ↓
+  Vault discovered (IndexedDB)
+    ↓
+  Vault restored (File System Access API permission)
+    ↓
+  Permissions restored
+    ↓
+  Vault verified (GET /vault/status)
+    ↓
+  Vault initialized (POST /vault/init)
+    ↓
+  Kernel initialized (VaultContext + isVaultInitialized=true)
+    ↓
+  Providers initialized (5 vault providers via ProviderManager.initializeAll)
+    ↓
+  Workflow initialized (WorkflowVaultProvider)
+    ↓
+  Agents initialized (AgentVaultProvider)
+    ↓
+  Application Ready (kernelReady=true, vaultReady=true)
+  ```
+- **Cross-platform validation**:
+  - Windows — file path handling, ACL semantics, FS Access API behavior in Chrome/Edge
+  - macOS — HFS+/APFS file path handling, FS Access API behavior
+  - Linux — POSIX paths, FS Access API behavior
+  - Vault abstraction preserves platform-independence (Web: FSA API; Desktop: native APIs)
+- **Regression validation**: Stages 8.1 + 8.2 + 8.3 + 8.4 must remain fully operational (72 + 89 = 161+ tests, all green)
 
-### Stage 8.6 — Integration Tests: Kernel
-- **Objective**: Test Kernel integration (lifecycle, workflows, provider routing, memory orchestration, event bus, sessions)
-- **Test Categories**:
-  - Kernel boot/shutdown sequence
-  - Provider registration and resolution
-  - Workflow execution and state management
-  - Memory orchestration across providers
-  - Event bus publish/subscribe patterns
-  - Session lifecycle and context isolation
-- **Validation**: Kernel integration tests pass
-
-### Stage 8.7 — Frontend Tests: @aios/web
-- **Objective**: Test React components, hooks, and panel wiring
-- **Test Categories**:
-  - **Hooks**: `useVaultPicker`, `memoryCoreClient`, TanStack Query hooks
-  - **Panels**: All 16 panel components (rendering, API integration, state)
-  - **3D Panels**: `QuantumEnginePanel`, `QVaultPanel` (lazy loading, chunk splitting)
-  - **Onboarding**: Wizard flow, vault selection, first-run bootstrap
-  - **Routing**: React Router navigation, protected routes
-- **Tools**: React Testing Library, Vitest, @testing-library/user-event
-- **Validation**: All tests pass, UI coverage ≥80%
-
-### Stage 8.8 — System Tests (UI → API → Kernel → T-Bit)
-- **Objective**: Full stack integration tests distinguishing from API-only integration tests
-- **Test Categories**:
-  - **Memory Flow**: UI remember → API → Kernel → T-Bit storage → UI recall
-  - **Query Flow**: UI search → API → Kernel → Query Index → results
-  - **Vault Flow**: Onboarding → vault pick → bootstrap → space manifest → panels active
-  - **3D Visualization**: QuantumEngine/QVault data pipeline
-  - **Document Pipeline**: Upload → parse → index → search → reconstruct
-- **Distinction**: System tests exercise the complete stack; Integration tests stop at API boundary
-
-### Stage 8.9 — E2E Tests: Critical User Journeys
-- **Objective**: Playwright tests for production-critical flows
-- **Test Journeys**:
-  1. **First Run**: Fresh install → onboarding → vault creation → dashboard
-  2. **Memory Operations**: Create memory → graph visualization → context recall
-  3. **Vault Management**: Switch vaults → permissions → persistence
-  4. **Document Processing**: Upload → index → semantic search → QA
-  5. **3D Exploration**: QuantumEngine navigation → QVault interaction
-- **Tools**: Playwright, Docker Compose test environment
-- **Validation**: All journeys pass in CI
-
-### Stage 8.10 — CI/CD Pipeline
-- **Objective**: GitHub Actions workflow with quality gates
-- **Pipeline Stages**:
-  1. **Lint & Typecheck**: `pnpm lint`, `pnpm typecheck` (all packages)
-  2. **Unit Tests**: `pnpm test:unit` (parallel per package)
-  3. **Integration Tests**: `pnpm test:integration` (API + Kernel)
-  4. **System Tests**: `pnpm test:system` (full stack)
-  5. **Build**: `pnpm build` (FULL TURBO)
-  6. **Security Scan**: `npm audit`, `snyk`/`trivy` for Docker images
-  7. **Bundle Analysis**: Vite bundle analyzer, chunk size validation (<500kB)
-  8. **E2E Tests**: `pnpm test:e2e` (Playwright on staging)
-  9. **Deploy Staging**: Docker Compose deploy to staging environment
-  10. **Post-Deploy Health**: Automated health checks, smoke tests
-  11. **Deploy Production**: Manual approval → production deploy
-  12. **Rollback**: Automated rollback on health check failure
-- **Quality Gates**: Coverage thresholds enforced, bundle size limits, zero critical vulnerabilities
-
-### Stage 8.11 — Production Deployment Configuration
-- **Objective**: Staging/prod environment configs, deploy scripts, rollback procedures
-- **Deliverables**:
-  - `docker-compose.staging.yml`, `docker-compose.prod.yml`
-  - `.env.staging.example`, `.env.prod.example`
-  - `scripts/deploy.sh` (with rollback support)
-  - `scripts/health-check.sh` (comprehensive service validation)
-  - `docs/DEPLOYMENT.md` (runbook)
-  - Secret management strategy (GitHub Secrets, 1Password, or Vault)
-- **Validation**: Staging deploy successful, rollback tested
+### Stage 8.7 — Documentation & AIOS_Book.md Update (⏳ Pending)
+- **Objective**: Update all living documentation for Phase 8 closure.
+- **Files**:
+  - `docs/AIOS_Book.md` — Phase 8 closure section
+  - `docs/AIOS_AppBible.md` — User flow for vault selection, onboarding
+  - `CHANGELOG.md` — Phase 8 completion entry
+  - `Framework/standards/` — Any new patterns
+- **Wait condition**: Stage 8.6 must be formally accepted and frozen first.
 
 ---
 

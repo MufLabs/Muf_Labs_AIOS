@@ -433,15 +433,18 @@ docker compose up --build # Must bring up healthy services
 ## 7. Implementation Order Summary
 
 ```
-Stage 8.1 → Stage 8.2 → Stage 8.3 → Stage 8.4 → Stage 8.5 → Stage 8.6
-   │          │          │          │          │          │
-   ▼          ▼          ▼          ▼          ▼          ▼
-Frontend   Backend    Frontend   Kernel/    (Removed)  Full       Docs
-Only       Only       Loader     Providers  — Out of   Validation Update
-                                           Scope
+Stage 8.1 → Stage 8.2 → Stage 8.3 → Stage 8.4       → Stage 8.6 → Stage 8.7
+   │          │          │          │                   │          │
+   ▼          ▼          ▼          ▼                   ▼          ▼
+Frontend   Backend    Frontend   Kernel/             Full       Docs
+Only       Only       Loader     Providers           Validation Update
+                                           (Vault Migration/Repair)
+                                          deferred to future phases
 ```
 
-**Dependencies respected:** Each stage only depends on completed prior stages. No parallel implementation of unrelated subsystems. Stage 8.5 (API Extensions) intentionally omitted per approved scope.
+**Stage 8.5 was intentionally removed.** Vault Migration and Repair endpoints are out of scope for Phase 8 and have been explicitly deferred to future phases. No implementation is missing. The roadmap proceeds directly from **Stage 8.4 → Stage 8.6**.
+
+**Dependencies respected:** Each stage only depends on completed prior stages. No parallel implementation of unrelated subsystems. Stage 8.5 (Vault Migration/Repair) intentionally omitted per approved scope.
 
 ---
 
