@@ -630,3 +630,18 @@ The repository is in a **strong, coherent state**: Phases 1–7 are complete and
 ---
 
 *End of Assessment v2.3 + Stage 8.4 Freeze Notice + Stage 8.6 Freeze Notice (2026-08-06). This document reflects the repository state as of 2026-08-06. For the official roadmap, see `docs/AIOS_Book.md` and `TASK_PROGRESS.md`.*
+
+
+---
+
+## Phase 8 Engineering Closure (Stage 8.7)
+
+**Status: Phase 8 Successfully Closed**
+
+- Acceptance Date: 2026-08-07
+- Freeze Date: 2026-08-07
+- Baseline Commit: b3cfbd7da58047dc8acddad7a7855a6a49383e60
+- Next Phase: Phase 9 - Testing & Validation
+- Closure artifacts: docs/PHASE8_FINAL_ACCEPTANCE.md, docs/PHASE8_ARCHITECTURE_BASELINE.md, docs/PHASE8_ENGINEERING_METRICS.md, docs/PHASE8_FINAL_AUDIT.md, docs/PHASE8_ENGINEERING_CLOSURE_REPORT.md, docs/ADR/ (ADR-001..010), docs/ENGINEERING_DECISIONS.md
+
+Per ADR-008 Freeze Policy, Phase 8 implementation shall not be modified unless a verified defect is discovered or an approved ECR explicitly authorizes it.
