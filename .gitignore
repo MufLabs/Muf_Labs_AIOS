@@ -62,11 +62,15 @@ coverage/
 # ── AIOS / T-Bit runtime data ──────────────────────────────────
 *.tbit
 .tbit/
+data/
 exports/
 replicas/
 snapshots/
 **/*.wal
 lockfile.*
+
+# ── Test runner artifacts ───────────────────────────────────────
+**/vitest.config.ts.timestamp-*.mjs
 
 # ── Tree dumps / scratch (regenerable) ─────────────────────────
 **/tree_*.txt

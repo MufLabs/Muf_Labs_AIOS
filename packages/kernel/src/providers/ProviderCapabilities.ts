@@ -105,4 +105,16 @@ export interface ProviderCapabilities {
     */
     reasoning?: boolean;
 
+    /**
+     * Stage 8.4 — Vault-aware providers: declares that the provider
+     * can read vault-scoped filesystem paths. Use this for providers
+     * that resolve their layout through `VaultContext.spacesRoot`.
+     */
+    vaultRead?: boolean;
+
+    /**
+     * Stage 8.4 — Vault-aware providers: declares that the provider
+     * can write vault-scoped filesystem paths.
+     */
+    vaultWrite?: boolean;
 }

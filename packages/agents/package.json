@@ -8,7 +8,8 @@
   "dependencies": {
     "@aios/database": "workspace:*",
     "@aios/llm": "workspace:*",
-    "@aios/kernel": "workspace:*"
+    "@aios/kernel": "workspace:*",
+    "@aios/shared": "workspace:*"
   },
   "scripts": {
     "build": "tsc --build",

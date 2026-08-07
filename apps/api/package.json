@@ -15,6 +15,7 @@
   "dependencies": {
     "@aios/agents": "workspace:*",
     "@aios/kernel": "workspace:*",
+    "@aios/shared": "workspace:*",
     "@aios/workflow": "workspace:*",
     "@muf/tbit-core": "workspace:*",
     "cors": "^2.8.6",

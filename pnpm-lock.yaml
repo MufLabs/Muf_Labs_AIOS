@@ -124,6 +124,9 @@ importers:
       '@aios/kernel':
         specifier: workspace:*
         version: link:../../packages/kernel
+      '@aios/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@aios/workflow':
         specifier: workspace:*
         version: link:../../packages/workflow
@@ -234,6 +237,9 @@ importers:
       '@aios/llm':
         specifier: workspace:*
         version: link:../llm
+      '@aios/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@types/node':
         specifier: ^24.3.0
@@ -281,6 +287,9 @@ importers:
       '@aios/llm':
         specifier: workspace:*
         version: link:../llm
+      '@aios/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@types/node':
         specifier: ^24.3.0
@@ -412,6 +421,9 @@ importers:
       '@aios/kernel':
         specifier: workspace:*
         version: link:../kernel
+      '@aios/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@types/node':
         specifier: ^24.3.0

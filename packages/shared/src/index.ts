@@ -12,3 +12,13 @@ export {
   createSpaceManifest,
   listSpaceManifests,
 } from "./tbitRuntimePaths";
+
+export {
+  type VaultContext,
+  type VaultProviderConfig,
+  type VaultCapability,
+  type VaultOpenedPayload,
+  type VaultClosedPayload,
+  type VaultSwitchedPayload,
+  VAULT_EVENTS,
+} from "./vaultContext";

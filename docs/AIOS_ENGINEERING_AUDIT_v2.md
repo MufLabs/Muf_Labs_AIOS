@@ -19,8 +19,8 @@
 
 | Category | Assessment |
 |----------|------------|
-| **Implemented & Functional** | Core T-Bit engine (`@muf/tbit-core`), Kernel orchestration (`@aios/kernel`), LLM Gateway (`@aios/llm`), Workflow Engine (`@aios/workflow`), Agents framework skeleton (`@aios/agents`), Database abstraction (`@aios/database`), 11 modular API route groups, React 19 web app with 16 panels, Docker/Compose production infra (Phase 7), test infrastructure (Vitest, React Testing Library, MSW, Playwright config), **Phase 8 Stages 8.1 + 8.2 + 8.3 COMPLETED & [FROZEN] (2026-08-06)**: Client-Side Vault Selection UI (FS Access API + IndexedDB, no fake fallback), Vault Bootstrap Service (linear sequence, `vaultReady` signal), Application Startup & Vault Loader (`useVaultInit` + `AppWrapper`), and the Stage 8.3 frontend validation layer (47 tests). |
-| **Planned / In-Progress** | Phase 8 Stage 8.4: Kernel & Provider Vault Integration (next), Stages 8.6-8.7: Testing & Documentation. Stages 8.1, 8.2, 8.3 COMPLETED & [FROZEN] (2026-08-06). |
+| **Implemented & Functional** | Core T-Bit engine (`@muf/tbit-core`), Kernel orchestration (`@aios/kernel`), LLM Gateway (`@aios/llm`), Workflow Engine (`@aios/workflow`), Agents framework skeleton (`@aios/agents`), Database abstraction (`@aios/database`), 11 modular API route groups, React 19 web app with 16 panels, Docker/Compose production infra (Phase 7), test infrastructure (Vitest, React Testing Library, MSW, Playwright config), **Phase 8 Stages 8.1 + 8.2 + 8.3 + 8.4 COMPLETED & [FROZEN] (2026-08-06)**: Client-Side Vault Selection UI (FS Access API + IndexedDB, no fake fallback), Vault Bootstrap Service (linear sequence, `vaultReady` signal), Application Startup & Vault Loader (`useVaultInit` + `AppWrapper`), the Stage 8.3 frontend validation layer (47 tests), and **Stage 8.4 — Kernel & Provider Vault Integration** (vault-aware Kernel, 5 vault providers, vault events, 88/88 tests). |
+| **Planned / In-Progress** | Phase 8 Stages 8.6-8.7: Integration Testing & Documentation consolidation. Stages 8.1, 8.2, 8.3, 8.4 COMPLETED & [FROZEN] (2026-08-06). |
 | **Future / Reserved** | `@aios/sdk` (empty), `@aios/desktop` (empty Tauri scaffold), `@aios/ui` (design system only, no app integration), packages described in `AIOS_MVP_ARCHITECTURE.md` but not created (`memory`, `semantic`, `query`, `guardian`, `assets`, `network`). |
 | **Known Blockers** | See §9 — limited to items that halt development or a functional release. |
 
@@ -201,7 +201,7 @@ First Run Vault Setup
 | 5 | LLM Gateway | `@aios/llm`: providers (Ollama, OpenAI, Anthropic), gateway, tools, streaming | ✅ Done | `llm` (providers/, gateway, chat, embeddings) | `api` (llm routes) | Unit | `AIOS_Book.md` Phase 5 | ✅ Compiles | ✅ | Phase 4 | Compiles ✓, Tested ✓, Integrated ✓, Documented ✓ |
 | 6 | Workflow & Agents | `@aios/workflow` (engine, DSL, nodes, state), `@aios/agents` (base, runtime, memory, tools, permissions) | ✅ Done | `workflow`, `agents` | `api` (workflows, agents routes) | Unit | `AIOS_Book.md` Phase 6 | ✅ Compiles | ✅ | Phases 4,5 | Compiles ✓, Tested ✓, Integrated ✓, Documented ✓ |
 | 7 | Production Infra | Docker/Compose, health checks, multi-service orchestration, nginx, SSL | ✅ Done | — | `api`, `web` (Dockerfiles) | Integration | `docker-compose.yml`, `AIOS_Book.md` Phase 7 | ✅ Compiles | ✅ | Phases 1–6 | Compiles ✓, Tested ✓, Integrated ✓, Documented ✓ |
-| **8** | **T-Bit Vault Setup** (Redefined) | **Client-first vault selection (FS API), VaultBootstrapService (linear sequence), startup loader, Kernel/provider vault integration, vault API** | **Analysis Complete — Awaiting Implementation Approval** | `tbit-core` (paths), `kernel` (vaultRoot), `shared` (vault types) | `api` (vault routes, service), `web` (picker, hooks, loader) | Stage 8.6 (planned) | `PHASE8_ENGINEERING_ANALYSIS.md`, `TASK_PROGRESS.md` | ⏳ | ⏳ | Phases 1–7 | **Pending**: Compiles, Tested, Integrated, Documented |
+| **8** | **T-Bit Vault Setup** (Redefined) | **Client-first vault selection (FS API), VaultBootstrapService (linear sequence), startup loader, Kernel/provider vault integration, vault API** | **Stages 8.1, 8.2, 8.3, 8.4 COMPLETED & [FROZEN] (2026-08-06); Stages 8.6, 8.7 pending** | `tbit-core` (paths), `kernel` (vaultRoot, vault providers), `shared` (vault types, VAULT_EVENTS) | `api` (vault routes, service, vaultBootstrapService.e2e), `web` (picker, hooks, loader) | **88 Stage 8.4 tests + 47 Stage 8.3 + 15 tbit-core + 3 Stage 8.2 e2e all passing** | `PHASE8_IMPLEMENTATION_PLAN.md`, `PROJECT_STATE.md`, `CHANGELOG.md`, `AIOS_Book.md` | ✅ 11/11 | ✅ | Phases 1–7 | **8.1–8.4**: Compiles ✓, Tested ✓, Integrated ✓, Documented ✓ |
 | **9** | **Testing & Validation** (New) | Kernel tests, Workflow tests, Agents tests, LLM tests, API integration tests, Web component tests, E2E tests, Coverage thresholds, CI validation | **Planned** | All | `api`, `web`, `desktop` | Full suite | Test plans | ⏳ | ⏳ | Phase 8 | **Pending**: Compiles, Tested, Integrated, Documented |
 | **10** | **Deployment & Production Hardening** (New) | Production hardening, Docker production images, CI/CD pipelines, Secrets management, Observability, Monitoring, Release management | **Planned** | — | `api`, `web`, `desktop` | Smoke/load | Runbooks | ⏳ | ⏳ | Phase 9 | **Pending**: Compiles, Tested, Integrated, Documented |
 | 11 | Future / MVP+ | P2P Network (`@aios/network`), Semantic Index (`@aios/semantic`), Query Index (`@aios/query`), Guardian (`@aios/guardian`), Assets (`@aios/assets`), SDK (`@aios/sdk`), Desktop (`@aios/desktop`), CLI (`@aios/cli`) | **Future / Reserved** | 7 aspirational packages | `desktop`, `cli` | TBD | `AIOS_MVP_ARCHITECTURE.md` | ⏳ | ⏳ | Phases 8–10 | N/A |
@@ -475,16 +475,94 @@ Release
 
 ---
 
-## 20. Conclusion
+## 20. Stage 8.4 Freeze Notice (2026-08-06)
 
-The repository is in a **strong, coherent state**: Phases 1–7 are complete and structurally mature. Phase 8 has been **redefined, engineered, and documented** (`PHASE8_ENGINEERING_ANALYSIS.md`, `TASK_PROGRESS.md`) — it awaits only implementation approval. The new roadmap (Phase 8 Vault → Phase 9 Testing → Phase 10 Deployment → Phase 11 Future) is consistent, actionable, and grounded in the actual codebase.
+### 20.1 Status
+
+**🧊 FROZEN** — Stage 8.4 (Kernel & Provider Vault Integration) was formally accepted and frozen on **2026-08-06**.
+
+### 20.2 Specification Compliance Audit (Traceability Matrix)
+
+| # | Stage 8.4 Requirement (Spec) | Implemented In | Status | Evidence |
+|---|------------------------------|----------------|--------|----------|
+| 1 | **Active Vault Context** (VaultContext interface: vaultId, vaultRoot, spacesRoot, spaceId, encryptionKeyId, userId, label, initializedAt) | `packages/shared/src/vaultContext.ts`; `packages/kernel/src/core/Kernel.ts` (`vaultContext`, `setVaultContext()`) | ✅ | `Kernel.vault.test.ts` (Kernel.vault > construction + setVaultContext) |
+| 2 | **Runtime Path Resolution** (no hardcoded paths; all paths via `tbitRuntimePaths`) | `packages/shared/src/index.ts` (re-exports); `apps/api/src/services/vaultBootstrapService.ts` (`setActiveTBitSpacesRoot(vaultRoot + '/spaces')`); all 5 vault providers | ✅ | `vaultProviders.test.ts` (idempotent initialization + execute guards) |
+| 3 | **Kernel Bootstrap Sequence** (Vault → Kernel → Memory → Providers → Workflow → Agent — deterministic order) | `apps/api/src/services/vaultBootstrapService.ts` (linear orchestration); `core/Kernel.ts` (`initializeProviders(config)`) | ✅ | `vaultBootstrapService.e2e.test.ts` (init with kernel verification, live kernel exposure) |
+| 4 | **Provider Integration** (5 vault-aware providers via `IProvider.initializeProvider(VaultProviderConfig)`) | `packages/kernel/src/providers/vault/{Memory,Workflow,Agent,QVault,Llm}VaultProvider.ts`; `packages/kernel/src/providers/ProviderManager.ts` (`initializeAll()`) | ✅ | `vaultProviders.test.ts` (41 tests); `ProviderManager.vault.test.ts` (11 tests) |
+| 5 | **Workflow Integration** (persistent context, temp context, logs, sessions scoped to vault) | `packages/kernel/src/providers/vault/WorkflowVaultProvider.ts` | ✅ | `vaultProviders.test.ts` > WorkflowVaultProvider block |
+| 6 | **Agent Integration** (prompt library, knowledge base, runtime cache scoped to vault) | `packages/kernel/src/providers/vault/AgentVaultProvider.ts` | ✅ | `vaultProviders.test.ts` > AgentVaultProvider block |
+| 7 | **Vault Events** (`vault.opened`, `vault.closed`, `vault.switched` on Kernel event bus) | `packages/shared/src/vaultContext.ts` (`VAULT_EVENTS` constants); `core/Kernel.ts` (`events` getter); `vaultBootstrapService.e2e.test.ts` (captures `vault.opened`) | ✅ | `vaultBootstrapService.e2e.test.ts` > vault.opened event capture; `Kernel.vault.test.ts` > events getter |
+| 8 | **Dependency Injection** (no global state; VaultContext injected via constructor or `setVaultContext()`) | `core/Kernel.ts` (constructor `vaultContext?: VaultContext` + `setVaultContext()`); no `process.env` reads inside Kernel; no module-level mutable state | ✅ | `Kernel.vault.test.ts` (construction with/without VaultContext); code review confirms zero global mutation |
+| 9 | **Phase 7 Backward Compatibility** (`boot()`/`shutdown()`/`context` getter/`isRunning` preserved) | `core/Kernel.ts` (re-exports `boot()`, `shutdown()`, `context`, `isRunning`) | ✅ | `Kernel.vault.test.ts` > Phase 7 backward compatibility block; smoke test 1/1 passing |
+
+**Audit Verdict: 9/9 requirements Implemented → FULLY IMPLEMENTED.**
+
+### 20.3 Validation Evidence
+
+- **88/88** Stage 8.4 tests passing:
+  - `Kernel.vault.test.ts` — 29 tests
+  - `vaultProviders.test.ts` — 41 tests
+  - `ProviderManager.vault.test.ts` — 11 tests
+  - `vaultBootstrapService.e2e.test.ts` — 7 tests
+- **11/11** packages build successfully (`pnpm run build`).
+- **TypeScript** compilation clean (`tsc --noEmit` on all modified packages).
+- **Regression**: Stage 8.3 frontend 47/47, Stage 8.2 backend e2e 3/3, tbit-core 15/15 — all still passing.
+
+### 20.4 Architecture Invariant (Honored)
+
+- **The Kernel remains the single orchestration point for subsystem initialization.** Stage 8.4 *extends* the existing `initializeProviders()` mechanism; it does **not** introduce a second initialization flow.
+- **No hardcoded paths** in vault-aware providers — all paths via `tbitRuntimePaths`.
+- **Zero global state mutation** — VaultContext is constructor/`setVaultContext()`-injected only.
+
+### 20.5 Modification Policy (LOCKED)
+
+From 2026-08-06 onward, Stage 8.4 vault-aware architecture, kernel contract, vault providers, vault events, and readiness flow are **LOCKED** unless:
+1. A **verified defect** is discovered, or
+2. An approved **Engineering Change Request (ECR)** explicitly authorizes the modification.
+
+LOCKED files:
+- `packages/shared/src/vaultContext.ts`
+- `packages/shared/src/index.ts`
+- `packages/kernel/src/Kernel.ts`
+- `packages/kernel/src/core/Kernel.ts`
+- `packages/kernel/src/providers/IProvider.ts`
+- `packages/kernel/src/providers/IProviderManager.ts`
+- `packages/kernel/src/providers/ProviderManager.ts`
+- `packages/kernel/src/providers/ProviderCapabilities.ts`
+- `packages/kernel/src/providers/ProviderInfo.ts`
+- `packages/kernel/src/providers/vault/MemoryVaultProvider.ts`
+- `packages/kernel/src/providers/vault/WorkflowVaultProvider.ts`
+- `packages/kernel/src/providers/vault/AgentVaultProvider.ts`
+- `packages/kernel/src/providers/vault/QVaultVaultProvider.ts`
+- `packages/kernel/src/providers/vault/LlmVaultProvider.ts`
+- `packages/kernel/src/providers/vault/index.ts`
+- `packages/kernel/src/index.ts`
+- `apps/api/src/services/vaultBootstrapService.ts`
+
+### 20.6 Documentation Synchronization
+
+| Doc | Status |
+|-----|--------|
+| `docs/AIOS_Book.md` | ✅ Updated (Stage 8.4 freeze section added) |
+| `docs/PHASE8_IMPLEMENTATION_PLAN.md` | ✅ Updated (Stage 8.4 marked ✅ Complete & [FROZEN]) |
+| `docs/AIOS_ENGINEERING_AUDIT_v2.md` | ✅ This document (this section) |
+| `PROJECT_STATE.md` | ✅ Updated (§3 = Stage 8.4 Frozen State) |
+| `CHANGELOG.md` | ✅ Updated (Stage 8.4 freeze entry under [Unreleased]) |
+
+No conflicting or outdated information remains.
+
+---
+
+## 21. Conclusion
+
+The repository is in a **strong, coherent state**: Phases 1–7 are complete and structurally mature. **Phase 8 Stages 8.1 + 8.2 + 8.3 + 8.4 are now COMPLETED & [FROZEN] (2026-08-06)** — including Stage 8.4 Kernel & Provider Vault Integration (88/88 tests passing, vault-aware Kernel, 5 vault providers, vault events, dependency injection). The remaining Phase 8 stages (8.6 Integration Testing, 8.7 Documentation) continue the closure of Phase 8. The new roadmap (Phase 8 Vault → Phase 9 Testing → Phase 10 Deployment → Phase 11 Future) is consistent, actionable, and grounded in the actual codebase.
 
 **No critical architectural defects were identified during this repository assessment.** The `@muf/tbit-core` vs `@aios/database` concern was a false duplication alarm — the separation is intentional and correct. Empty packages are future placeholders, not debt.
 
 **The core architecture is production-oriented and structurally mature. Production validation remains part of Phases 9 and 10.**
 
-**Next action**: Approve Phase 8 implementation per `PHASE8_ENGINEERING_ANALYSIS.md` §9 Approval Gate. All downstream phases unblock from there.
+**Next action**: Proceed to Phase 8 Stage 8.6 (Integration Testing & Build Validation) per `docs/PHASE8_IMPLEMENTATION_PLAN.md` §Stage 8.6.
 
 ---
 
-*End of Assessment v2.2. This document reflects the repository state as of 2026-08-05. For the official roadmap, see `docs/AIOS_Book.md` and `TASK_PROGRESS.md`.*
+*End of Assessment v2.2 + Stage 8.4 Freeze Notice (2026-08-06). This document reflects the repository state as of 2026-08-06. For the official roadmap, see `docs/AIOS_Book.md` and `TASK_PROGRESS.md`.*

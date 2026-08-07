@@ -21,7 +21,7 @@
 | &nbsp;&nbsp;└─ Stage 8.1 | ✅ **Complete** | Client-Side Vault Selection UI (Frontend Only) |
 | &nbsp;&nbsp;└─ Stage 8.2 | ✅ **Complete** | Vault Bootstrap Service (Backend Orchestrator) |
 | &nbsp;&nbsp;└─ Stage 8.3 | ✅ **Complete** & [FROZEN] (2026-08-06) | Application Startup & Vault Loader (Frontend) |
-| &nbsp;&nbsp;└─ Stage 8.4 | ⏳ Pending | Kernel & Provider Vault Integration |
+| &nbsp;&nbsp;└─ Stage 8.4 | ✅ **Complete** & [FROZEN] (2026-08-06) | Kernel & Provider Vault Integration |
 | &nbsp;&nbsp;└─ Stage 8.5 | ⏭️ Removed | Out of Scope (Vault Migration/Repair) |
 | &nbsp;&nbsp;└─ Stage 8.6 | ⏳ Pending | Integration Testing & Build Validation |
 | &nbsp;&nbsp;└─ Stage 8.7 | ⏳ Pending | Documentation & AIOS_Book.md Update |
@@ -806,6 +806,72 @@ Implement T-Bit Vault Setup with client-first vault selection, bootstrap orchest
   - ✅ Architecture validation: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
   - ✅ Coding rules compliance: No TODO, no placeholder, no pseudo-code, all public interfaces documented, strict TypeScript
   - ✅ Readiness boundary aligned: Frontend uses `vaultReady` (not `kernelReady`) per Stage 8.2 contract
+
+### Stage 8.4 — Kernel & Provider Vault Integration ✅ **COMPLETED** & [FROZEN] (2026-08-06)
+- **Objective**: Make the Kernel completely Vault-aware. Wire all 5 vault-aware providers (Memory, Workflow, Agent, QVault, LLM) through the existing Kernel initialization mechanism — propagating the active `VaultContext` so paths, encryption, and metadata are derived from the open vault rather than from hardcoded/global state.
+- **Architecture invariant honored**: The Kernel remains the **single orchestration point** for subsystem initialization. Stage 8.4 *extends* the existing `initializeProviders()` mechanism; it does **not** introduce a second initialization flow.
+
+#### Files Created
+- `packages/shared/src/vaultContext.ts` — Canonical `VaultContext`, `VaultProviderConfig`, `VaultCapability`, `VaultOpenedPayload`, `VaultClosedPayload`, `VaultSwitchedPayload` types and `VAULT_EVENTS` constants (`vault.opened`, `vault.closed`, `vault.switched`). Single source of truth for vault-aware types across the monorepo.
+- `packages/kernel/src/providers/vault/MemoryVaultProvider.ts` — Concrete vault-aware provider; `id: 'memory-vault'`, `vaultRead:true`, `vaultWrite:true`. Replaces/extends global memory provider when a vault is open.
+- `packages/kernel/src/providers/vault/WorkflowVaultProvider.ts` — Vault-aware workflow provider; persistent + temp context, logs, sessions scoped to vault.
+- `packages/kernel/src/providers/vault/AgentVaultProvider.ts` — Vault-aware agent provider; prompt library, knowledge base, runtime cache scoped to vault.
+- `packages/kernel/src/providers/vault/QVaultVaultProvider.ts` — Vault-aware QVault provider; quantum vault bindings resolve from `VaultContext`.
+- `packages/kernel/src/providers/vault/LlmVaultProvider.ts` — Vault-aware LLM provider; resolves LLM gateway configuration from active vault.
+- `packages/kernel/src/providers/vault/index.ts` — Barrel export for all 5 vault providers + `VAULT_PROVIDER_IDS` constant.
+- `packages/kernel/src/__tests__/Kernel.vault.test.ts` — 29 tests covering: vault-aware Kernel construction, `setVaultContext()`, `initializeProviders()`, `disposeVault()`, `getProviderReadiness()`, `execute()` request enrichment with vault metadata, Phase 7 backward compatibility (`boot()`/`shutdown()`/`context` getter), `generateVaultId()`.
+- `packages/kernel/src/__tests__/vaultProviders.test.ts` — 41 tests covering all 5 vault providers (id, name, capabilities, description, idempotent `initializeProvider()`, `execute()` guards and response shape, vault metadata propagation).
+- `packages/kernel/src/__tests__/ProviderManager.vault.test.ts` — 11 tests covering `ProviderManager.initializeAll()`: empty registry, missing `initializeProvider` opt-in, fan-out invocation, config propagation, single-failure isolation, multiple-failure isolation, non-Error throws, complete id enumeration, idempotency, unregistered providers, fresh-context propagation.
+- `apps/api/src/services/vaultBootstrapService.e2e.test.ts` — 7 e2e tests covering full Vault → Kernel wiring path: status before init, init with kernel verification, live Kernel exposure, `vault.opened` event capture, `disposeVault` with `vault.closed`, restart simulation, input validation.
+
+#### Files Modified
+- `packages/shared/src/index.ts` — Re-exports of `VaultContext`, `VaultProviderConfig`, `VaultCapability`, event payloads, `VAULT_EVENTS`, `setActiveTBitSpacesRoot`, `resolveActiveTBitDataPath`.
+- `packages/kernel/src/core/Kernel.ts` — Vault-aware Kernel: `vaultContext?: VaultContext` constructor parameter, `setVaultContext()`, `initializeProviders(config: VaultProviderConfig)`, `disposeVault()`, `getProviderReadiness()`, static `generateVaultId()`, `events` getter, `context` getter, `boot()`/`shutdown()` (Phase 7 backward compat), `isVaultInitialized` flag, `execute()` enrichment with `vaultId`/`spaceId` metadata.
+- `packages/kernel/src/Kernel.ts` — Converted to **barrel re-export** of `core/Kernel.ts` (resolves the dual-Kernel class conflict without breaking existing Phase 7 imports).
+- `packages/kernel/src/providers/IProvider.ts` — Added optional `initializeProvider?(config: VaultProviderConfig): Promise<void>` vault-aware hook.
+- `packages/kernel/src/providers/IProviderManager.ts` — Added `initializeAll(config: VaultProviderConfig): Promise<Record<string, boolean>>` fan-out method.
+- `packages/kernel/src/providers/ProviderManager.ts` — Implements `initializeAll()` with per-provider error handling; returns `Record<providerId, boolean>` (true = initialized, false = failed/missing hook).
+- `packages/kernel/src/providers/ProviderCapabilities.ts` — Added `vaultRead?: boolean`, `vaultWrite?: boolean` flags.
+- `packages/kernel/src/providers/ProviderInfo.ts` — Added `kind?: string`, `tags?: string[]`, `description?: string` fields.
+- `packages/kernel/src/index.ts` — Added vault exports; re-exports `VAULT_EVENTS`, `VaultContext`, etc., from `@aios/shared`.
+- `apps/api/src/services/vaultBootstrapService.ts` — Imports `VaultContext` from `@aios/shared`; fully wires `Kernel` with `VaultContext`; registers all 5 vault providers; calls `setVaultContext()` + `initializeProviders()`; reports per-provider readiness mapped to subsystems `{memory, workflow, provider, agent, qvault, llm}`. Added `onVaultOpenedForTesting()` helper that wraps `Kernel.prototype.initializeProviders` to attach event listener before `vault.opened` is emitted.
+- `packages/kernel/package.json`, `packages/agents/package.json`, `packages/workflow/package.json`, `apps/api/package.json` — Added `@aios/shared` as dependency for `VaultContext` and event types.
+- `.gitignore` — Added `data/` and `**/vitest.config.ts.timestamp-*.mjs` patterns.
+
+#### Active Vault Context
+- `VaultContext` interface (defined in `@aios/shared`) carries: `vaultId`, `vaultRoot`, `spacesRoot`, `spaceId`, `encryptionKeyId`, `userId`, `label`, `initializedAt`.
+- The `Kernel` holds exactly one `VaultContext` at a time; `setVaultContext()` swaps it atomically and emits `vault.switched` on the event bus.
+- Vault metadata is **dependency-injected** into the Kernel via constructor or `setVaultContext()` — no global state, no `process.env` reads inside the Kernel.
+
+#### Runtime Path Resolution
+- All vault-aware providers resolve paths via `tbitRuntimePaths` from `@muf/tbit-core` (re-exported through `@aios/shared`).
+- `setActiveTBitSpacesRoot(vaultRoot + '/spaces')` is called during vault bootstrap **before** any provider initializes, so all subsequent T-Bit operations resolve into the active vault.
+- **Zero hardcoded paths** in vault-aware providers; `tbitRuntimePaths` is the single source of path truth.
+
+#### Kernel Bootstrap Sequence
+The deterministic bootstrap order (preserved exactly):
+1. **Vault** — VaultContext propagated to Kernel
+2. **Kernel** — receives VaultContext, sets `vaultContext` field
+3. **Memory** — `MemoryVaultProvider` initialized via `initializeProvider()`
+4. **Providers** — `WorkflowVaultProvider`, `QVaultVaultProvider`, `LlmVaultProvider` initialized in sequence
+5. **Workflow** — WorkflowVaultProvider initialized (subsystem registered)
+6. **Agent** — `AgentVaultProvider` initialized last (depends on all other providers)
+
+Vault events are emitted on the Kernel event bus:
+- `vault.opened` — emitted once all providers initialize successfully
+- `vault.closed` — emitted when `disposeVault()` is called
+- `vault.switched` — emitted on `setVaultContext()` when a vault is already open
+
+#### Validation Gate 8.4
+- ✅ `pnpm run build` — Full monorepo build passes (**11/11 packages**)
+- ✅ `pnpm --filter @aios/kernel test` — 81 tests pass (29 Kernel.vault + 41 vaultProviders + 11 ProviderManager.vault)
+- ✅ `pnpm --filter @aios/api test` — 7 e2e tests pass (vaultBootstrapService.e2e)
+- ✅ TypeScript compilation clean — `tsc --noEmit` passes on all modified packages
+- ✅ Architecture validation: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
+- ✅ Coding rules compliance: No TODO, no placeholder, no pseudo-code; all public interfaces documented; strict TypeScript; no global state mutation
+- ✅ **Total Stage 8.4 tests: 88/88 PASSING**
+- ✅ Dependency injection: Zero global state; VaultContext is constructor/`setVaultContext()`-injected only
+- ✅ No hardcoded paths in vault-aware providers — all paths via `tbitRuntimePaths`
 
 ### Stage 8.4 — Unit Tests: @aios/shared, @aios/kernel, @aios/agents, @aios/workflow, @aios/llm, @aios/database, @aios/ui
 - **Objective**: Test shared utilities and supporting packages
