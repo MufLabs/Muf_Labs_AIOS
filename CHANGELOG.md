@@ -248,3 +248,43 @@ Stage 8.6 is **infrastructure-only** and does not introduce new architectural ar
 - Closure artifacts: docs/PHASE8_FINAL_ACCEPTANCE.md, docs/PHASE8_ARCHITECTURE_BASELINE.md, docs/PHASE8_ENGINEERING_METRICS.md, docs/PHASE8_FINAL_AUDIT.md, docs/PHASE8_ENGINEERING_CLOSURE_REPORT.md, docs/ADR/ (ADR-001..010), docs/ENGINEERING_DECISIONS.md
 
 Per ADR-008 Freeze Policy, Phase 8 implementation shall not be modified unless a verified defect is discovered or an approved ECR explicitly authorizes it.
+
+
+---
+
+## Phase 8 Repository Baseline & Governance (v0.3.0)
+
+**Status: Repository Baseline Complete**
+
+### What changed
+Added the final repository-governance baseline artifacts: official Release record, Engineering Timeline, and Version governance. package.json version bumped 0.1.0 -> 0.3.0 (metadata only; no functionality, architecture, or API changes).
+
+### Why it changed
+Phase 8 engineering closure required a permanent release baseline, timeline, and version record for all future AIOS/MUF Labs development.
+
+### How it works
+The @aios/* source code, Kernel, Workflow, Providers, Agents, T-Bit, Q-Vault, Memory, API, and Frontend are unchanged. Only engineering-governance documentation and the manifest version were added/updated.
+
+### Architectural / Engineering rationale
+Documented in ADR-008 (Freeze Policy) and ADR-009 (Documentation Synchronization Policy). The release baseline + timeline + version form the immutable reference referenced by future phases.
+
+### Dependencies
+Final Acceptance, Final Audit, Architecture Baseline, Engineering Metrics, Closure Report, ADR registry, Phase 8 frozen stages.
+
+### Validation performed
+Build 11/11 PASS; TypeScript 10/10 PASS; Tests 220/220 + 8 integration PASS; Docker Compose valid; Documentation Consistency Audit: 16/16 artifacts present, 0 placeholder/TODO issues, version 0.3.0 consistent.
+
+### Acceptance criteria
+Repository frozen, Architecture frozen, Documentation synchronized, Engineering Baseline complete, Release documented, Timeline documented, Version documented, Git Tag commands prepared, Repository ready for Phase 9.
+
+### Architectural impact
+None (governance / metadata only).
+
+### Future considerations
+Phase 9 (Testing & Validation) is the next approved phase. No future implementation may modify the frozen baseline without a verified defect or an approved ECR.
+
+### New governance artifacts
+- docs/RELEASES/RELEASE_v0.3.0.md
+- docs/ENGINEERING_TIMELINE.md
+- VERSION + docs/VERSION.md
+- package.json version: 0.3.0
