@@ -7,6 +7,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    env: {
+      NODE_ENV: 'test',
+    },
     include: ['src/**/*.test.{ts,tsx}'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/.turbo/**', '**/*.stories.tsx'],
     coverage: {
@@ -29,7 +32,7 @@ export default defineConfig({
         '**/vite-env.d.ts',
       ],
     },
-    setupFiles: ['../../tests/setup-web.ts'],
+    setupFiles: ['./tests/setup.ts'],
     testTimeout: 30000,
     hookTimeout: 30000,
     deps: {

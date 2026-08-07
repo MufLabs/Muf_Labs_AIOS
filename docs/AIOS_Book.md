@@ -20,7 +20,7 @@
 | **Phase 8** | 🔄 **In Progress** | T-Bit Vault Setup (client-first vault selection, bootstrap, Kernel integration) |
 | &nbsp;&nbsp;└─ Stage 8.1 | ✅ **Complete** | Client-Side Vault Selection UI (Frontend Only) |
 | &nbsp;&nbsp;└─ Stage 8.2 | ✅ **Complete** | Vault Bootstrap Service (Backend Orchestrator) |
-| &nbsp;&nbsp;└─ Stage 8.3 | ✅ **Complete** | Application Startup & Vault Loader (Frontend) |
+| &nbsp;&nbsp;└─ Stage 8.3 | ✅ **Complete** & [FROZEN] (2026-08-06) | Application Startup & Vault Loader (Frontend) |
 | &nbsp;&nbsp;└─ Stage 8.4 | ⏳ Pending | Kernel & Provider Vault Integration |
 | &nbsp;&nbsp;└─ Stage 8.5 | ⏭️ Removed | Out of Scope (Vault Migration/Repair) |
 | &nbsp;&nbsp;└─ Stage 8.6 | ⏳ Pending | Integration Testing & Build Validation |
@@ -659,6 +659,31 @@ server {
 - ✅ Added end-to-end functional validation test `apps/api/src/services/vaultBootstrapService.e2e.test.ts` (3 tests, all passing): create vault, init, manifest creation, storage recovery, status, restart-simulation, status remains available
 - ✅ Build validation: 11/11 packages pass; Tests: 15 @muf/tbit-core + 3 Stage 8.2 e2e, all passing (no regressions)
 - ✅ Architecture validation: all 6 principles preserved
+
+### 2026-08-06 — Stage 8.3 Frontend Validation Layer ✅ **COMPLETED**
+- **Objective**: Production-quality automated test coverage for the frontend Stage 8.3 surface (useVaultInit, useVaultPicker, AppWrapper)
+- **Files Created**:
+  - `apps/web/src/hooks/useVaultInit.test.ts` (15 tests, all green) — Verifies every startup branch: initial loading state, vault discovery/restoration, missing vault, permission restoration, invalid vault, successful startup, API failure, retry flow, manual onboarding trigger, Stage 8.2 readiness boundary (`vaultReady=true`, `kernelReady=false`)
+  - `apps/web/src/hooks/useVaultPicker.test.ts` (19 tests, all green) — IndexedDB persistence (4), folder selection (4), permission restoration/revocation/recovery (6), missing/invalid handle handling (3), browser compatibility (2)
+  - `apps/web/src/AppWrapper.test.tsx` (13 tests, all green) — Loading state, onboarding state, `window.location.reload()` trigger on OnboardingView completion, ready state with `vaultConfig` + `triggerOnboarding`, error state with retry, full state-machine transitions (loading → onboarding → ready, ready → onboarding via trigger, loading → error → loading)
+  - `apps/web/tests/setup.ts` — Local setup file (mirrors root `tests/setup-web.ts`) so Vite resolves `@testing-library/jest-dom` from `apps/web/node_modules`
+- **Files Modified** (refactor for testability, no behavior change):
+  - `apps/web/src/AppWrapper.tsx` — New file: extracted wrapper component from former `apps/web/src/main.tsx` for testability
+  - `apps/web/src/index.tsx` — Reduced to import `AppWrapper`
+  - `apps/web/vitest.config.ts` — Added React plugin, `NODE_ENV=test` env, setup file, resolve aliases for `@aios/web`, `@aios/shared`, `@muf/tbit-core`, `@aios/ui`
+- **Test infrastructure decisions**:
+  - In-memory `FakeIDBDatabase` shim (`FakeObjectStore`, `FakeIDBDatabase`, `fakeOpenDB`) living INSIDE `vi.hoisted` block to fix TDZ at hoist time
+  - `vi.resetModules()` + dynamic import to reset module-level `dbPromise` cache between tests
+  - `Object.defineProperty(window, "location", { configurable: true, value: { ...originalLocation, reload: reloadSpy } })` for jsdom (Location.reload is non-configurable on instance)
+  - Stale handle test handles throw on BOTH `queryPermission` and `requestPermission` (matches real-world failure: a stale handle fails at every permission operation)
+- **TypeScript safety**: `tsc --noEmit` on `@aios/web` succeeds (all test files type-check clean)
+- **Validation**:
+  - `pnpm --filter "@aios/web" test` → 47 tests passed (3 files)
+  - `pnpm --filter "@aios/api" test` → 3 Stage 8.2 e2e tests still pass (regression check)
+  - `pnpm --filter "@aios/kernel" --filter "@muf/tbit-core" test` → 16 tests pass (no regressions)
+  - `pnpm turbo run build` → 11/11 packages succeed
+  - Architecture validation: all 6 principles preserved
+- **Constraints honored**: No modifications to business logic, architecture, API contracts, Vault behavior, Kernel/Workflow/Providers/Agents. Stage 8.4 NOT implemented.
 ### 2026-08-05 — Pre-Stage 8.2 Cleanup: Security & Dead Code Removal ✅ **COMPLETED**
 - **Objective**: Remove accumulated technical debt before Stage 8.2 implementation
 - **Deleted**: `apps/api/src/routes.ts` (dead code — legacy monolithic routes superseded by modular `routes/index.ts`)
@@ -746,23 +771,41 @@ Implement T-Bit Vault Setup with client-first vault selection, bootstrap orchest
 - **Coding rules compliance**: No TODO, no placeholder, no pseudo-code, all public interfaces documented, strict TypeScript
 - **Architecture validation**: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
 
-### Stage 8.3 — Application Startup & Vault Loader (Frontend) ✅ **COMPLETED**
+### Stage 8.3 — Application Startup & Vault Loader (Frontend) ✅ **COMPLETED** & [FROZEN] (2026-08-06)
 - **Objective**: On application load, detect configured vault → verify → initialize → or show onboarding
 - **Files Modified** (aligning with Stage 8.2 readiness contract):
   - `apps/web/src/types/vault.ts` — Added `vaultReady` field to `VaultInitResponse` and `VaultStatusResponse` interfaces (distinguishes Stage 8.2 vault readiness from full Kernel readiness)
   - `apps/web/src/hooks/useVaultInit.ts` — Fixed readiness check: uses `status.vaultReady` (not `status.kernelReady`) to determine "ready" state; added JSDoc comment explaining Stage 8.2 boundary
 - **Implementation Details**:
   - `useVaultInit` hook orchestrates startup flow: load vault config → restore File System Access permission → query API status → mount app if `vaultReady=true`
-  - `AppWrapper` in `apps/web/src/index.tsx` routes to LoadingSpinner (loading), OnboardingView (onboarding), ErrorView (error), or `<App />` (ready)
+  - `AppWrapper` extracted from `apps/web/src/index.tsx` routes to LoadingSpinner (loading), OnboardingView (onboarding), ErrorView (error), or `<App />` (ready)
   - `App.tsx` accepts `vaultConfig` prop and displays vault badge in header; removed legacy `localStorage` check for `tbit:activeContainerId`
   - Vault readiness boundary preserved: `kernelReady` remains `false` until Stage 8.4; `vaultReady` signals T-Bit storage recovery succeeded (Stage 8.2 scope)
+- **Stage 8.3 Frontend Validation Layer (NEW — automated test coverage)**:
+  - `apps/web/src/hooks/useVaultInit.test.ts` (15 tests) — Initial loading state, vault discovery/restoration, missing vault, permission restoration, invalid vault, successful startup, API failure, retry flow, manual onboarding trigger, Stage 8.2 readiness boundary (`vaultReady=true`, `kernelReady=false`)
+  - `apps/web/src/hooks/useVaultPicker.test.ts` (19 tests) — IndexedDB persistence (4), folder selection (4), permission restoration/revocation/recovery (6), missing/invalid handle handling (3), browser compatibility (2)
+  - `apps/web/src/AppWrapper.test.tsx` (13 tests) — Loading state, onboarding state, `window.location.reload()` trigger on OnboardingView completion, ready state with `vaultConfig` + `triggerOnboarding`, error state with retry, full state-machine transitions (loading → onboarding → ready, ready → onboarding via trigger, loading → error → loading)
+  - **Total**: 47 frontend Stage 8.3 tests, all green
+- **Test Infrastructure delivered (apps/web)**:
+  - `apps/web/vitest.config.ts` — React plugin, `NODE_ENV=test` env, setup file, resolve aliases for `@aios/web`, `@aios/shared`, `@muf/tbit-core`, `@aios/ui`
+  - `apps/web/tests/setup.ts` — Local setup file (mirrors root `tests/setup-web.ts`) so Vite resolves `@testing-library/jest-dom` from `apps/web/node_modules`
+  - `apps/web/src/AppWrapper.tsx` — Extracted wrapper component (from former `apps/web/src/main.tsx`) for testability without behavior change
 - **Validation Gate 8.3**:
   - ✅ `pnpm run build --filter=@aios/web` passes
   - ✅ `pnpm run build` full monorepo passes (11/11 packages)
-  - ✅ TypeScript compilation clean with no errors
-  - ✅ All relevant tests pass: 15 @muf/tbit-core + 3 Stage 8.2 e2e + 1 @aios/database + 1 @aios/kernel + 1 @aios/agents + 1 @aios/llm + 3 @aios/api = 25 tests
+  - ✅ TypeScript compilation clean with no errors (`tsc --noEmit` on `@aios/web` succeeds)
+  - ✅ All relevant tests pass: **72 tests** total
+    - 47 frontend Stage 8.3 tests (19 `useVaultPicker` + 15 `useVaultInit` + 13 `AppWrapper`)
+    - 15 `@muf/tbit-core` storage tests
+    - 3 Stage 8.2 e2e `@aios/api` (vaultBootstrapService) regression
+    - 1 `@aios/database` smoke
+    - 1 `@aios/kernel` smoke
+    - 1 `@aios/agents` smoke
+    - 1 `@aios/llm` smoke
+    - 3 `@aios/api` Stage 8.2 vault bootstrap e2e
   - ✅ Architecture validation: All 6 principles preserved (modularity, isolation, dependency inversion, provider abstraction, kernel responsibilities, T-Bit independence)
   - ✅ Coding rules compliance: No TODO, no placeholder, no pseudo-code, all public interfaces documented, strict TypeScript
+  - ✅ Readiness boundary aligned: Frontend uses `vaultReady` (not `kernelReady`) per Stage 8.2 contract
 
 ### Stage 8.4 — Unit Tests: @aios/shared, @aios/kernel, @aios/agents, @aios/workflow, @aios/llm, @aios/database, @aios/ui
 - **Objective**: Test shared utilities and supporting packages
