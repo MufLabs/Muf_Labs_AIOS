@@ -9,8 +9,7 @@
         "clean": "turbo run clean",
         "typecheck": "turbo run typecheck",
         "test": "turbo run test",
-        "test:unit": "turbo run test:unit",
-        "test:integration": "turbo run test:integration",
+        "test:integration": "vitest run --config vitest.config.ts tests/integration",
         "test:coverage": "turbo run test:coverage"
     },
     "devDependencies": {

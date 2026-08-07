@@ -23,9 +23,9 @@
         "typecheck": "tsc --noEmit",
         "dev": "vite",
         "clean": "rimraf dist .turbo tsconfig.tsbuildinfo",
-        "test": "vitest run",
-        "test:watch": "vitest",
-        "test:coverage": "vitest run --coverage"
+        "test": "vitest run --passWithNoTests",
+        "test:watch": "vitest --passWithNoTests",
+        "test:coverage": "vitest run --coverage --passWithNoTests"
     },
     "peerDependencies": {
         "react": "^19.1.0",

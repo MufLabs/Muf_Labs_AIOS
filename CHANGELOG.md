@@ -144,6 +144,81 @@ Stage 8.4 architecture, vault-aware kernel, vault providers, vault events, and t
 
 ---
 
+## [Unreleased]
+
+### 🧊 Frozen — Stage 8.6 (2026-08-06)
+
+**Stage 8.6 — Integration Testing & Build Validation** has been formally accepted and frozen.
+
+#### Scope
+Stage 8.6 is the **integration-validation gate** between implementation (Stages 8.1–8.4) and final Phase 8 closure (Stage 8.7). It validates that the entire monorepo — not just individual packages — is **coherent, deterministic, and release-ready**. No new product code is introduced; only test infrastructure, wiring, and one cross-package integration test.
+
+#### Added
+- `tests/integration/vault-bootstrap.test.ts` — New cross-package integration test exercising the public `Kernel` class API: constructs `Kernel` with a vault context, registers all 5 vault providers (`MemoryVaultProvider`, `WorkflowVaultProvider`, `AgentVaultProvider`, `QVaultVaultProvider`, `LlmVaultProvider`), calls `initializeProviders()`, asserts `providers.size() === 5`, asserts each registered provider reports vault capabilities (`info.capabilities.vaultRead === true` or `info.capabilities.vaultWrite === true`), asserts provider readiness via `getProviderReadiness()`, and asserts vault events are reachable through the `events` getter. 8 tests, 8/8 passing.
+- `vitest.config.ts` (root) — Added `tests/**/*.test.ts` glob pattern so cross-package integration tests are picked up by Vitest in addition to workspace tests.
+- `packages/ui/package.json`, `packages/shared/package.json`, `packages/workflow/package.json` — Updated `test` script to use `vitest run --passWithNoTests` so Turborepo does not fail on zero-test packages.
+
+#### Changed
+- `package.json` (root) — Replaced stub `test:integration` script (`turbo run test:integration` — no workspace defined that task) with direct Vitest invocation: `"test:integration": "vitest run --config vitest.config.ts tests/integration"`.
+- `tests/integration/vault-bootstrap.test.ts` (during implementation, 3 revisions):
+  - Switched from importing non-public `ProviderManagerFactory` (not in `@aios/kernel` public barrel) to public `Kernel` class API.
+  - Switched from `kernel.providers.getProviders` (non-existent) to `kernel.providers.getAll()`.
+  - Switched from `caps.some(...)` (capabilities is **object**, not array) to `caps.vaultRead === true || caps.vaultWrite === true`.
+
+#### Tests Added
+- `tests/integration/vault-bootstrap.test.ts` — 8 cross-package integration tests (vault-context kernel construction, provider registration for all 5 vault providers, `initializeProviders()` fan-out, `getProviderReadiness()` mapping, `info.capabilities` shape verification, vault events getter exposure).
+
+#### Validation
+- **220/220** monorepo tests passing across **18 test files** in **11 packages**.
+  - Includes Stage 8.4 (88), Stage 8.3 (47), tbit-core (15), Stage 8.2 e2e (3), plus baseline suites.
+- **8/8** cross-package integration tests passing (`pnpm test:integration`).
+- **11/11** packages build successfully (`pnpm run build`).
+- **TypeScript** compilation clean on all packages (`tsc --noEmit`).
+- **Docker Compose** validates: `docker compose -f docker-compose.yml config` exits 0; all 3 services (`api`, `web`, `postgres`) parse cleanly.
+- **Regression**: Stage 8.3 frontend 47/47, Stage 8.2 backend e2e 3/3, tbit-core 15/15 — all still passing. Zero regressions.
+- **Frozen-Stage integrity**: Stage 8.4 LOCKED file list verified unchanged; no modifications to vault-aware Kernel, vault providers, vault events, or readiness flow.
+
+#### Architecture Invariant (Honored)
+- Kernel remains the **single orchestration point** for subsystem initialization — no new initialization paths introduced.
+- No hardcoded filesystem paths introduced; all paths via `tbitRuntimePaths`.
+- Zero global state mutation.
+- Stage 8.4 architecture and LOCKED artifacts preserved untouched.
+
+#### Specification Compliance Audit
+- **14/15** Stage 8.6 requirements verified implemented (strict-pass).
+- **1 deferral** (Gap G-1): **Lint not configured** at repository level — no `eslint.config.*`, no per-package ESLint. Documented as tooling gap, not architectural defect. Tracked for Stage 8.7 (add ESLint flat config + per-package `lint` script).
+- Traceability matrix: see `docs/PHASE8_STAGE86_ENGINEERING_ANALYSIS.md` §10 (full 15-row matrix) and `docs/AIOS_ENGINEERING_AUDIT_v2.md` §21.3 (summary matrix).
+- Audit verdict: **14/15 strict-pass, 1 deferral**. Freeze accepted; deferral does not block Phase 8 closure.
+
+#### Architectural Findings
+| ID | Finding | Severity | Action |
+|----|---------|----------|--------|
+| **F-1** | Lint not configured at repository level. | Low (Tooling) | Stage 8.7 |
+| **F-2** | Vite 3D-panel chunks exceed 500 kB warning threshold. | Low (Performance) | Stage 8.7 / Phase 9 |
+| **F-3** | Root `test:integration` was a stub script. | Low (Tooling) | **RESOLVED** |
+| **F-4** | Test gating failed on packages with zero test files. | Low (Tooling) | **RESOLVED** |
+| **F-5** | Integration test initially imported non-public `ProviderManagerFactory`. | Low (Test Quality) | **RESOLVED** |
+| **F-6** | Integration test initially treated `info.capabilities` as string array. | Low (Test Quality) | **RESOLVED** |
+
+#### Documentation Synchronization
+| Doc | Status |
+|-----|--------|
+| `docs/PHASE8_STAGE86_ENGINEERING_ANALYSIS.md` | ✅ New (12 sections, ~370 lines) |
+| `docs/AIOS_ENGINEERING_AUDIT_v2.md` | ✅ Updated to v2.3 (§21 Stage 8.6 Freeze Notice added) |
+| `PROJECT_STATE.md` | ✅ Updated (§4 = Stage 8.6 Frozen State) |
+| `docs/PHASE8_IMPLEMENTATION_PLAN.md` | ✅ Stage 8.6 marked ✅ Complete & [FROZEN]; Stage 8.5 omission clarified |
+| `docs/AIOS_Book.md` | ✅ Stage 8.6 freeze section added |
+| `CHANGELOG.md` | ✅ This entry |
+
+#### Locked
+Stage 8.6 is **infrastructure-only** and does not introduce new architectural artifacts or new LOCKED files. The Stage 8.4 LOCKED file list (see above) remains authoritative and is verified unchanged. Stage 8.6 wiring is recorded for reproducibility:
+
+- `tests/integration/vault-bootstrap.test.ts` — Cross-package integration test (frozen).
+- `vitest.config.ts` (root) — Vitest configuration including `tests/**/*.test.ts` glob (frozen for Stage 8.6 scope).
+- `package.json` (root) — `test:integration` script wiring (frozen for Stage 8.6 scope).
+
+---
+
 ## Frozen — Stage 8.2 (Backend Vault Bootstrap Service) — pre-2026-08-06
 
 (Stage 8.2 freeze predates this changelog. See `docs/PHASE8_IMPLEMENTATION_PLAN.md` Stage 8.2 section.)
