@@ -18,4 +18,4 @@
  *   `getProviderReadiness`, and `events` for vault-aware providers.
  */
 export { Kernel } from "./core/Kernel";
-export { IKernel } from "./core/IKernel";
+export type { IKernel } from "./core/IKernel";
