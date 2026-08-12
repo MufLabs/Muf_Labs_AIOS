@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { vaultBootstrapService } from "../services/vaultBootstrapService";
 import { requireSymbolicApiKey } from "../middleware/auth";
+import { bootstrapLogger, newRequestId, newCorrelationId } from "../services/bootstrapLogger";
 
 const router: Router = Router();
 
@@ -43,17 +44,29 @@ router.use(requireSymbolicApiKey);
  *   - 500: Bootstrap failure.
  */
 router.post("/vault/init", async (req: Request, res: Response) => {
+  const requestId = newRequestId();
+  const correlationId = newCorrelationId();
+  const endpoint = "POST /api/v1/tbit/vault/init";
+  const logCtx = { requestId, correlationId, endpoint };
+
   try {
     const { vaultRoot, userId, label, generateKey } = req.body ?? {};
 
     if (!vaultRoot?.trim()) {
+      bootstrapLogger.warn("VaultBootstrapRoute", "vaultRoot is required.", logCtx);
       res.status(400).json({ ok: false, error: "vaultRoot is required." });
       return;
     }
     if (!userId?.trim()) {
+      bootstrapLogger.warn("VaultBootstrapRoute", "userId is required.", logCtx);
       res.status(400).json({ ok: false, error: "userId is required." });
       return;
     }
+
+    bootstrapLogger.info("VaultBootstrapRoute", "Starting vault initialization.", {
+      ...logCtx,
+      metadata: { vaultRoot: vaultRoot.trim(), userId: userId.trim() },
+    });
 
     const result = await vaultBootstrapService.initialize({
       vaultRoot: vaultRoot.trim(),
@@ -62,8 +75,19 @@ router.post("/vault/init", async (req: Request, res: Response) => {
       generateKey,
     });
 
+    bootstrapLogger.info("VaultBootstrapRoute", "Vault initialized successfully.", {
+      ...logCtx,
+      metadata: {
+        spaceId: result.spaceId,
+        vaultId: result.vaultId,
+        kernelReady: result.kernelReady,
+        vaultReady: result.vaultReady,
+      },
+    });
+
     res.status(201).json(result);
   } catch (error) {
+    bootstrapLogger.error("VaultBootstrapRoute", "Vault initialization failed.", error, logCtx);
     res.status(500).json({
       ok: false,
       error: error instanceof Error ? error.message : "Vault initialization failed.",
@@ -81,10 +105,19 @@ router.post("/vault/init", async (req: Request, res: Response) => {
  *   - 500: Status query failure.
  */
 router.get("/vault/status", async (_req: Request, res: Response) => {
+  const requestId = newRequestId();
+  const endpoint = "GET /api/v1/tbit/vault/status";
+  const logCtx = { requestId, endpoint };
+
   try {
     const status = await vaultBootstrapService.getStatus();
+    bootstrapLogger.info("VaultBootstrapRoute", "Vault status queried.", {
+      ...logCtx,
+      metadata: { initialized: status.initialized, kernelReady: status.kernelReady },
+    });
     res.json(status);
   } catch (error) {
+    bootstrapLogger.error("VaultBootstrapRoute", "Vault status query failed.", error, logCtx);
     res.status(500).json({
       ok: false,
       error: error instanceof Error ? error.message : "Vault status query failed.",

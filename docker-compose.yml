@@ -10,7 +10,7 @@ services:
       - NODE_ENV=production
       - TBIT_VAULT_ROOT=/data/spaces
       - CORS_ORIGIN=http://localhost:3000
-      - SYMBOLIC_API_KEY=${SYMBOLIC_API_KEY:-changeme}
+      - TBIT_API_KEY=${TBIT_API_KEY:-changeme}
       - LOG_LEVEL=info
     volumes:
       - tbit-data:/data

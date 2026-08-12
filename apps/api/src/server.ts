@@ -7,6 +7,7 @@ import express, {
 import cors from "cors";
 
 import { registerRoutes } from "./routes/index";
+import { bootstrapLogger, newRequestId } from "./services/bootstrapLogger";
 
 /**
  * Creates and configures the Express application.
@@ -38,8 +39,14 @@ export function createServer(): Express {
     registerRoutes(app);
 
     // Global error handler
-    app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-        console.error("Unhandled error:", err);
+    app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
+        const requestId = newRequestId();
+        const endpoint = `${req.method} ${req.originalUrl ?? req.url}`;
+        bootstrapLogger.error("GlobalErrorHandler", "Unhandled API error.", err, {
+            requestId,
+            endpoint,
+            metadata: { method: req.method, url: req.originalUrl ?? req.url },
+        });
         res.status(500).json({
             error: "Internal server error",
             message: process.env.NODE_ENV === "development" ? err.message : undefined

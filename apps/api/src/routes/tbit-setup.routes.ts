@@ -15,6 +15,7 @@ import { createHash } from "crypto";
 import path from "path";
 
 import { requireSymbolicApiKey } from "../middleware/auth";
+import { bootstrapLogger, newRequestId } from "../services/bootstrapLogger";
 
 const router: Router = Router();
 
@@ -26,15 +27,24 @@ router.use(requireSymbolicApiKey);
  * Get first-run setup status
  */
 router.get("/setup/status", async (_req: Request, res: Response) => {
+  const requestId = newRequestId();
+  const endpoint = "GET /api/v1/tbit/setup/status";
+  const logCtx = { requestId, endpoint };
+
   try {
     const encryptionConfigured = await isEncryptionConfigured();
     const spaces = await listSpaceManifests();
+    bootstrapLogger.info("SetupRoute", "Setup status queried.", {
+      ...logCtx,
+      metadata: { encryptionConfigured, spacesCount: spaces.length },
+    });
     res.json({
       initialized: encryptionConfigured && spaces.length > 0,
       encryptionConfigured,
       spacesCount: spaces.length,
     });
   } catch (error) {
+    bootstrapLogger.error("SetupRoute", "Failed querying setup status.", error, logCtx);
     res.status(500).json({
       ok: false,
       error: error instanceof Error ? error.message : "Fallo consultando estado de setup.",
@@ -48,10 +58,15 @@ router.get("/setup/status", async (_req: Request, res: Response) => {
  * Optional vaultRoot parameter allows vault-aware initialization
  */
 router.post("/setup/bootstrap", async (req: Request, res: Response) => {
+  const requestId = newRequestId();
+  const endpoint = "POST /api/v1/tbit/setup/bootstrap";
+  const logCtx = { requestId, endpoint };
+
   try {
     const { userId, label, generateKey, vaultRoot } = req.body ?? {};
 
     if (!userId?.trim()) {
+      bootstrapLogger.warn("SetupRoute", "bootstrapSetup requires userId.", logCtx);
       res.status(400).json({ ok: false, error: "bootstrapSetup requiere userId." });
       return;
     }
@@ -124,8 +139,14 @@ router.post("/setup/bootstrap", async (req: Request, res: Response) => {
       response.vaultRoot = normalizeTBitVaultRoot(vaultRoot.trim());
     }
 
+    bootstrapLogger.info("SetupRoute", "Setup bootstrap completed.", {
+      ...logCtx,
+      metadata: { spaceId, encryptionKeyId, ready: true },
+    });
+
     res.status(201).json(response);
   } catch (error) {
+    bootstrapLogger.error("SetupRoute", "Setup bootstrap failed.", error, logCtx);
     res.status(500).json({
       ok: false,
       error: error instanceof Error ? error.message : "Fallo en bootstrap de setup.",
