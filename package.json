@@ -4,11 +4,13 @@
   "private": true,
   "packageManager": "pnpm@10.15.1",
   "scripts": {
+    "setup:secret": "node scripts/setup-tbit-secret.mjs",
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "node scripts/setup-tbit-secret.mjs && turbo run dev --filter=@aios/api --filter=@aios/web",
     "clean": "turbo run clean",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
+    "test:secret": "vitest run --config vitest.config.ts tests/setup-tbit-secret.test.ts",
     "test:integration": "vitest run --config vitest.config.ts tests/integration",
     "test:coverage": "turbo run test:coverage"
   },

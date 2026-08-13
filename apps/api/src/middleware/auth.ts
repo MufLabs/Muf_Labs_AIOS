@@ -19,9 +19,18 @@ export function requireSymbolicApiKey(
     return;
   }
 
-  // In production, validate against stored key(s)
-  // For now, accept any non-empty key
-  const expectedKey = process.env.TBIT_API_KEY ?? "dev-key-change-in-production";
+  // Resolve the expected key strictly from the environment (installation-level).
+  // No hardcoded fallback: if the canonical root .env has not been bootstrapped,
+  // authentication fails closed instead of accepting a default value.
+  const expectedKey = process.env.TBIT_API_KEY;
+  if (!expectedKey || expectedKey.trim().length === 0) {
+    res.status(503).json({
+      ok: false,
+      error: "API key local no configurada. Ejecuta el bootstrap de secretos (pnpm run setup:secret).",
+    });
+    return;
+  }
+
   if (apiKey !== expectedKey) {
     res.status(403).json({
       ok: false,
