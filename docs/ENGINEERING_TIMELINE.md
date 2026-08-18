@@ -4,7 +4,7 @@
 
 ## Evolution Chain
 
-Foundation -> Architecture -> Kernel -> T-Bit Integration -> Phase 7 -> Phase 8 -> Current Engineering Baseline
+Foundation -> Architecture -> Kernel -> T-Bit Integration -> Phase 7 -> Phase 8 -> Phase 9 -> Current Engineering Baseline
 
 ---
 
@@ -76,6 +76,23 @@ Foundation -> Architecture -> Kernel -> T-Bit Integration -> Phase 7 -> Phase 8 
 - **Status:** Phase 8 Frozen; Repository Baseline Complete.
 - **Next Approved Phase:** Phase 9 - Testing & Validation.
 - **Baseline Commit:** b3cfbd7da58047dc8acddad7a7855a6a49383e60
+
+## Milestone 8 - Phase 9 (Testing, Validation & Release Candidate Preparation)
+
+- **Date:** 2026-08-10 to 2026-08-13
+- **Objective:** Stabilize the application bootstrap and produce a fully validated Release Candidate.
+- **Deliverables:**
+  - Bootstrap Stabilization (ECR-Phase9-0001): RC-01…RC-04 corrections, FR-07 structured bootstrap logging, secret bootstrap configuration
+  - docs/PHASE9_BOOTSTRAP_VALIDATION_REPORT.md (APPROVED entry artifact)
+  - docs/PHASE9_BOOTSTRAP_SMOKE_TEST_ST001.md (PASS entry artifact)
+  - docs/PHASE9_FINAL_ACCEPTANCE.md (Phase 9 closure & acceptance record)
+- **Engineering Decisions:** Engineering governance policy (ADR-009) maintained; Phase 9 is a validation/closure phase with no semantic version increment (package version remains v0.3.0). A Release Candidate (`v0.4.x`) version increment is a Phase 10 governance decision per VERSION.md policy.
+- **Validation:** Secret bootstrap 10/10 PASS; full build 11/11; full typecheck 10/10; full test suite 18/18 task groups; integration 8/8; web 47/47; runtime API HTTP 200/201/403 as expected; CORS honored; git working tree clean.
+- **Validated Commit:** 13078768645cb5f33a2b02da792d34e6bcbeab6d (1307876) — "Phase 9 bootstrap secret configuration"
+- **Acceptance Date:** 2026-08-13
+- **Freeze Date:** 2026-08-13
+- **Status:** Phase 9 Closed; Release Candidate validated at commit 1307876.
+- **Next Approved Phase:** Phase 10 - Deployment & Production Hardening (formally unblocked).
 
 ---
 

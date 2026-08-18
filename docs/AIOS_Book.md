@@ -17,7 +17,7 @@
 | **Phase 4 Extended** | ✅ Complete | 10 T-Bit UI panels created |
 | **Phase 6** | ✅ Complete | 3D UI / QuantumEngine + QVault + 16 panels wired (build green) |
 | **Phase 7** | ✅ **Complete** | Connect apps/api and apps/web (Docker, decompose server.ts) |
-| **Phase 8** | 🔄 **In Progress** | T-Bit Vault Setup (client-first vault selection, bootstrap, Kernel integration) |
+| **Phase 8** | ✅ **Complete** & [FROZEN] (2026-08-07) | T-Bit Vault Setup (client-first vault selection, bootstrap, Kernel integration) |
 | &nbsp;&nbsp;└─ Stage 8.1 | ✅ **Complete** | Client-Side Vault Selection UI (Frontend Only) |
 | &nbsp;&nbsp;└─ Stage 8.2 | ✅ **Complete** | Vault Bootstrap Service (Backend Orchestrator) |
 | &nbsp;&nbsp;└─ Stage 8.3 | ✅ **Complete** & [FROZEN] (2026-08-06) | Application Startup & Vault Loader (Frontend) |
@@ -25,6 +25,7 @@
 | &nbsp;&nbsp;└─ Stage 8.5 | ⏭️ Removed | Out of Scope (Vault Migration/Repair) |
 | &nbsp;&nbsp;└─ Stage 8.6 | ⏳ Pending | Integration Testing & Build Validation |
 | &nbsp;&nbsp;└─ Stage 8.7 | ⏳ Pending | Documentation & AIOS_Book.md Update |
+| **Phase 9** | ✅ **Complete** & [FROZEN] (2026-08-13) | Testing, Validation & Release Candidate Preparation (bootstrap stabilization ST-001 + full-suite validation) |
 
 ---
 
@@ -1016,4 +1017,47 @@ Phase 9 (Testing & Validation) is the next approved phase. No future implementat
 - docs/RELEASES/RELEASE_v0.3.0.md
 - docs/ENGINEERING_TIMELINE.md
 - VERSION + docs/VERSION.md
+---
+
+## Phase 9 Engineering Closure (Testing & Validation)
+
+**Status: Phase 9 Successfully Closed**
+
+- Acceptance Date: 2026-08-13
+- Freeze Date: 2026-08-13
+- Validated Commit: 13078768645cb5f33a2b02da792d34e6bcbeab6d (1307876) — "Phase 9 bootstrap secret configuration"
+- Package Version: v0.3.0 (unchanged; Phase 9 introduces no semantic change)
+- Next Phase: Phase 10 - Deployment & Production Hardening (formally unblocked)
+
+### What changed
+Formally closed Phase 9 (Testing, Validation & Release Candidate Preparation). Phase 9
+delivered the **Bootstrap Stabilization** workstream (ECR-Phase9-0001 — secret bootstrap
+configuration and structured bootstrap logging, FR-07) and produced a fully validated
+release candidate at commit `1307876`.
+
+### Validation recorded
+- Secret bootstrap: `pnpm run test:secret` — 10/10 PASS
+- API typecheck: PASS; Web typecheck: PASS
+- Web tests: 47/47 PASS (3 test files)
+- Integration: `pnpm test:integration` — 8/8 PASS
+- Full build: `pnpm build` — 11/11 tasks successful
+- Full typecheck: `pnpm typecheck` — 10/10 tasks successful
+- Full test suite: `pnpm test` — 18/18 tasks successful
+- Runtime API `GET /health` — HTTP 200
+- T-Bit setup status (pre-bootstrap) — HTTP 200, initialized=false, encryptionConfigured=true, spacesCount=0
+- Invalid auth — HTTP 403
+- Vault init — HTTP 201
+- Full vault status (post-init) — initialized=true, spacesCount=1, all 6 subsystems ready
+- Vault filesystem — structure verified under `C:\Temp\aios-phase9-test-vault`
+- Web/API CORS — `Access-Control-Allow-Origin: http://localhost:5173` honored (HTTP 200)
+- Git working tree — clean
+
+### Documents
+- `docs/PHASE9_FINAL_ACCEPTANCE.md` — NEW (Phase 9 closure & acceptance record)
+- `docs/PHASE9_BOOTSTRAP_VALIDATION_REPORT.md` — APPROVED entry artifact
+- `docs/PHASE9_BOOTSTRAP_SMOKE_TEST_ST001.md` — PASS entry artifact
+
+Phase 8 architecture, package boundary contracts, and the frozen Phase 8 baseline are
+**unchanged** by Phase 9. Per ADR-008 Freeze Policy, neither the Phase 8 baseline nor the
+Phase 9 validated state shall be modified without a verified defect or an approved ECR.
 - package.json version: 0.3.0
