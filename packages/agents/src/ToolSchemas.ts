@@ -1,5 +1,5 @@
 import { AiToolSchema } from "@aios/llm";
-import { tbitSymbolicTools } from "./SymbolicBridge";
+import { tbitSymbolicTools } from "./SymbolicBridge.js";
 
 export const tbitCoreTools: AiToolSchema[] = [
   {
@@ -123,3 +123,4 @@ export const tbitCoreTools: AiToolSchema[] = [
     function: tool,
   })) satisfies AiToolSchema[]),
 ];
+

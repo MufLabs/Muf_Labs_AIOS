@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
-import { resolveActiveTBitDataPath } from "./tbitRuntimePaths";
+import { resolveActiveTBitDataPath } from "./tbitRuntimePaths.js";
 
 export type MemoryCoreRecord = {
   key: string;
@@ -550,3 +550,4 @@ export async function getQueryIndexStats() {
     attributes: Object.keys(index.byAttribute).length,
   };
 }
+

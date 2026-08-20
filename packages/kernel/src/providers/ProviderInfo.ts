@@ -1,5 +1,5 @@
-import { ProviderCapabilities } from "./ProviderCapabilities";
-import { ProviderModel } from "./ProviderModel";
+import { ProviderCapabilities } from "./ProviderCapabilities.js";
+import { ProviderModel } from "./ProviderModel.js";
 
 export interface ProviderInfo {
 
@@ -91,3 +91,4 @@ export interface ProviderInfo {
      */
     description?: string;
 }
+

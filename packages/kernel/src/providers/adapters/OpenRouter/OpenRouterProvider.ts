@@ -1,10 +1,10 @@
 import {
     ProviderRequest
-} from "../../ProviderRequest";
+} from "../../ProviderRequest.js";
 
 import {
     ProviderResponse
-} from "../../ProviderResponse";
+} from "../../ProviderResponse.js";
 
 import {
     OpenAICompatibleProvider
@@ -12,15 +12,15 @@ import {
 
 import {
     OpenRouterConfiguration
-} from "./OpenRouterConfiguration";
+} from "./OpenRouterConfiguration.js";
 
 import {
     OpenRouterProviderInfo
-} from "./OpenRouterProviderInfo";
+} from "./OpenRouterProviderInfo.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 export class OpenRouterProvider extends OpenAICompatibleProvider {
 

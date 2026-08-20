@@ -1,14 +1,14 @@
 import { AgentContext } from "../core";
 import { AgentFactory } from "../core";
-import { IAgent } from "../core/IAgent";
+import { IAgent } from "../core/IAgent.js";
 import { MarkdownAgentLoader } from "../loaders";
 import { AgentRegistry } from "../registry";
 import { AgentRuntime, RuntimeResult } from "../runtime";
 import { AgentRequest } from "../types";
 
-import { IAgentManager } from "./IAgentManager";
-import { ManagerOptions } from "./ManagerOptions";
-import { ManagerState } from "./ManagerState";
+import { IAgentManager } from "./IAgentManager.js";
+import { ManagerOptions } from "./ManagerOptions.js";
+import { ManagerState } from "./ManagerState.js";
 
 export class AgentManager implements IAgentManager {
 

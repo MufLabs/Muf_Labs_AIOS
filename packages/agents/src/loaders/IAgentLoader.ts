@@ -1,4 +1,4 @@
-import { AgentDefinition } from "../core/AgentDefinition";
+import { AgentDefinition } from "../core/AgentDefinition.js";
 
 export interface IAgentLoader {
 

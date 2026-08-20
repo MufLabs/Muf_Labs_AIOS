@@ -19,6 +19,8 @@ This directory is the canonical home for all Architecture Decision Records. Each
 | [ADR-008](./ADR-008-freeze-policy.md) | Freeze Policy (LOCKED artifacts, ECR-gated modification) | Approved & frozen | 2026-08-06 |
 | [ADR-009](./ADR-009-documentation-synchronization-policy.md) | Documentation Synchronization Policy | Approved & frozen | 2026-08-07 |
 | [ADR-010](./ADR-010-specification-compliance-audit-process.md) | Specification Compliance Audit Process | Approved & frozen | 2026-08-07 |
+| [ADR-011](./ADR-011-container-runtime-decisions.md) | Container Runtime Decisions (Production Docker Images & Compose Topology) | Approved & frozen | 2026-08-18 |
+| [ADR-012](./ADR-012-workspace-package-production-entrypoints.md) | Workspace Package Production Entry-Point Mapping (`dist` vs `src`) | Proposed — READY FOR APPROVAL | 2026-08-19 |
 
 ## Cross-Reference
 

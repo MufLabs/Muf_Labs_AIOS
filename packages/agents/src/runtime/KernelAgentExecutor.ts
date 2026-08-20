@@ -1,6 +1,6 @@
-import { IAgentExecutor } from "./IAgentExecutor";
-import { ExecutionContext } from "./ExecutionContext";
-import { ExecutionResult } from "./ExecutionResults";
+import { IAgentExecutor } from "./IAgentExecutor.js";
+import { ExecutionContext } from "./ExecutionContext.js";
+import { ExecutionResult } from "./ExecutionResults.js";
 
 export class KernelAgentExecutor implements IAgentExecutor {
 

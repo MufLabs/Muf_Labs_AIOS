@@ -1,21 +1,25 @@
 services:
   api:
+    image: aios-api:latest
     build:
-      context: ./apps/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/api/Dockerfile
     container_name: aios-api
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=production
       - TBIT_VAULT_ROOT=/data/spaces
-      - CORS_ORIGIN=http://localhost:3000
-      - TBIT_API_KEY=${TBIT_API_KEY:-changeme}
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000
+      - TBIT_API_KEY=${TBIT_API_KEY}
+      - TBIT_HMAC_SECRET=${TBIT_HMAC_SECRET}
+      - TBIT_ENCRYPTION_SECRET=${TBIT_ENCRYPTION_SECRET}
       - LOG_LEVEL=info
+      - ENABLE_METRICS=true
     volumes:
       - tbit-data:/data
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3001/readyz"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -23,9 +27,10 @@ services:
     restart: unless-stopped
 
   web:
+    image: aios-web:latest
     build:
-      context: ./apps/web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/web/Dockerfile
     container_name: aios-web
     ports:
       - "3000:80"
@@ -33,7 +38,7 @@ services:
       api:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/health"]
       interval: 30s
       timeout: 10s
       retries: 3

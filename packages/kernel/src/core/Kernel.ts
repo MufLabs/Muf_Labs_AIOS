@@ -9,26 +9,26 @@ import {
     VAULT_EVENTS,
 } from "@aios/shared";
 
-import { KernelContext } from "../context";
+import { KernelContext } from "../context/index.js";
 
 import {
     KernelRequest,
     KernelResponse
 } from "../types";
 
-import { IKernel } from "./IKernel";
+import { IKernel } from "./IKernel.js";
 
 import {
     ProviderManager
-} from "../providers";
+} from "../providers/index.js";
 
 import {
     ProviderRegistry
-} from "../registry";
+} from "../registry/index.js";
 
 import {
     ExecutionPipeline
-} from "../execution";
+} from "../execution/index.js";
 
 /**
  * Stage 8.4 — Vault-Aware Kernel

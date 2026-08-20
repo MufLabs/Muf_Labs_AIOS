@@ -19,7 +19,9 @@
     "@aios/workflow": "workspace:*",
     "@muf/tbit-core": "workspace:*",
     "cors": "^2.8.6",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

@@ -3,11 +3,12 @@
  */
 
 export * from "./manager";
-export * from "./ChatEngine";
+export * from "./ChatEngine.js";
 export * from "./Prompts";
-export * from "./ToolSchemas";
-export * from "./LocalToolExecutor";
-export * from "./SymbolicBridge";
-export * from "./SymbolicEngine";
-export * from "./tools/DocumentQA";
-export * from "./tools/WebResearch";
+export * from "./ToolSchemas.js";
+export * from "./LocalToolExecutor.js";
+export * from "./SymbolicBridge.js";
+export * from "./SymbolicEngine.js";
+export * from "./tools/DocumentQA.js";
+export * from "./tools/WebResearch.js";
+

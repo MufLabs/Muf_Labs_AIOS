@@ -2,9 +2,9 @@
 // Provides backward-compatible function signatures for the API routes
 // that expect the old functional API style from @aios/database
 
-import { TBitStorageService, TBitStorageConfig } from "./TBitStorageService";
-import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths";
-import { resolveHmacSecret } from "./hmacSecret";
+import { TBitStorageService, TBitStorageConfig } from "./TBitStorageService.js";
+import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths.js";
+import { resolveHmacSecret } from "./hmacSecret.js";
 import { createHash } from "crypto";
 import path from "path";
 
@@ -324,3 +324,4 @@ export async function compareNetworkState(remoteState: {
     diff: { missing: [], extra: [], conflicts: [] },
   };
 }
+

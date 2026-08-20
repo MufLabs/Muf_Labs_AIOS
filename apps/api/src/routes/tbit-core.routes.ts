@@ -13,7 +13,7 @@ import {
   importBundle,
 } from "@muf/tbit-core";
 
-import { requireSymbolicApiKey } from "../middleware/auth";
+import { requireSymbolicApiKey } from "../middleware/auth.js";
 
 const router: Router = Router();
 

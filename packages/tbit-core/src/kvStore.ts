@@ -3,10 +3,10 @@
 // Uses the container's WAL + metadata for atomic operations
 
 import path from "path";
-import { TBitStorageService, TBitStorageConfig } from "./TBitStorageService";
-import { normalizeTBitKey } from "./textEncoding";
-import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths";
-import { resolveHmacSecret } from "./hmacSecret";
+import { TBitStorageService, TBitStorageConfig } from "./TBitStorageService.js";
+import { normalizeTBitKey } from "./textEncoding.js";
+import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths.js";
+import { resolveHmacSecret } from "./hmacSecret.js";
 import { createHash } from "crypto";
 
 /**
@@ -237,3 +237,4 @@ export async function getKvStats(): Promise<{
     totalSizeBytes,
   };
 }
+

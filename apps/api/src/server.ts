@@ -6,8 +6,11 @@ import express, {
 } from "express";
 import cors from "cors";
 
-import { registerRoutes } from "./routes/index";
-import { bootstrapLogger, newRequestId } from "./services/bootstrapLogger";
+import { registerRoutes } from "./routes/index.js";
+import healthRouter from "./routes/health.js";
+import { bootstrapLogger, newRequestId } from "./services/bootstrapLogger.js";
+import { requestIdMiddleware } from "./middleware/requestId.js";
+import { observabilityMiddleware } from "./middleware/observability.js";
 
 /**
  * Creates and configures the Express application.
@@ -20,6 +23,13 @@ export function createServer(): Express {
     // Parse JSON bodies
     app.use(express.json());
 
+    // Request / correlation ID propagation (Stage 10.1) — must run before
+    // observability so req.id / req.correlationId exist for request lifecycle logs.
+    app.use(requestIdMiddleware);
+
+    // Request lifecycle logging + HTTP metrics (Stage 10.2) — wired exactly once.
+    app.use(observabilityMiddleware);
+
     // CORS configuration
     const corsOrigin = process.env.CORS_ORIGIN ?? "http://localhost,http://localhost:5173";
     const allowedOrigins = corsOrigin.split(",").map((o) => o.trim());
@@ -30,10 +40,8 @@ export function createServer(): Express {
         allowedHeaders: ["Content-Type", "Authorization", "X-TBit-API-Key"]
     }));
 
-    // Health check endpoint (no auth required)
-    app.get("/health", (_req: Request, res: Response) => {
-        res.json({ status: "ok", timestamp: new Date().toISOString() });
-    });
+    // Health, liveness and readiness probes (no auth required)
+    app.use(healthRouter);
 
     // Register API routes
     registerRoutes(app);

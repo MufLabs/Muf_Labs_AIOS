@@ -3,36 +3,36 @@
  * Providers Public API
  */
 
-export * from "./BaseProvider";
+export * from "./BaseProvider.js";
 
-export * from "./IProvider";
-export * from "./IProviderManager";
+export * from "./IProvider.js";
+export * from "./IProviderManager.js";
 
-export * from "./ProviderCapabilities";
-export * from "./ProviderInfo";
-export * from "./ProviderManager";
-export * from "./ProviderManagerFactory";
-export * from "./ProviderModel";
-export * from "./ProviderNotFoundError";
-export * from "./ProviderRequest";
-export * from "./ProviderResponse";
+export * from "./ProviderCapabilities.js";
+export * from "./ProviderInfo.js";
+export * from "./ProviderManager.js";
+export * from "./ProviderManagerFactory.js";
+export * from "./ProviderModel.js";
+export * from "./ProviderNotFoundError.js";
+export * from "./ProviderRequest.js";
+export * from "./ProviderResponse.js";
 
-export * from "./common";
+export * from "./common/index.js";
 
 /**
  * Routing
  */
 
-export * from "../routing";
+export * from "../routing/index.js";
 
 /**
  * Registry
  */
 
-export * from "../registry";
+export * from "../registry/index.js";
 
 /**
  * Built-in adapters
  */
 
-export * from "./adapters/OpenAI";
+export * from "./adapters/OpenAI/index.js";

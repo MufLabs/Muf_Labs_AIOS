@@ -1,6 +1,6 @@
-import { HttpRequest } from "./HttpRequest";
-import { HttpResponse } from "./HttpResponse";
-import { ProviderException } from "./ProviderException";
+import { HttpRequest } from "./HttpRequest.js";
+import { HttpResponse } from "./HttpResponse.js";
+import { ProviderException } from "./ProviderException.js";
 
 export class HttpClient {
 

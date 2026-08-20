@@ -1,4 +1,4 @@
-import { IAgent } from "../core/IAgent";
+import { IAgent } from "../core/IAgent.js";
 
 export interface IAgentRegistry {
 

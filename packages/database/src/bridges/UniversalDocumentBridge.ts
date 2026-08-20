@@ -1,12 +1,12 @@
-import { deleteBinaryAsset, importBinaryAsset, BinaryAssetImportResult } from "./BinaryAssetBridge";
+import { deleteBinaryAsset, importBinaryAsset, BinaryAssetImportResult } from "./BinaryAssetBridge.js";
 import {
   buildCodeMarkdownDocument,
   CodeGraphSummary,
   isSourceCodeFile,
   summarizeCodeGraph,
-} from "./CodeGraphExtractor";
-import { importMarkdownDocument, MarkdownImportResult } from "./MarkdownBridge";
-import { extractOfficeDocument, ExtractedOfficeDocument } from "./DocumentExtractors";
+} from "./CodeGraphExtractor.js";
+import { importMarkdownDocument, MarkdownImportResult } from "./MarkdownBridge.js";
+import { extractOfficeDocument, ExtractedOfficeDocument } from "./DocumentExtractors.js";
 
 export type UniversalDocumentImportRequest = {
   userId: string;
@@ -256,3 +256,4 @@ export async function importUniversalDocument(
     binary,
   };
 }
+

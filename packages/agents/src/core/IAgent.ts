@@ -1,6 +1,6 @@
-import { AgentDefinition } from "./AgentDefinition";
-import { AgentContext } from "./AgentContext";
-import { AgentResult } from "./AgentResult";
+import { AgentDefinition } from "./AgentDefinition.js";
+import { AgentContext } from "./AgentContext.js";
+import { AgentResult } from "./AgentResult.js";
 
 /**
  * Runtime contract implemented by every executable agent.

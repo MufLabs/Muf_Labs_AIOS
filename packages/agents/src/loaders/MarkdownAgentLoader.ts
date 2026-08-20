@@ -1,11 +1,11 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import { AgentDefinition } from "../core/AgentDefinition";
+import { AgentDefinition } from "../core/AgentDefinition.js";
 import { MarkdownAgentParser } from "../parsers";
 
-import { AgentFileLocator } from "./AgentFileLocator";
-import { IAgentLoader } from "./IAgentLoader";
+import { AgentFileLocator } from "./AgentFileLocator.js";
+import { IAgentLoader } from "./IAgentLoader.js";
 
 export class MarkdownAgentLoader implements IAgentLoader {
 

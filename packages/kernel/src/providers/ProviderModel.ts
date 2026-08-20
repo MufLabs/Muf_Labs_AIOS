@@ -1,4 +1,4 @@
-import { ProviderCapabilities } from "./ProviderCapabilities";
+import { ProviderCapabilities } from "./ProviderCapabilities.js";
 
 export interface ProviderModel {
 

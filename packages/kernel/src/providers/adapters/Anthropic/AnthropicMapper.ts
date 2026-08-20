@@ -1,6 +1,6 @@
 import {
     ProviderRequest
-} from "../../ProviderRequest";
+} from "../../ProviderRequest.js";
 
 export class AnthropicMapper {
 

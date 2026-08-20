@@ -1,6 +1,6 @@
 import { TBitStorageService } from "@aios/database";
-import { inferEquationKey } from "./SymbolicEngine";
-import { runSymbolicOperation, SymbolicOperation, SymbolicResult } from "./SymbolicEngine";
+import { inferEquationKey } from "./SymbolicEngine.js";
+import { runSymbolicOperation, SymbolicOperation, SymbolicResult } from "./SymbolicEngine.js";
 import { normalizeTBitKey } from "@aios/database";
 
 export type SymbolicOracleRequest = {
@@ -152,3 +152,4 @@ export async function operarSimbolicamente(
     source: "direct_expression",
   };
 }
+

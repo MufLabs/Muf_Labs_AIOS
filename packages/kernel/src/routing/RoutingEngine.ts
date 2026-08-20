@@ -1,28 +1,28 @@
-import { IRoutingEngine } from "./IRoutingEngine";
+import { IRoutingEngine } from "./IRoutingEngine.js";
 
 import {
 
     CapabilityResolver
 
-} from "./CapabilityResolver";
+} from "./CapabilityResolver.js";
 
 import {
 
     ProviderResolver
 
-} from "./ProviderResolver";
+} from "./ProviderResolver.js";
 
 import {
 
     RoutingPolicy
 
-} from "./RoutingPolicy";
+} from "./RoutingPolicy.js";
 
 import {
 
     ModelSelector
 
-} from "./ModelSelector";
+} from "./ModelSelector.js";
 
 import {
 

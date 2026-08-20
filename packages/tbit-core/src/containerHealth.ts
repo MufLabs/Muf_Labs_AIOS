@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { readFile, stat } from "fs/promises";
 import path from "path";
-import { getActiveTBitDataDir } from "./tbitRuntimePaths";
+import { getActiveTBitDataDir } from "./tbitRuntimePaths.js";
 
 type MetadataEntry = {
   length?: number;
@@ -233,3 +233,4 @@ export async function getContainerHealthReport(): Promise<TBitHealthReport> {
     summary,
   };
 }
+

@@ -1,4 +1,4 @@
-import { AgentResult } from "../core/AgentResult";
+import { AgentResult } from "../core/AgentResult.js";
 
 export interface RuntimeResult {
 

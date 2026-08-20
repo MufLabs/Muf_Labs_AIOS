@@ -1,10 +1,10 @@
-import { evaluateEquation } from "./SymbolicEngine";
+import { evaluateEquation } from "./SymbolicEngine.js";
 import { assertAiPermission } from "@aios/kernel";
 import { indexExternalMemoryRecord, removeMemoryIndexRecord } from "@aios/database";
 import { searchQueryIndex } from "@aios/database";
-import { operarSimbolicamente } from "./SymbolicBridge";
+import { operarSimbolicamente } from "./SymbolicBridge.js";
 import { normalizeTBitKey } from "@aios/database";
-import { researchWebPage } from "./tools/WebResearch";
+import { researchWebPage } from "./tools/WebResearch.js";
 
 type DynamicStorage = {
   inject?: (key: string, payload: string) => Promise<unknown>;
@@ -141,3 +141,4 @@ export function createTBitLocalToolExecutor(storage: unknown) {
     throw new Error(`Herramienta T-BIT no soportada: ${toolName}`);
   };
 }
+

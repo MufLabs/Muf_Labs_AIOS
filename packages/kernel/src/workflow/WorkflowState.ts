@@ -1,4 +1,4 @@
-import { WorkflowCommand } from "../types/KernelTypes";
+import { WorkflowCommand } from "../types/KernelTypes.js";
 
 export interface WorkflowState {
 

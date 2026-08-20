@@ -1,5 +1,5 @@
-import { IAgent } from "../core/IAgent";
-import { IAgentRegistry } from "./IAgentRegistry";
+import { IAgent } from "../core/IAgent.js";
+import { IAgentRegistry } from "./IAgentRegistry.js";
 
 /**
  * Central runtime registry.

@@ -1,5 +1,5 @@
-import { ProviderInfo } from "../../ProviderInfo";
-import { ProviderModel } from "../../ProviderModel";
+import { ProviderInfo } from "../../ProviderInfo.js";
+import { ProviderModel } from "../../ProviderModel.js";
 
 export const OpenAICompatibleProviderInfo: ProviderInfo = {
 

@@ -1,5 +1,5 @@
 import mammoth from "mammoth";
-import { PDFParse } from "pdf-parse";
+import pdfParse from "pdf-parse";
 
 export type ExtractedOfficeDocument = {
   kind: "pdf" | "docx" | "xlsx";
@@ -98,21 +98,16 @@ export async function extractOfficeDocument(request: {
   }
 
   if (isPdf(request.filename, request.mimeType)) {
-    const parser = new PDFParse({ data: buffer });
-    try {
-      const result = await parser.getText();
-      const text = cleanText(result.text ?? "");
-      if (!text) return null;
-      return {
-        kind: "pdf",
-        title,
-        text: `# ${title}\n\n${text}`,
-        tags: ["pdf", "documento"],
-        pageCount: typeof result.total === "number" ? result.total : undefined,
-      };
-    } finally {
-      await parser.destroy();
-    }
+    const result = await pdfParse(buffer);
+    const text = cleanText(result.text ?? "");
+    if (!text) return null;
+    return {
+      kind: "pdf",
+      title,
+      text: `# ${title}\n\n${text}`,
+      tags: ["pdf", "documento"],
+      pageCount: typeof result.numpages === "number" ? result.numpages : undefined,
+    };
   }
 
   if (isXlsx(request.filename, request.mimeType)) {

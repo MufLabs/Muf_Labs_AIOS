@@ -1,7 +1,7 @@
 import {
     WorkflowRequest,
     WorkflowResult
-} from "../types/WorkflowTypes";
+} from "../types/WorkflowTypes.js";
 
 import { KernelContext } from "@aios/kernel";
 

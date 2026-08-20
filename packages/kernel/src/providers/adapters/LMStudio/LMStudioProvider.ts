@@ -4,15 +4,15 @@ import {
 
 import {
     LMStudioConfiguration
-} from "./LMStudioConfiguration";
+} from "./LMStudioConfiguration.js";
 
 import {
     LMStudioProviderInfo
-} from "./LMStudioProviderInfo";
+} from "./LMStudioProviderInfo.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 export class LMStudioProvider extends OpenAICompatibleProvider {
 

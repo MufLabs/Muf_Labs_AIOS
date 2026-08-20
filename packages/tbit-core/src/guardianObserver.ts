@@ -1,5 +1,5 @@
-import { getQueryIndex, QueryIndexEntry } from "./queryIndex";
-import { searchSemanticIndex } from "./semanticIndex";
+import { getQueryIndex, QueryIndexEntry } from "./queryIndex.js";
+import { searchSemanticIndex } from "./semanticIndex.js";
 
 export type GuardianObservationRequest = {
   userId?: string;
@@ -310,3 +310,4 @@ export async function observeGuardian(request: GuardianObservationRequest = {}):
     ],
   };
 }
+

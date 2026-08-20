@@ -1,5 +1,5 @@
-import { ConversationMessage } from "../session/ConversationMessage";
-import { WorkflowState } from "../workflow/WorkflowState";
+import { ConversationMessage } from "../session/ConversationMessage.js";
+import { WorkflowState } from "../workflow/WorkflowState.js";
 
 export interface KernelState {
 

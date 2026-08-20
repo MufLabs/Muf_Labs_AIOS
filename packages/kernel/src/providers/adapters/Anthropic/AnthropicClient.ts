@@ -6,11 +6,11 @@ import {
 
 import {
     AnthropicAuthentication
-} from "./AnthropicAuthentication";
+} from "./AnthropicAuthentication.js";
 
 import {
     AnthropicConfiguration
-} from "./AnthropicConfiguration";
+} from "./AnthropicConfiguration.js";
 
 export class AnthropicClient {
 

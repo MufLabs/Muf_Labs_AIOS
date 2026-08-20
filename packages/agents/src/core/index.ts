@@ -3,9 +3,9 @@
  * Core Agent Runtime
  */
 
-export * from "./Agent";
-export * from "./AgentContext";
-export * from "./AgentDefinition";
-export * from "./AgentFactory";
-export * from "./AgentResult";
-export * from "./IAgent";
+export * from "./Agent.js";
+export * from "./AgentContext.js";
+export * from "./AgentDefinition.js";
+export * from "./AgentFactory.js";
+export * from "./AgentResult.js";
+export * from "./IAgent.js";

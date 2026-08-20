@@ -1,11 +1,11 @@
 import { KernelContext } from "@aios/kernel";
 
-import { IWorkflow } from "../interfaces/IWorkflow";
+import { IWorkflow } from "../interfaces/IWorkflow.js";
 
 import {
     WorkflowRequest,
     WorkflowResult
-} from "../types/WorkflowTypes";
+} from "../types/WorkflowTypes.js";
 
 export class DocumentWorkflow implements IWorkflow {
 

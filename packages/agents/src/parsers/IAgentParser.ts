@@ -1,5 +1,5 @@
-import { AgentDefinition } from "../core/AgentDefinition";
-import { ParserResult } from "./ParserResult";
+import { AgentDefinition } from "../core/AgentDefinition.js";
+import { ParserResult } from "./ParserResult.js";
 
 export interface IAgentParser {
 

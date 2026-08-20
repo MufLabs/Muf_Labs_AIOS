@@ -1,5 +1,5 @@
-import { AgentRegistry } from "./AgentRegistry";
-import { RegistryStatistics } from "./RegistryStatistics";
+import { AgentRegistry } from "./AgentRegistry.js";
+import { RegistryStatistics } from "./RegistryStatistics.js";
 
 export class RegistryInspector {
 

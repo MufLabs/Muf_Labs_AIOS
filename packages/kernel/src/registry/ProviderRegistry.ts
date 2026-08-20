@@ -1,6 +1,6 @@
 import { IProvider } from "../providers";
 
-import { IProviderRegistry } from "./IProviderRegistry";
+import { IProviderRegistry } from "./IProviderRegistry.js";
 
 export class ProviderRegistry implements IProviderRegistry {
 

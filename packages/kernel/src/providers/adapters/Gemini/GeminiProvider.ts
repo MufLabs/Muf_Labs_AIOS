@@ -4,15 +4,15 @@ import {
 
 import {
     GeminiConfiguration
-} from "./GeminiConfiguration";
+} from "./GeminiConfiguration.js";
 
 import {
     GeminiProviderInfo
-} from "./GeminiProviderInfo";
+} from "./GeminiProviderInfo.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 export class GeminiProvider extends OpenAICompatibleProvider {
 

@@ -3,9 +3,9 @@ import { KernelContext } from "@aios/kernel";
 import {
     WorkflowRequest,
     WorkflowResult
-} from "../types/WorkflowTypes";
+} from "../types/WorkflowTypes.js";
 
-import { WorkflowRegistry } from "../registry/WorkflowRegistry";
+import { WorkflowRegistry } from "../registry/WorkflowRegistry.js";
 
 export class WorkflowExecutor {
 

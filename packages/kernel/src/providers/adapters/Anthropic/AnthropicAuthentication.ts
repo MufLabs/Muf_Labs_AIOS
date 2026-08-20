@@ -4,7 +4,7 @@ import {
 
 import {
     AnthropicConfiguration
-} from "./AnthropicConfiguration";
+} from "./AnthropicConfiguration.js";
 
 export class AnthropicAuthentication {
 

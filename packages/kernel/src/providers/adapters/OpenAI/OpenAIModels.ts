@@ -4,11 +4,11 @@ import {
 
 import {
     OpenAICompatibleModels
-} from "../OpenAICompatible";
+} from "../OpenAICompatible/index.js";
 
 import {
     OpenAIConfiguration
-} from "./OpenAIConfiguration";
+} from "./OpenAIConfiguration.js";
 
 export class OpenAIModels {
 

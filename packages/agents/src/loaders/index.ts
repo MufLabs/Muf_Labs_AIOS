@@ -1,3 +1,3 @@
-export * from "./IAgentLoader";
-export * from "./AgentFileLocator";
-export * from "./MarkdownAgentLoader";
+export * from "./IAgentLoader.js";
+export * from "./AgentFileLocator.js";
+export * from "./MarkdownAgentLoader.js";

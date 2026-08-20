@@ -4,15 +4,15 @@ import {
 
 import {
     OllamaConfiguration
-} from "./OllamaConfiguration";
+} from "./OllamaConfiguration.js";
 
 import {
     OllamaProviderInfo
-} from "./OllamaProviderInfo";
+} from "./OllamaProviderInfo.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 export class OllamaProvider extends OpenAICompatibleProvider {
 

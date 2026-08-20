@@ -1,8 +1,8 @@
 import { type VaultProviderConfig } from "@aios/shared";
 
-import { IProvider } from "./IProvider";
-import { ProviderRequest } from "./ProviderRequest";
-import { ProviderResponse } from "./ProviderResponse";
+import { IProvider } from "./IProvider.js";
+import { ProviderRequest } from "./ProviderRequest.js";
+import { ProviderResponse } from "./ProviderResponse.js";
 
 export interface IProviderManager {
 
@@ -66,3 +66,4 @@ export interface IProviderManager {
         config: VaultProviderConfig
     ): Promise<Record<string, boolean>>;
 }
+

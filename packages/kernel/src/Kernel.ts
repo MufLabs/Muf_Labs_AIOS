@@ -17,5 +17,6 @@
  *   `setVaultContext`, `initializeProviders`, `disposeVault`,
  *   `getProviderReadiness`, and `events` for vault-aware providers.
  */
-export { Kernel } from "./core/Kernel";
-export type { IKernel } from "./core/IKernel";
+export { Kernel } from "./core/Kernel.js";
+export type { IKernel } from "./core/IKernel.js";
+

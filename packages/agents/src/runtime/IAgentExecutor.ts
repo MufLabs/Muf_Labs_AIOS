@@ -1,5 +1,5 @@
-import { ExecutionContext } from "./ExecutionContext";
-import { ExecutionResult } from "./ExecutionResults";
+import { ExecutionContext } from "./ExecutionContext.js";
+import { ExecutionResult } from "./ExecutionResults.js";
 
 export interface IAgentExecutor {
 

@@ -1,4 +1,4 @@
-﻿import { AiMessage, AiProvider, AiProviderRequest, AiProviderResponse, AiToolCall, AiToolSchema } from "../AiProvider";
+import { AiMessage, AiProvider, AiProviderRequest, AiProviderResponse, AiToolCall, AiToolSchema } from "../AiProvider.js";
 
 function systemText(messages: AiMessage[]): string | undefined {
   return messages.find((message) => message.role === "system" && typeof message.content === "string")?.content ?? undefined;
@@ -240,5 +240,6 @@ export function providerLabel(provider: AiProvider): string {
   const maybe = provider as AiProvider & { label?: string };
   return maybe.label ?? (provider.constructor.name.replace(/Provider$/, "") || "Deterministic");
 }
+
 
 

@@ -1,9 +1,9 @@
-export * from "./AgentTypes";
+export * from "./AgentTypes.js";
 
-export * from "./AgentCommand";
+export * from "./AgentCommand.js";
 
-export * from "./AgentCapability";
+export * from "./AgentCapability.js";
 
-export * from "./AgentMetadata";
+export * from "./AgentMetadata.js";
 
-export * from "./AgentExecution";
+export * from "./AgentExecution.js";

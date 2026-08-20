@@ -20,9 +20,9 @@ import { existsSync, statSync } from "fs";
 import { promises as fs } from "fs";
 import type { FileHandle } from "fs/promises";
 import { dirname, resolve } from "path";
-import { AllocationMap } from "./AllocationMap";
-import { TBitContainer } from "./TBitContainer";
-import { normalizeTBitKey, normalizeUnicodeText } from "../core/textEncoding";
+import { AllocationMap } from "./AllocationMap.js";
+import { TBitContainer } from "./TBitContainer.js";
+import { normalizeTBitKey, normalizeUnicodeText } from "../core/textEncoding.js";
 
 export type TBitMetadataEntry = {
   length: number;
@@ -1301,3 +1301,4 @@ export class TBitStorageService {
     return this.containerSizeBytes() - SYSTEM_HEADER_SIZE;
   }
 }
+

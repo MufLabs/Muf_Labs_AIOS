@@ -8,7 +8,7 @@ import {
 
 import {
     NvidiaConfiguration
-} from "./NvidiaConfiguration";
+} from "./NvidiaConfiguration.js";
 
 export class NvidiaModels {
 

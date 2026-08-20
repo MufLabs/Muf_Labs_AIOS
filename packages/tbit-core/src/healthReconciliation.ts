@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
-import { syncQueryIndexIncremental } from "./queryIndex";
-import { resolveActiveTBitDataPath } from "./tbitRuntimePaths";
-import type { MemoryCoreRecord } from "./queryIndex";
+import { syncQueryIndexIncremental } from "./queryIndex.js";
+import { resolveActiveTBitDataPath } from "./tbitRuntimePaths.js";
+import type { MemoryCoreRecord } from "./queryIndex.js";
 
 type Metadata = Record<string, unknown>;
 
@@ -115,3 +115,4 @@ export async function reconcileContainerHealth(dryRun = false): Promise<HealthRe
     note: "Reconciliacion conservadora: corrige indices logicos y Query Index. No borra datos fisicos ni crea memoria ficticia para registros fisicos sin indice.",
   };
 }
+

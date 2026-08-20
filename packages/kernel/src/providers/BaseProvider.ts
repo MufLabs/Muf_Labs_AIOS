@@ -1,7 +1,7 @@
-import { IProvider } from "./IProvider";
-import { ProviderInfo } from "./ProviderInfo";
-import { ProviderRequest } from "./ProviderRequest";
-import { ProviderResponse } from "./ProviderResponse";
+import { IProvider } from "./IProvider.js";
+import { ProviderInfo } from "./ProviderInfo.js";
+import { ProviderRequest } from "./ProviderRequest.js";
+import { ProviderResponse } from "./ProviderResponse.js";
 
 export abstract class BaseProvider implements IProvider {
 

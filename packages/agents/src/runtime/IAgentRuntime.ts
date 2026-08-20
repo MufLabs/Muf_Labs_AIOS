@@ -1,6 +1,6 @@
-import { AgentContext } from "../core/AgentContext";
+import { AgentContext } from "../core/AgentContext.js";
 import { AgentRequest } from "../types";
-import { RuntimeResult } from "./RuntimeResults";
+import { RuntimeResult } from "./RuntimeResults.js";
 
 export interface IAgentRuntime {
 

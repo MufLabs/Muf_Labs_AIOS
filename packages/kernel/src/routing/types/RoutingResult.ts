@@ -1,4 +1,4 @@
-import { ProviderCandidate } from "./ProviderCandidate";
+import { ProviderCandidate } from "./ProviderCandidate.js";
 
 export interface RoutingResult {
 

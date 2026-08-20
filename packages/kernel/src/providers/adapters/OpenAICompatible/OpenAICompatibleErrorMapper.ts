@@ -1,4 +1,4 @@
-import { ProviderException } from "../../common";
+import { ProviderException } from "../../common/index.js";
 
 export class OpenAICompatibleErrorMapper {
 

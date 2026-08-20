@@ -4,15 +4,15 @@ import {
 
 import {
     NvidiaConfiguration
-} from "./NvidiaConfiguration";
+} from "./NvidiaConfiguration.js";
 
 import {
     NvidiaProviderInfo
-} from "./NvidiaProviderInfo";
+} from "./NvidiaProviderInfo.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 export class NvidiaProvider extends OpenAICompatibleProvider {
 

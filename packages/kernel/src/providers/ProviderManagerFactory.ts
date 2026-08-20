@@ -1,7 +1,7 @@
-import { IProvider } from "./IProvider";
-import { ProviderManager } from "./ProviderManager";
+import { IProvider } from "./IProvider.js";
+import { ProviderManager } from "./ProviderManager.js";
 
-import { ProviderRegistry } from "../registry";
+import { ProviderRegistry } from "../registry/index.js";
 
 export class ProviderManagerFactory {
 

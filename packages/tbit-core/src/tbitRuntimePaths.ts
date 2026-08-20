@@ -1,5 +1,5 @@
 import path from "path";
-import { normalizeTBitKey } from "./textEncoding";
+import { normalizeTBitKey } from "./textEncoding.js";
 
 export type TBitSpacePaths = {
   spaceId: string;

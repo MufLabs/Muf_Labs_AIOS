@@ -1,18 +1,18 @@
 import { Router } from "express";
-import tbitCoreRoutes from "./tbit-core.routes";
-import tbitMemoryRoutes from "./tbit-memory.routes";
-import tbitQueryRoutes from "./tbit-query.routes";
-import tbitSemanticRoutes from "./tbit-semantic.routes";
-import tbitHealthRoutes from "./tbit-health.routes";
-import tbitEncryptionRoutes from "./tbit-encryption.routes";
-import tbitAssetsRoutes from "./tbit-assets.routes";
-import tbitAiPermissionsRoutes from "./tbit-ai-permissions.routes";
-import tbitDocumentsRoutes from "./tbit-documents.routes";
-import tbitMarkdownRoutes from "./tbit-markdown.routes";
-import tbitNetworkRoutes from "./tbit-network.routes";
-import tbitSetupRoutes from "./tbit-setup.routes";
-import tbitKvRoutes from "./tbit-kv.routes";
-import tbitVaultRoutes from "./tbit-vault.routes";
+import tbitCoreRoutes from "./tbit-core.routes.js";
+import tbitMemoryRoutes from "./tbit-memory.routes.js";
+import tbitQueryRoutes from "./tbit-query.routes.js";
+import tbitSemanticRoutes from "./tbit-semantic.routes.js";
+import tbitHealthRoutes from "./tbit-health.routes.js";
+import tbitEncryptionRoutes from "./tbit-encryption.routes.js";
+import tbitAssetsRoutes from "./tbit-assets.routes.js";
+import tbitAiPermissionsRoutes from "./tbit-ai-permissions.routes.js";
+import tbitDocumentsRoutes from "./tbit-documents.routes.js";
+import tbitMarkdownRoutes from "./tbit-markdown.routes.js";
+import tbitNetworkRoutes from "./tbit-network.routes.js";
+import tbitSetupRoutes from "./tbit-setup.routes.js";
+import tbitKvRoutes from "./tbit-kv.routes.js";
+import tbitVaultRoutes from "./tbit-vault.routes.js";
 
 /**
  * Register all T-Bit API routes

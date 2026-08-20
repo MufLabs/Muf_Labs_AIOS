@@ -1,6 +1,6 @@
 import { KernelRequest } from "../../types";
 
-import { RoutingCriteria } from "./RoutingCriteria";
+import { RoutingCriteria } from "./RoutingCriteria.js";
 
 export interface RoutingRequest {
 

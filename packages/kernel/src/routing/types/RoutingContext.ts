@@ -2,7 +2,7 @@ import { KernelContext } from "../../context";
 
 import { IProvider } from "../../providers";
 
-import { RoutingRequest } from "./RoutingRequest";
+import { RoutingRequest } from "./RoutingRequest.js";
 
 export interface RoutingContext {
 

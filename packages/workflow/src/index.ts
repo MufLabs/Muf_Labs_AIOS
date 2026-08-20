@@ -1,3 +1,3 @@
-export * from "./WorkflowEngine";
+export * from "./WorkflowEngine.js";
 
-export * from "./types/WorkflowTypes";
+export * from "./types/WorkflowTypes.js";

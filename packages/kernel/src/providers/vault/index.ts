@@ -12,11 +12,11 @@
  *  - Q-Vault      → `QVaultVaultProvider`
  *  - LLM Gateway  → `LlmVaultProvider`
  */
-export { MemoryVaultProvider } from "./MemoryVaultProvider";
-export { WorkflowVaultProvider } from "./WorkflowVaultProvider";
-export { AgentVaultProvider } from "./AgentVaultProvider";
-export { QVaultVaultProvider } from "./QVaultVaultProvider";
-export { LlmVaultProvider } from "./LlmVaultProvider";
+export { MemoryVaultProvider } from "./MemoryVaultProvider.js";
+export { WorkflowVaultProvider } from "./WorkflowVaultProvider.js";
+export { AgentVaultProvider } from "./AgentVaultProvider.js";
+export { QVaultVaultProvider } from "./QVaultVaultProvider.js";
+export { LlmVaultProvider } from "./LlmVaultProvider.js";
 
 /**
  * Canonical list of provider ids registered by `VaultBootstrapService`.
@@ -31,3 +31,4 @@ export const VAULT_PROVIDER_IDS = [
 ] as const;
 
 export type VaultProviderId = (typeof VAULT_PROVIDER_IDS)[number];
+

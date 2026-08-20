@@ -1,5 +1,5 @@
-import { AgentDefinition } from "./AgentDefinition";
-import { AgentResult } from "./AgentResult";
+import { AgentDefinition } from "./AgentDefinition.js";
+import { AgentResult } from "./AgentResult.js";
 
 /**
  * Runtime contract implemented by the execution engine.

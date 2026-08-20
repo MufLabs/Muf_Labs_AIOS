@@ -29,8 +29,8 @@ import {
   getEncryptionKeyById,
   getEncryptionKeyRing,
   getEncryptionKeyStatus,
-} from "../security/EncryptionKeyManager";
-import { normalizeTBitKey, normalizeUnicodeText } from "../core/textEncoding";
+} from "../security/EncryptionKeyManager.js";
+import { normalizeTBitKey, normalizeUnicodeText } from "../core/textEncoding.js";
 
 const SYSTEM_MAGIC = Buffer.from("TBITFS1\0", "ascii");
 const FRAME_MAGIC = Buffer.from("TBIT", "ascii");

@@ -8,7 +8,7 @@ import {
 
 import {
     LMStudioConfiguration
-} from "./LMStudioConfiguration";
+} from "./LMStudioConfiguration.js";
 
 export class LMStudioModels {
 

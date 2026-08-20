@@ -1,11 +1,11 @@
 import { createHash } from "crypto";
-import { deleteAsset, registerAsset } from "../assets/AssetManager";
+import { deleteAsset, registerAsset } from "../assets/AssetManager.js";
 import {
   deleteMemoryRecordsBatch,
   recallMemory,
   rememberMemoryBatch,
-} from "../memory/MemoryCore";
-import type { MemoryCoreRememberRequest } from "../memory/MemoryCore";
+} from "../memory/MemoryCore.js";
+import type { MemoryCoreRememberRequest } from "../memory/MemoryCore.js";
 
 export type BinaryAssetImportRequest = {
   userId: string;
@@ -230,3 +230,4 @@ export async function reconstructBinaryAsset(storage: unknown, rootKey: string):
 export async function deleteBinaryAsset(storage: unknown, rootOrAssetKey: string) {
   return deleteAsset(storage, rootOrAssetKey);
 }
+

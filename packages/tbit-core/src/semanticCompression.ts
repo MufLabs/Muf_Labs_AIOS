@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { normalizeTBitKey } from "./textEncoding";
+import { normalizeTBitKey } from "./textEncoding.js";
 
 export type CompressionState =
   | "COMPRESSION_PENDING"
@@ -205,3 +205,4 @@ export async function compressSemanticGravity(
       "Compresion semantica verificable: primero escribe archivo condensado, luego libera regiones originales. El archivo .tbit puede no reducir su tamano fisico hasta una reconstruccion/export-import.",
   };
 }
+

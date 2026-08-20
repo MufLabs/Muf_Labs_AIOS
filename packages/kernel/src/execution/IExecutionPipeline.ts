@@ -1,5 +1,5 @@
-import { PipelineContext } from "./PipelineContext";
-import { PipelineResult } from "./PipelineResult";
+import { PipelineContext } from "./PipelineContext.js";
+import { PipelineResult } from "./PipelineResult.js";
 
 export interface IExecutionPipeline {
 

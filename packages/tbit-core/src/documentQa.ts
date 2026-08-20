@@ -1,5 +1,5 @@
-import { recallMemory } from "./memoryCore";
-import { searchQueryIndex } from "./queryIndex";
+import { recallMemory } from "./memoryCore.js";
+import { searchQueryIndex } from "./queryIndex.js";
 
 type DynamicStorage = {
   read?: (key: string) => Promise<unknown>;
@@ -360,3 +360,4 @@ export async function answerDocumentQuestion(
     : await readMarkdownDocument(storage, documentKey);
   return answerFromBlocks(query, document);
 }
+

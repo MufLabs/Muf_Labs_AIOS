@@ -1,4 +1,4 @@
-import { WorkflowCommand } from "../workflow/WorkflowCommand";
+import { WorkflowCommand } from "../workflow/WorkflowCommand.js";
 
 export class CommandRegistry {
 

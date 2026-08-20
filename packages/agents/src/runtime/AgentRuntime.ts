@@ -1,17 +1,17 @@
 import {
     AgentContext,
     AgentExecutionRuntime
-} from "../core/AgentContext";
-import { AgentDefinition } from "../core/AgentDefinition";
-import { AgentResult } from "../core/AgentResult";
-import { IAgent } from "../core/IAgent";
+} from "../core/AgentContext.js";
+import { AgentDefinition } from "../core/AgentDefinition.js";
+import { AgentResult } from "../core/AgentResult.js";
+import { IAgent } from "../core/IAgent.js";
 
-import { AgentRegistry } from "../registry/AgentRegistry";
-import { AgentSelector } from "../registry/AgentSelector";
+import { AgentRegistry } from "../registry/AgentRegistry.js";
+import { AgentSelector } from "../registry/AgentSelector.js";
 
 import { AgentRequest } from "../types";
-import { RuntimeOptions } from "./RuntimeOptions";
-import { RuntimeResult } from "./RuntimeResults";
+import { RuntimeOptions } from "./RuntimeOptions.js";
+import { RuntimeResult } from "./RuntimeResults.js";
 
 /**
  * Central execution runtime.

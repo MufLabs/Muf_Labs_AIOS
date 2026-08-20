@@ -2,15 +2,15 @@ import {
     HttpClient,
     HttpRequest,
     HttpResponse
-} from "../../common";
+} from "../../common/index.js";
 
 import {
     OpenAICompatibleAuthentication
-} from "./OpenAICompatibleAuthentication";
+} from "./OpenAICompatibleAuthentication.js";
 
 import {
     OpenAICompatibleConfiguration
-} from "./OpenAICompatibleConfiguration";
+} from "./OpenAICompatibleConfiguration.js";
 
 export class OpenAICompatibleClient {
 

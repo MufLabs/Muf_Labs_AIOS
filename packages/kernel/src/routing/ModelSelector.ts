@@ -1,4 +1,4 @@
-import { IModelSelector } from "./IModelSelector";
+import { IModelSelector } from "./IModelSelector.js";
 
 import {
 

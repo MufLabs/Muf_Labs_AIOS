@@ -1,4 +1,4 @@
-import { RoutingPolicy } from "./RoutingPolicy";
+import { RoutingPolicy } from "./RoutingPolicy.js";
 
 export class RoutingPolicyBuilder {
 

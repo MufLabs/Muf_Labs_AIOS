@@ -1,8 +1,8 @@
-import { IExecutionPipeline } from "./IExecutionPipeline";
+import { IExecutionPipeline } from "./IExecutionPipeline.js";
 
-import { PipelineContext } from "./PipelineContext";
-import { PipelineResult } from "./PipelineResult";
-import { PromptBuilder } from "./PromptBuilder";
+import { PipelineContext } from "./PipelineContext.js";
+import { PipelineResult } from "./PipelineResult.js";
+import { PromptBuilder } from "./PromptBuilder.js";
 
 import {
     IProviderManager

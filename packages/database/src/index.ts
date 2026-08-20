@@ -5,7 +5,7 @@
  */
 
 // Core utilities
-export { normalizeUnicodeText, normalizeTBitKey } from "./core/textEncoding";
+export { normalizeUnicodeText, normalizeTBitKey } from "./core/textEncoding.js";
 
 // Runtime paths
 export {
@@ -18,12 +18,12 @@ export {
   resolveReplicasDir,
   resolveExportsDir,
   resolveLockPath,
-} from "./core/RuntimePaths";
+} from "./core/RuntimePaths.js";
 
 // Storage engine
-export { TBitContainer } from "./storage/TBitContainer";
-export type { TBitOffsets, TBitProjection } from "./storage/TBitContainer";
-export { TBitStorageService } from "./storage/TBitStorageService";
+export { TBitContainer } from "./storage/TBitContainer.js";
+export type { TBitOffsets, TBitProjection } from "./storage/TBitContainer.js";
+export { TBitStorageService } from "./storage/TBitStorageService.js";
 export type {
   TBitMetadataEntry,
   TBitMetadata,
@@ -32,9 +32,9 @@ export type {
   TBitBatchWriteInput,
   TBitBatchCollapseResult,
   TBitStorageConfig,
-} from "./storage/TBitStorageService";
-export { AllocationMap } from "./storage/AllocationMap";
-export type { AllocationRange, AllocationRegion } from "./storage/AllocationMap";
+} from "./storage/TBitStorageService.js";
+export { AllocationMap } from "./storage/AllocationMap.js";
+export type { AllocationRange, AllocationRegion } from "./storage/AllocationMap.js";
 
 // Security
 export {
@@ -42,8 +42,8 @@ export {
   getEncryptionKeyRing,
   getEncryptionKeyById,
   getEncryptionKeyStatus,
-} from "./security/EncryptionKeyManager";
-export type { EncryptionKeyMaterial } from "./security/EncryptionKeyManager";
+} from "./security/EncryptionKeyManager.js";
+export type { EncryptionKeyMaterial } from "./security/EncryptionKeyManager.js";
 
 // Query index
 export {
@@ -52,13 +52,13 @@ export {
   getQueryIndex,
   searchQueryIndex,
   getQueryIndexStats,
-} from "./indexing/QueryIndex";
+} from "./indexing/QueryIndex.js";
 export type {
   QueryIndexEntry,
   TBitQueryIndex,
   QuerySearchRequest,
   QuerySearchResult,
-} from "./indexing/QueryIndex";
+} from "./indexing/QueryIndex.js";
 
 // Memory core
 export {
@@ -72,7 +72,7 @@ export {
   deleteMemoryRecord,
   deleteMemoryRecordsBatch,
   getMemoryGraph,
-} from "./memory/MemoryCore";
+} from "./memory/MemoryCore.js";
 export type {
   MemoryCoreRememberRequest,
   MemoryCoreRecord,
@@ -80,7 +80,7 @@ export type {
   MemoryGraphNode,
   MemoryGraphLink,
   MemoryGraph,
-} from "./memory/MemoryCore";
+} from "./memory/MemoryCore.js";
 
 // Asset manager
 export {
@@ -88,13 +88,13 @@ export {
     listAssets,
   deleteAsset,
   getAssetStats,
-} from "./assets/AssetManager";
+} from "./assets/AssetManager.js";
 // Bridges
-export * from "./bridges/MarkdownBridge";
-export * from "./bridges/BinaryAssetBridge";
-export * from "./bridges/UniversalDocumentBridge";
-export * from "./bridges/DocumentExtractors";
-export * from "./bridges/CodeGraphExtractor";
+export * from "./bridges/MarkdownBridge.js";
+export * from "./bridges/BinaryAssetBridge.js";
+export * from "./bridges/UniversalDocumentBridge.js";
+export * from "./bridges/DocumentExtractors.js";
+export * from "./bridges/CodeGraphExtractor.js";
 
 // Semantic index
 export {
@@ -106,7 +106,7 @@ export {
   getSemanticIndex,
   searchSemanticIndex,
   getSemanticIndexStats,
-} from "./indexing/SemanticIndex";
+} from "./indexing/SemanticIndex.js";
 
 export type {
   TBitAssetStatus,
@@ -114,7 +114,7 @@ export type {
   TBitAssetIndex,
   RegisterAssetRequest,
   DeleteAssetResult,
-} from "./assets/AssetManager";
+} from "./assets/AssetManager.js";
 
 // Semantic compression (canonical)
 export {
@@ -122,4 +122,4 @@ export {
   type SemanticCompressionRequest,
   type SemanticCompressionReport,
   compressSemanticGravity,
-} from "./SemanticCompression";
+} from "./SemanticCompression.js";

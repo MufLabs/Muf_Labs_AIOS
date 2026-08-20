@@ -4,15 +4,15 @@ import {
 
 import {
     ProviderModel
-} from "../../ProviderModel";
+} from "../../ProviderModel.js";
 
 import {
     AnthropicConfiguration
-} from "./AnthropicConfiguration";
+} from "./AnthropicConfiguration.js";
 
 import {
     AnthropicAuthentication
-} from "./AnthropicAuthentication";
+} from "./AnthropicAuthentication.js";
 
 interface AnthropicModelsResponse {
 

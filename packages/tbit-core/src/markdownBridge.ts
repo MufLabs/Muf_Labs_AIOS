@@ -1,5 +1,5 @@
-import { deleteAsset, listAssets, registerAsset } from "./assetManager";
-import { deleteMemoryRecordsBatch, recallMemory, rememberMemory, rememberMemoryBatch } from "./memoryCore";
+import { deleteAsset, listAssets, registerAsset } from "./assetManager.js";
+import { deleteMemoryRecordsBatch, recallMemory, rememberMemory, rememberMemoryBatch } from "./memoryCore.js";
 
 export type MarkdownImportRequest = {
   userId: string;
@@ -484,4 +484,5 @@ async function importChunkedMarkdownDocument(
     record,
   };
 }
+
 

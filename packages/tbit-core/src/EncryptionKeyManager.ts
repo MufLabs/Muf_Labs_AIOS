@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from "crypto";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { dirname } from "path";
-import { resolveActiveTBitDataPath } from "./tbitRuntimePaths";
+import { resolveActiveTBitDataPath } from "./tbitRuntimePaths.js";
 
 export type EncryptionKeyMaterial = {
   id: string;
@@ -193,3 +193,4 @@ export function getEncryptionKeyStatus() {
     keyCount: ring.length,
   };
 }
+

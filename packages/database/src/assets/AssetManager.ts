@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
-import { deleteMemoryRecordsBatch } from "../memory/MemoryCore";
-import { resolveActiveTBitDataPath } from "../core/RuntimePaths";
+import { deleteMemoryRecordsBatch } from "../memory/MemoryCore.js";
+import { resolveActiveTBitDataPath } from "../core/RuntimePaths.js";
 
 export type TBitAssetStatus = "ACTIVE" | "DELETED";
 
@@ -248,3 +248,4 @@ export async function getAssetStats(userId?: string) {
     }, {}),
   };
 }
+

@@ -1,6 +1,6 @@
-﻿import { AiProvider, DeterministicTBitProvider } from "./AiProvider";
-import { OpenAICompatibleProvider } from "./providers/OpenAICompatibleProvider";
-import { AnthropicProvider, GeminiProvider, providerLabel } from "./providers/UniversalAiProviders";
+import { AiProvider, DeterministicTBitProvider } from "./AiProvider.js";
+import { OpenAICompatibleProvider } from "./providers/OpenAICompatibleProvider.js";
+import { AnthropicProvider, GeminiProvider, providerLabel } from "./providers/UniversalAiProviders.js";
 
 export type AiProviderRuntime = {
   provider: AiProvider;
@@ -427,4 +427,5 @@ export function createAiProviderRuntimeFromConfig(config?: AiProviderRuntimeConf
 
   throw new Error(`Proveedor IA no soportado: ${requested}`);
 }
+
 

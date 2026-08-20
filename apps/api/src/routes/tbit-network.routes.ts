@@ -6,7 +6,7 @@ import {
   compareNetworkState,
 } from "@muf/tbit-core";
 
-import { requireSymbolicApiKey } from "../middleware/auth";
+import { requireSymbolicApiKey } from "../middleware/auth.js";
 
 const router: Router = Router();
 
@@ -113,3 +113,4 @@ router.post("/network/compare", async (req: Request, res: Response) => {
 });
 
 export default router;
+

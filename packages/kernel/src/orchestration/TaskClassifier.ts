@@ -12,7 +12,7 @@ import type {
   Complexity,
   Urgency,
   TechnicalLevel,
-} from "./TaskIntent";
+} from "./TaskIntent.js";
 
 const HAS = (text: string, ...words: string[]): boolean =>
   words.some((w) => text.includes(w));

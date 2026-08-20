@@ -8,7 +8,7 @@ import {
 
 import {
     GeminiConfiguration
-} from "./GeminiConfiguration";
+} from "./GeminiConfiguration.js";
 
 export class GeminiModels {
 

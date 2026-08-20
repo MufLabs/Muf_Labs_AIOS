@@ -1,6 +1,6 @@
-import { HttpClient } from "../../common";
-import { ProviderModel } from "../../ProviderModel";
-import { OpenAICompatibleConfiguration } from "./OpenAICompatibleConfiguration";
+import { HttpClient } from "../../common/index.js";
+import { ProviderModel } from "../../ProviderModel.js";
+import { OpenAICompatibleConfiguration } from "./OpenAICompatibleConfiguration.js";
 
 interface OpenAICompatibleModelResponse {
     object: string;

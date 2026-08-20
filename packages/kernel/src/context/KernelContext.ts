@@ -1,11 +1,11 @@
 import { randomUUID } from "crypto";
 
-import { EventBus } from "../events/EventBus";
-import { MemoryStore } from "../memory/MemoryStore";
-import { Conversation } from "../session/Conversation";
-import { WorkflowState } from "../workflow/WorkflowState";
-import { CommandRegistry } from "../commands/CommandRegistry";
-import { ServiceContainer } from "../services/ServiceContainer";
+import { EventBus } from "../events/EventBus.js";
+import { MemoryStore } from "../memory/MemoryStore.js";
+import { Conversation } from "../session/Conversation.js";
+import { WorkflowState } from "../workflow/WorkflowState.js";
+import { CommandRegistry } from "../commands/CommandRegistry.js";
+import { ServiceContainer } from "../services/ServiceContainer.js";
 
 export class KernelContext {
 

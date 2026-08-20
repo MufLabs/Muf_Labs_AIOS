@@ -11,7 +11,7 @@ export {
   type TBitSpaceManifest,
   createSpaceManifest,
   listSpaceManifests,
-} from "./tbitRuntimePaths";
+} from "./tbitRuntimePaths.js";
 
 export {
   type VaultContext,
@@ -21,4 +21,5 @@ export {
   type VaultClosedPayload,
   type VaultSwitchedPayload,
   VAULT_EVENTS,
-} from "./vaultContext";
+} from "./vaultContext.js";
+

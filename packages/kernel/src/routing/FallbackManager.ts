@@ -1,4 +1,4 @@
-import { IFallbackManager } from "./IFallbackManager";
+import { IFallbackManager } from "./IFallbackManager.js";
 
 import {
 

@@ -1,4 +1,4 @@
-import { IProviderResolver } from "./IProviderResolver";
+import { IProviderResolver } from "./IProviderResolver.js";
 
 import {
 

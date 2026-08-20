@@ -1,5 +1,5 @@
 // ─── T-Bit Core Engine ───────────────────────────────────────────
-export { TBitContainer, TBitOffsets, TBitProjection } from "./TBitFileSystem";
+export { TBitContainer, TBitOffsets, TBitProjection } from "./TBitFileSystem.js";
 export {
   TBitStorageService,
   TBitMetadataEntry,
@@ -9,8 +9,8 @@ export {
   TBitBatchWriteInput,
   TBitBatchCollapseResult,
   TBitStorageConfig,
-} from "./TBitStorageService";
-export { AllocationMap, AllocationRange } from "./AllocationMap";
+} from "./TBitStorageService.js";
+export { AllocationMap, AllocationRange } from "./AllocationMap.js";
 
 // ─── Security & Encoding ─────────────────────────────────────────
 export {
@@ -23,12 +23,12 @@ export {
   activateStoredKey,
   isEncryptionConfigured,
   EncryptionKeyMaterial,
-} from "./EncryptionKeyManager";
-export { resolveHmacSecret } from "./hmacSecret";
+} from "./EncryptionKeyManager.js";
+export { resolveHmacSecret } from "./hmacSecret.js";
 export {
   normalizeTBitKey,
   normalizeUnicodeText,
-} from "./textEncoding";
+} from "./textEncoding.js";
 export {
   obtenerContextoTemporalSistema,
   obtenerPromptTemporalSistema,
@@ -37,7 +37,7 @@ export {
   resolverFechaRelativa,
   TemporalContext,
   SemanticMemory,
-} from "./temporalSemantics";
+} from "./temporalSemantics.js";
 
 // ─── Memory Core ─────────────────────────────────────────────────
 export {
@@ -55,7 +55,7 @@ export {
   deleteMemoryRecord,
   deleteMemoryRecordsBatch,
   rememberMemoryBatch,
-} from "./memoryCore";
+} from "./memoryCore.js";
 
 // ─── Memory Core API Compatibility Layer ─────────────────────────────
 export {
@@ -67,7 +67,7 @@ export {
   getMemoryGraphCompat,
   deleteMemoryRecordCompat,
   deleteMemoryRecordsBatchCompat,
-} from "./memoryCoreCompat";
+} from "./memoryCoreCompat.js";
 
 // ─── Query & Semantic Index ──────────────────────────────────────
 export {
@@ -79,13 +79,13 @@ export {
   rebuildQueryIndex,
   searchQueryIndex,
   syncQueryIndexIncremental,
-} from "./queryIndex";
+} from "./queryIndex.js";
 export {
   SemanticIndexEntry,
   getSemanticIndexStats,
   rebuildSemanticIndex,
   searchSemanticIndex,
-} from "./semanticIndex";
+} from "./semanticIndex.js";
 
 // ─── AI Permissions ──────────────────────────────────────────────
 export {
@@ -95,7 +95,7 @@ export {
   AiPermissionsPolicy,
   AiPermissionAction,
   AiPermissionDecision,
-} from "./aiPermissions";
+} from "./aiPermissions.js";
 
 // ─── Asset Manager ───────────────────────────────────────────────
 export {
@@ -108,7 +108,7 @@ export {
   TBitAssetIndex,
   RegisterAssetRequest,
   DeleteAssetResult,
-} from "./assetManager";
+} from "./assetManager.js";
 
 // ─── Asset Manager API Compatibility Layer ─────────────────────────────
 export {
@@ -116,17 +116,17 @@ export {
   getAssetStatsCompat,
   registerAssetCompat,
   deleteAssetCompat,
-} from "./assetManagerCompat";
+} from "./assetManagerCompat.js";
 
 // ─── Container Health ────────────────────────────────────────────
 export {
   getContainerHealthReport,
   TBitContainerHealth,
   TBitHealthReport,
-} from "./containerHealth";
+} from "./containerHealth.js";
 export {
   reconcileContainerHealth,
-} from "./healthReconciliation";
+} from "./healthReconciliation.js";
 
 // ─── Runtime Paths ───────────────────────────────────────────────
 export {
@@ -142,7 +142,7 @@ export {
   getActiveTBitDataDir,
   createSpaceManifest,
   listSpaceManifests,
-} from "./tbitRuntimePaths";
+} from "./tbitRuntimePaths.js";
 
 // ─── Markdown Bridge ─────────────────────────────────────────────
 export {
@@ -154,7 +154,7 @@ export {
   listMarkdownDocuments,
   deleteMarkdownDocument,
   purgeOrphanMarkdownChunks,
-} from "./markdownBridge";
+} from "./markdownBridge.js";
 
 // ─── Markdown Bridge API Compatibility Layer ─────────────────────────────
 export {
@@ -164,7 +164,7 @@ export {
   deleteMarkdownDocumentCompat,
   reconstructMarkdownDocumentCompat,
   purgeOrphanMarkdownChunksCompat,
-} from "./markdownBridgeCompat";
+} from "./markdownBridgeCompat.js";
 
 // ─── Binary Asset Bridge ─────────────────────────────────────────
 export {
@@ -174,37 +174,37 @@ export {
   BinaryAssetImportRequest,
   BinaryAssetImportResult,
   BinaryAssetReconstructResult,
-} from "./binaryAssetBridge";
+} from "./binaryAssetBridge.js";
 
 // ─── Binary Asset Bridge API Compatibility Layer ─────────────────────────────
 export {
   importBinaryAssetCompat,
   reconstructBinaryAssetCompat,
   deleteBinaryAssetCompat,
-} from "./binaryAssetBridgeCompat";
+} from "./binaryAssetBridgeCompat.js";
 
 // ─── Universal Document Bridge ───────────────────────────────────
 export {
   importUniversalDocument,
   UniversalDocumentImportRequest,
   UniversalDocumentImportResult,
-} from "./universalDocumentBridge";
+} from "./universalDocumentBridge.js";
 
 // ─── Universal Document Bridge API Compatibility Layer ─────────────────────────────
 export {
   importUniversalDocumentCompat,
   answerDocumentQuestionCompat,
-} from "./universalDocumentBridgeCompat";
+} from "./universalDocumentBridgeCompat.js";
 
 // ─── Semantic Compression ────────────────────────────────────────
 export {
   compressSemanticGravity,
-} from "./semanticCompression";
+} from "./semanticCompression.js";
 
 // ─── Guardian Observer ───────────────────────────────────────────
 export {
   observeGuardian,
-} from "./guardianObserver";
+} from "./guardianObserver.js";
 
 // ─── Web Research ────────────────────────────────────────────────
 export {
@@ -212,12 +212,12 @@ export {
   extractFirstUrlFromText,
   researchWebPage,
   buildWebResearchPrompt,
-} from "./webResearch";
+} from "./webResearch.js";
 
 // ─── Document QA ─────────────────────────────────────────────────
 export {
   answerDocumentQuestion,
-} from "./documentQa";
+} from "./documentQa.js";
 
 // ─── Code Graph Extractor ────────────────────────────────────────
 export {
@@ -227,7 +227,7 @@ export {
   buildCodeMarkdownDocument,
   CodeGraphAnalysis,
   CodeGraphSummary,
-} from "./codeGraphExtractor";
+} from "./codeGraphExtractor.js";
 
 // ─── KV Store ──────────────────────────────────────────────────────
 export {
@@ -237,13 +237,13 @@ export {
   listKvKeys,
   getKvStats,
   KvValueOptions,
-} from "./kvStore";
+} from "./kvStore.js";
 
 // ─── Document Extractors ─────────────────────────────────────────
 export {
   extractOfficeDocument,
   ExtractedOfficeDocument,
-} from "./documentExtractors";
+} from "./documentExtractors.js";
 
 // ─── API Compatibility Layer ────────────────────────────────────────
 export {
@@ -262,4 +262,5 @@ export {
   exportNetworkRecord,
   importNetworkRecord,
   compareNetworkState,
-} from "./apiCompat";
+} from "./apiCompat.js";
+

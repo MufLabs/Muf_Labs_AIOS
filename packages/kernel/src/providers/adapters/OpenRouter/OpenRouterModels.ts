@@ -8,7 +8,7 @@ import {
 
 import {
     OpenRouterConfiguration
-} from "./OpenRouterConfiguration";
+} from "./OpenRouterConfiguration.js";
 
 export class OpenRouterModels {
 

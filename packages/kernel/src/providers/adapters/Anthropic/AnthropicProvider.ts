@@ -4,43 +4,43 @@ import {
 
 import {
     BaseProvider
-} from "../../BaseProvider";
+} from "../../BaseProvider.js";
 
 import {
     ProviderRequest
-} from "../../ProviderRequest";
+} from "../../ProviderRequest.js";
 
 import {
     ProviderResponse
-} from "../../ProviderResponse";
+} from "../../ProviderResponse.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 import {
     AnthropicClient
-} from "./AnthropicClient";
+} from "./AnthropicClient.js";
 
 import {
     AnthropicConfiguration
-} from "./AnthropicConfiguration";
+} from "./AnthropicConfiguration.js";
 
 import {
     AnthropicErrorMapper
-} from "./AnthropicErrorMapper";
+} from "./AnthropicErrorMapper.js";
 
 import {
     AnthropicMapper
-} from "./AnthropicMapper";
+} from "./AnthropicMapper.js";
 
 import {
     AnthropicModels
-} from "./AnthropicModels";
+} from "./AnthropicModels.js";
 
 import {
     AnthropicProviderInfo
-} from "./AnthropicProviderInfo";
+} from "./AnthropicProviderInfo.js";
 
 interface AnthropicMessageResponse {
 

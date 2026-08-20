@@ -10,8 +10,8 @@ import {
   readSync,
   writeSync
 } from "fs";
-import { getActiveEncryptionKey, getEncryptionKeyById, getEncryptionKeyRing, getEncryptionKeyStatus } from "./EncryptionKeyManager";
-import { normalizeTBitKey, normalizeUnicodeText } from "./textEncoding";
+import { getActiveEncryptionKey, getEncryptionKeyById, getEncryptionKeyRing, getEncryptionKeyStatus } from "./EncryptionKeyManager.js";
+import { normalizeTBitKey, normalizeUnicodeText } from "./textEncoding.js";
 
 const SYSTEM_MAGIC = Buffer.from("TBITFS1\0", "ascii");
 const FRAME_MAGIC = Buffer.from("TBIT", "ascii");
@@ -685,3 +685,4 @@ export class TBitContainer {
     ];
   }
 }
+

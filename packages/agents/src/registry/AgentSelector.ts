@@ -1,5 +1,5 @@
-import { IAgent } from "../core/IAgent";
-import { AgentRegistry } from "./AgentRegistry";
+import { IAgent } from "../core/IAgent.js";
+import { AgentRegistry } from "./AgentRegistry.js";
 
 /**
  * Responsible for selecting the most appropriate runtime agent.

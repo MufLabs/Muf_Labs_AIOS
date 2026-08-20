@@ -1,4 +1,4 @@
-﻿import { AiMessage, AiProvider, AiProviderRequest, AiProviderResponse } from "../AiProvider";
+import { AiMessage, AiProvider, AiProviderRequest, AiProviderResponse } from "../AiProvider.js";
 
 export type OpenAICompatibleProviderOptions = {
   apiKey: string;
@@ -84,6 +84,7 @@ export class OpenAICompatibleProvider implements AiProvider {
     return { message };
   }
 }
+
 
 
 

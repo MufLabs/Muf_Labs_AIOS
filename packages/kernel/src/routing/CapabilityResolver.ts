@@ -1,4 +1,4 @@
-import { ICapabilityResolver } from "./ICapabilityResolver";
+import { ICapabilityResolver } from "./ICapabilityResolver.js";
 
 import {
 

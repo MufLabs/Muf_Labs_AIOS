@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "T-Bit spatial data integrity engine — deterministic container storage with AES-256-GCM encryption, Vit/Anti-Vit verification, and memory core",
   "private": true,
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

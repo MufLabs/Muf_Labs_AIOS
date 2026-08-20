@@ -6,7 +6,7 @@
  */
 
 import type { AiProviderDescriptor } from "@aios/llm";
-import type { TaskIntent } from "./TaskIntent";
+import type { TaskIntent } from "./TaskIntent.js";
 
 const DOMAIN_PREFERENCE: Record<string, string[]> = {
   code: ["openai", "grok", "qwen", "claude", "deterministic"],

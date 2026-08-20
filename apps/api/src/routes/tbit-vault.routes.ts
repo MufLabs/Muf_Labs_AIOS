@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
-import { vaultBootstrapService } from "../services/vaultBootstrapService";
-import { requireSymbolicApiKey } from "../middleware/auth";
-import { bootstrapLogger, newRequestId, newCorrelationId } from "../services/bootstrapLogger";
+import { vaultBootstrapService } from "../services/vaultBootstrapService.js";
+import { requireSymbolicApiKey } from "../middleware/auth.js";
+import { bootstrapLogger, newRequestId, newCorrelationId } from "../services/bootstrapLogger.js";
 
 const router: Router = Router();
 
@@ -126,3 +126,4 @@ router.get("/vault/status", async (_req: Request, res: Response) => {
 });
 
 export default router;
+

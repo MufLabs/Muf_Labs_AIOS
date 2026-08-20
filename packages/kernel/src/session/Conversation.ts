@@ -1,4 +1,4 @@
-import { ConversationMessage } from "./ConversationMessage";
+import { ConversationMessage } from "./ConversationMessage.js";
 
 export class Conversation {
 

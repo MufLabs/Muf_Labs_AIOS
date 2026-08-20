@@ -1,4 +1,4 @@
-import type { AgentCapability } from "./AgentCapability";
+import type { AgentCapability } from "./AgentCapability.js";
 
 export interface AgentMetadata {
 

@@ -1,4 +1,4 @@
-import { ProviderRequest } from "../../ProviderRequest";
+import { ProviderRequest } from "../../ProviderRequest.js";
 
 export class OpenAICompatibleMapper {
 

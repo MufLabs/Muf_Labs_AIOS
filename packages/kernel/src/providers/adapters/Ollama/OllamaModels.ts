@@ -8,7 +8,7 @@ import {
 
 import {
     OllamaConfiguration
-} from "./OllamaConfiguration";
+} from "./OllamaConfiguration.js";
 
 export class OllamaModels {
 

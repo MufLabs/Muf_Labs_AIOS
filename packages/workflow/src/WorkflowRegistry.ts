@@ -1,6 +1,6 @@
-import { WorkflowCommand } from "./types/WorkflowTypes";
+import { WorkflowCommand } from "./types/WorkflowTypes.js";
 
-import { IWorkflow } from "./interfaces/IWorkflow";
+import { IWorkflow } from "./interfaces/IWorkflow.js";
 
 export class WorkflowRegistry {
 

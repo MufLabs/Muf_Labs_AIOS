@@ -4,11 +4,11 @@ import {
   normalizeTBitSpaceId,
 } from "@aios/shared";
 
-import { BaseProvider } from "../BaseProvider";
-import type { IProvider } from "../IProvider";
-import { ProviderInfo } from "../ProviderInfo";
-import { ProviderRequest } from "../ProviderRequest";
-import { ProviderResponse } from "../ProviderResponse";
+import { BaseProvider } from "../BaseProvider.js";
+import type { IProvider } from "../IProvider.js";
+import { ProviderInfo } from "../ProviderInfo.js";
+import { ProviderRequest } from "../ProviderRequest.js";
+import { ProviderResponse } from "../ProviderResponse.js";
 
 /**
  * Stage 8.4 — Workflow Vault Provider
@@ -93,3 +93,4 @@ export class WorkflowVaultProvider extends BaseProvider implements IProvider {
     };
   }
 }
+

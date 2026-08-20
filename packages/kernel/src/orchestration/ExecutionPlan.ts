@@ -5,7 +5,7 @@
  * de IA sugeridos y si la ejecución puede paralelizarse.
  */
 
-import type { TaskIntent, TaskCategory } from "./TaskIntent";
+import type { TaskIntent, TaskCategory } from "./TaskIntent.js";
 
 export type StepStatus = "pending" | "running" | "done" | "failed" | "skipped";
 

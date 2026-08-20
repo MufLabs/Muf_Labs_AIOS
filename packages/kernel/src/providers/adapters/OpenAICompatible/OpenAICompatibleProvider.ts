@@ -4,44 +4,44 @@ import {
 
 import {
     BaseProvider
-} from "../../BaseProvider";
+} from "../../BaseProvider.js";
 
 import {
     ProviderRequest
-} from "../../ProviderRequest";
+} from "../../ProviderRequest.js";
 
 import {
     ProviderResponse,
     ProviderToolCall
-} from "../../ProviderResponse";
+} from "../../ProviderResponse.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 import {
     OpenAICompatibleClient
-} from "./OpenAICompatibleClient";
+} from "./OpenAICompatibleClient.js";
 
 import {
     OpenAICompatibleConfiguration
-} from "./OpenAICompatibleConfiguration";
+} from "./OpenAICompatibleConfiguration.js";
 
 import {
     OpenAICompatibleErrorMapper
-} from "./OpenAICompatibleErrorMapper";
+} from "./OpenAICompatibleErrorMapper.js";
 
 import {
     OpenAICompatibleMapper
-} from "./OpenAICompatibleMapper";
+} from "./OpenAICompatibleMapper.js";
 
 import {
     OpenAICompatibleModels
-} from "./OpenAICompatibleModels";
+} from "./OpenAICompatibleModels.js";
 
 import {
     OpenAICompatibleProviderInfo
-} from "./OpenAICompatibleProviderInfo";
+} from "./OpenAICompatibleProviderInfo.js";
 
 interface OpenAICompatibleChoice {
 

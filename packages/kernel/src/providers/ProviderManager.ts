@@ -1,15 +1,15 @@
 import { type VaultProviderConfig } from "@aios/shared";
 
-import { IProvider } from "./IProvider";
-import { IProviderManager } from "./IProviderManager";
-import { ProviderNotFoundError } from "./ProviderNotFoundError";
-import { ProviderRequest } from "./ProviderRequest";
-import { ProviderResponse } from "./ProviderResponse";
+import { IProvider } from "./IProvider.js";
+import { IProviderManager } from "./IProviderManager.js";
+import { ProviderNotFoundError } from "./ProviderNotFoundError.js";
+import { ProviderRequest } from "./ProviderRequest.js";
+import { ProviderResponse } from "./ProviderResponse.js";
 
 import {
     ProviderRegistry,
     ProviderSelector
-} from "../registry";
+} from "../registry/index.js";
 
 export class ProviderManager implements IProviderManager {
 

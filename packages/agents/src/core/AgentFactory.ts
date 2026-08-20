@@ -1,8 +1,8 @@
-import { Agent } from "./Agent";
-import { AgentContext } from "./AgentContext";
-import { AgentDefinition } from "./AgentDefinition";
-import { AgentResult } from "./AgentResult";
-import { IAgent } from "./IAgent";
+import { Agent } from "./Agent.js";
+import { AgentContext } from "./AgentContext.js";
+import { AgentDefinition } from "./AgentDefinition.js";
+import { AgentResult } from "./AgentResult.js";
+import { IAgent } from "./IAgent.js";
 
 /**
  * Default runtime implementation used for agents loaded

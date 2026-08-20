@@ -1,6 +1,6 @@
 import type { ProviderModel } from "../providers";
 
-import { IRoutingPolicy } from "./IRoutingPolicy";
+import { IRoutingPolicy } from "./IRoutingPolicy.js";
 
 import {
     ProviderCandidate,

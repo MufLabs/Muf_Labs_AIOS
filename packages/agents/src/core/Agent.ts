@@ -1,7 +1,7 @@
-import { AgentDefinition } from "./AgentDefinition";
-import { AgentContext } from "./AgentContext";
-import { AgentResult } from "./AgentResult";
-import { IAgent } from "./IAgent";
+import { AgentDefinition } from "./AgentDefinition.js";
+import { AgentContext } from "./AgentContext.js";
+import { AgentResult } from "./AgentResult.js";
+import { IAgent } from "./IAgent.js";
 
 /**
  * Base implementation for every executable agent.

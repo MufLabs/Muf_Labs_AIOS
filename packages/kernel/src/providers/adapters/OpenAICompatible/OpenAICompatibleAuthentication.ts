@@ -1,6 +1,6 @@
 import { Authentication } from "../../common";
 
-import { OpenAICompatibleConfiguration } from "./OpenAICompatibleConfiguration";
+import { OpenAICompatibleConfiguration } from "./OpenAICompatibleConfiguration.js";
 
 export class OpenAICompatibleAuthentication {
 

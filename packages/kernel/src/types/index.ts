@@ -1,3 +1,3 @@
-export * from "./KernelRequest";
-export * from "./KernelResponse";
-export * from "./KernelOptions";
+export * from "./KernelRequest.js";
+export * from "./KernelResponse.js";
+export * from "./KernelOptions.js";

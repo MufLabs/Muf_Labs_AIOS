@@ -1,18 +1,18 @@
 import {
     OpenAICompatibleProvider
-} from "../OpenAICompatible";
+} from "../OpenAICompatible/index.js";
 
 import {
     OpenAIConfiguration
-} from "./OpenAIConfiguration";
+} from "./OpenAIConfiguration.js";
 
 import {
     OpenAIProviderInfo
-} from "./OpenAIProviderInfo";
+} from "./OpenAIProviderInfo.js";
 
 import {
     ProviderInfo
-} from "../../ProviderInfo";
+} from "../../ProviderInfo.js";
 
 export class OpenAIProvider extends OpenAICompatibleProvider {
 

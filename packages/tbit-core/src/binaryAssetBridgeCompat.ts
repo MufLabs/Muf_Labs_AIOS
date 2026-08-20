@@ -5,9 +5,9 @@
 import {
   TBitStorageService,
   TBitStorageConfig,
-} from "./TBitStorageService";
-import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths";
-import { resolveHmacSecret } from "./hmacSecret";
+} from "./TBitStorageService.js";
+import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths.js";
+import { resolveHmacSecret } from "./hmacSecret.js";
 import { createHash } from "crypto";
 import path from "path";
 import {
@@ -17,7 +17,7 @@ import {
   BinaryAssetImportRequest,
   BinaryAssetImportResult,
   BinaryAssetReconstructResult,
-} from "./binaryAssetBridge";
+} from "./binaryAssetBridge.js";
 
 /**
  * Create a default TBitStorageConfig for compatibility functions

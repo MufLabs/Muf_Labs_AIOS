@@ -19,7 +19,7 @@
  */
 
 import { createHash } from "crypto";
-import { getActiveEncryptionKeyAsync } from "./EncryptionKeyManager";
+import { getActiveEncryptionKeyAsync } from "./EncryptionKeyManager.js";
 
 /** Legacy dev-only fallback secret — must NEVER be used in production. */
 const DEV_HMAC_SECRET_FALLBACK = "dev-hmac-secret";

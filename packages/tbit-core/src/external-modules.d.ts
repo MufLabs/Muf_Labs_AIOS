@@ -5,20 +5,17 @@ declare module "mammoth" {
 
 declare module "pdf-parse" {
   interface PDFResult {
-    text: string;
-    numpages: number;
-    info: Record<string, unknown>;
-    metadata: Record<string, unknown>;
-    total: number;
+    text?: string;
+    numpages?: number;
+    numrender?: number;
+    info?: Record<string, unknown> | null;
+    metadata?: Record<string, unknown> | null;
+    version?: string;
   }
-  interface PDFOptions {
-    data: Buffer;
-  }
-  export class PDFParse {
-    constructor(options: PDFOptions);
-    getText(): Promise<PDFResult>;
-    destroy(): Promise<void>;
-  }
+  export default function PDFParse(
+    dataBuffer: Buffer,
+    options?: Record<string, unknown>
+  ): Promise<PDFResult>;
 }
 
 declare module "read-excel-file/node" {

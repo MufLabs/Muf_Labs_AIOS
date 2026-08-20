@@ -5,21 +5,21 @@
 import {
   TBitStorageService,
   TBitStorageConfig,
-} from "./TBitStorageService";
-import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths";
-import { resolveHmacSecret } from "./hmacSecret";
+} from "./TBitStorageService.js";
+import { getTBitSpacePaths, normalizeTBitSpaceId } from "./tbitRuntimePaths.js";
+import { resolveHmacSecret } from "./hmacSecret.js";
 import { createHash } from "crypto";
 import path from "path";
 import {
   importUniversalDocument,
   UniversalDocumentImportRequest,
   UniversalDocumentImportResult,
-} from "./universalDocumentBridge";
+} from "./universalDocumentBridge.js";
 import {
   answerDocumentQuestion,
   DocumentQuestionRequest,
   DocumentQuestionResult,
-} from "./documentQa";
+} from "./documentQa.js";
 
 /**
  * Create a default TBitStorageConfig for compatibility functions
@@ -80,3 +80,4 @@ export async function answerDocumentQuestionCompat(
   const storage = await getDefaultStorage();
   return answerDocumentQuestion(storage, request);
 }
+

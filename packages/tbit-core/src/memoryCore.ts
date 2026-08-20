@@ -1,9 +1,9 @@
 import { createHash } from "crypto";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { dirname } from "path";
-import { syncQueryIndexIncremental } from "./queryIndex";
-import { resolveActiveTBitDataPath } from "./tbitRuntimePaths";
-import { normalizeTBitKey } from "./textEncoding";
+import { syncQueryIndexIncremental } from "./queryIndex.js";
+import { resolveActiveTBitDataPath } from "./tbitRuntimePaths.js";
+import { normalizeTBitKey } from "./textEncoding.js";
 
 export type MemoryCoreRememberRequest = {
   userId: string;
@@ -525,3 +525,4 @@ export async function getMemoryGraph(userId?: string): Promise<MemoryGraph> {
     tags,
   };
 }
+

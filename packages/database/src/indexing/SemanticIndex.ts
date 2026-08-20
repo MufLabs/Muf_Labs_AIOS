@@ -1,8 +1,8 @@
 import { createHash } from "crypto";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
-import { getQueryIndex, QueryIndexEntry } from "../indexing/QueryIndex";
-import { resolveActiveTBitDataPath } from "../core/RuntimePaths";
+import { getQueryIndex, QueryIndexEntry } from "../indexing/QueryIndex.js";
+import { resolveActiveTBitDataPath } from "../core/RuntimePaths.js";
 
 function semanticIndexPath(): string {
   return resolveActiveTBitDataPath("semantic-index.json");
@@ -375,3 +375,4 @@ export async function getSemanticIndexStats() {
     dimensions: index.dimensions,
   };
 }
+

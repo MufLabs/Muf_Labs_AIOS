@@ -3,10 +3,10 @@ import { basename } from "node:path";
 import { AgentDefinition } from "../core";
 import { AgentCapability } from "../types";
 
-import { FrontMatterParser } from "./FrontMatterParser";
-import { PromptExtractor } from "./PromptExtractor";
-import { ParserResult } from "./ParserResult";
-import { IAgentParser } from "./IAgentParser";
+import { FrontMatterParser } from "./FrontMatterParser.js";
+import { PromptExtractor } from "./PromptExtractor.js";
+import { ParserResult } from "./ParserResult.js";
+import { IAgentParser } from "./IAgentParser.js";
 
 export class MarkdownAgentParser implements IAgentParser {
 

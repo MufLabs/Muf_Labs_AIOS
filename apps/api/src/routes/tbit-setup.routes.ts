@@ -14,8 +14,8 @@ import { TBitStorageService, TBitStorageConfig } from "@muf/tbit-core";
 import { createHash } from "crypto";
 import path from "path";
 
-import { requireSymbolicApiKey } from "../middleware/auth";
-import { bootstrapLogger, newRequestId } from "../services/bootstrapLogger";
+import { requireSymbolicApiKey } from "../middleware/auth.js";
+import { bootstrapLogger, newRequestId } from "../services/bootstrapLogger.js";
 
 const router: Router = Router();
 
@@ -155,3 +155,4 @@ router.post("/setup/bootstrap", async (req: Request, res: Response) => {
 });
 
 export default router;
+

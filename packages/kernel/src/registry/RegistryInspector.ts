@@ -1,5 +1,5 @@
-import { ProviderRegistry } from "./ProviderRegistry";
-import { RegistryStatistics } from "./RegistryStatistics";
+import { ProviderRegistry } from "./ProviderRegistry.js";
+import { RegistryStatistics } from "./RegistryStatistics.js";
 
 export class RegistryInspector {
 

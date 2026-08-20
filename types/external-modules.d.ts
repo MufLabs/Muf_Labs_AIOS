@@ -12,7 +12,7 @@ declare module "mammoth" {
 
 declare module "pdf-parse" {
   export interface PdfParseOptions { data: Buffer; }
-  export interface PdfParseResult { text?: string; total?: number; numpages?: number; info?: Record<string, unknown>; }
+  export interface PdfParseResult { text?: string; total?: number; numpages?: number; numrender?: number; info?: Record<string, unknown>; metadata?: Record<string, unknown> | null; version?: string; }
   export default class PDFParse {
     constructor(options: PdfParseOptions);
     getText(): Promise<PdfParseResult>;
