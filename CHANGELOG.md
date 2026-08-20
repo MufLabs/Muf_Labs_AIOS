@@ -61,11 +61,33 @@ Stage 8.3 architecture, startup flow, validation logic, readiness boundaries, an
 
 ---
 
-## [Unreleased]
+## [v0.5.0]
 
 ### 🧊 Frozen — Stage 8.4 (2026-08-06)
 
 **Stage 8.4 — Kernel & Provider Vault Integration** has been formally accepted and frozen.
+### 🌟 Phase 10 — Deployment & Production Hardening (v0.5.0)
+
+#### Added
+- Docker production hardening and deployment pipelines
+- Rollback procedure documentation (docs/OPERATIONS/ROLLBACK.md)
+- Deployment verification script (scripts/verify-deployment.mjs)
+- Phase 10 acceptance report (docs/PHASE10_FINAL_ACCEPTANCE.md)
+- Synchronized documentation: AIOS_Book.md and ENGINEERING_TIMELINE.md
+- Full monorepo build and typecheck validation
+- Secret bootstrap validation and runtime API hardening
+
+#### Changed
+- Version bump from v0.3.0 to v0.5.0
+- CHANGELOG promoted to v0.5.0 release entry
+- Package configuration updated for production readiness
+- Docker Compose production configuration enhanced
+
+#### Fixed
+- Deployment pipeline validation gates
+- Rollback procedure correctness
+- Version consistency across repository
+
 
 #### Added
 - `packages/shared/src/vaultContext.ts` — Canonical `VaultContext`, `VaultProviderConfig`, `VaultCapability`, `VaultOpenedPayload`, `VaultClosedPayload`, `VaultSwitchedPayload` types and `VAULT_EVENTS` constants (`vault.opened`, `vault.closed`, `vault.switched`). Single source of truth for vault-aware types across the monorepo.
@@ -144,7 +166,7 @@ Stage 8.4 architecture, vault-aware kernel, vault providers, vault events, and t
 
 ---
 
-## [Unreleased]
+## [v0.5.0]
 
 ### 🧊 Frozen — Stage 8.6 (2026-08-06)
 

@@ -24,8 +24,9 @@
 | &nbsp;&nbsp;└─ Stage 8.4 | ✅ **Complete** & [FROZEN] (2026-08-06) | Kernel & Provider Vault Integration |
 | &nbsp;&nbsp;└─ Stage 8.5 | ⏭️ Removed | Out of Scope (Vault Migration/Repair) |
 | &nbsp;&nbsp;└─ Stage 8.6 | ⏳ Pending | Integration Testing & Build Validation |
-| &nbsp;&nbsp;└─ Stage 8.7 | ⏳ Pending | Documentation & AIOS_Book.md Update |
+| &nbsp;&nbsp;└─ Stage 8.7 | ✅ **Complete** | Documentation & AIOS_Book.md Update (Phase 10 synchronization) |
 | **Phase 9** | ✅ **Complete** & [FROZEN] (2026-08-13) | Testing, Validation & Release Candidate Preparation (bootstrap stabilization ST-001 + full-suite validation) |
+| | **Phase 10** | ✅ **Complete** & [FROZEN] (2026-08-20) | Deployment & Production Hardening (v0.5.0 release) |
 
 ---
 

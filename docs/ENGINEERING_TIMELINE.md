@@ -92,8 +92,32 @@ Foundation -> Architecture -> Kernel -> T-Bit Integration -> Phase 7 -> Phase 8 
 - **Acceptance Date:** 2026-08-13
 - **Freeze Date:** 2026-08-13
 - **Status:** Phase 9 Closed; Release Candidate validated at commit 1307876.
-- **Next Approved Phase:** Phase 10 - Deployment & Production Hardening (formally unblocked).
+- **Next Approved Phase:** Phase 11 — Multi-Vault & Advanced Orchestration (formally unblocked).
 
 ---
 
 *End of Engineering Timeline.*
+
+## Milestone 9 - Phase 10 (Deployment & Production Hardening)
+
+- **Date:** 2026-08-10 to 2026-08-20
+- **Objective:** Deploy production hardening: Docker Compose hardening, rollback procedures, deployment verification, ECR compatibility, secret bootstrap validation
+- **Deliverables:**
+  - docs/RELEASES/RELEASE_v0.5.0.md — Official release record
+  - docs/OPERATIONS/ROLLBACK.md — Rollback procedure documentation
+  - scripts/verify-deployment.mjs — Deployment verification script
+  - docs/PHASE10_FINAL_ACCEPTANCE.md — Phase 10 closure & acceptance record
+  - CHANGELOG.md — v0.5.0 entry with Phase 10 changes
+  - Full monorepo build validated (11/11)
+  - Full typecheck validated (10/10)
+  - Full test suite validated (18/18 task groups)
+  - Integration suite validated (8/8)
+  - Web test suite validated (47/47)
+  - Runtime API health validated (HTTP 200/201/403)
+  - CORS honored
+  - Secret bootstrap 10/10 PASS
+- **Engineering Decisions:** Version bump v0.3.0 → v0.5.0 per VERSION.md policy; deployment pipeline scripts created; rollback procedure documented; version consistency across repository enforced
+- **Acceptance Date:** 2026-08-20
+- **Freeze Date:** 2026-08-20
+- **Validated Commit:** (to be recorded per governance decision)
+- **Status:** Phase 10 Closed — v0.5.0 release ready.
