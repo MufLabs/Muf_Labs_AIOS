@@ -11,6 +11,7 @@ import healthRouter from "./routes/health.js";
 import { bootstrapLogger, newRequestId } from "./services/bootstrapLogger.js";
 import { requestIdMiddleware } from "./middleware/requestId.js";
 import { observabilityMiddleware } from "./middleware/observability.js";
+import { metricsHandler, metricsEnabled } from "./services/metrics.js";
 
 /**
  * Creates and configures the Express application.
@@ -42,6 +43,11 @@ export function createServer(): Express {
 
     // Health, liveness and readiness probes (no auth required)
     app.use(healthRouter);
+
+    // Metrics endpoint (opt-in, Stage 10.2) — guarded by ENABLE_METRICS env var
+    if (metricsEnabled) {
+      app.use("/metrics", metricsHandler);
+    }
 
     // Register API routes
     registerRoutes(app);
